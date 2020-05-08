@@ -63,9 +63,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BeeClipboard.cs" />
+    <Compile Include="BeeImage.cs" />
     <Compile Include="BinaryStructConverter.cs" />
-    <Compile Include="BITMAPFILEHEADER.cs" />
-    <Compile Include="BITMAPINFOHEADER.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

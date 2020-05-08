@@ -7,13 +7,31 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.Resources>
+            <DataTemplate x:Key="GrippieTemplate">
+                <TextBlock Text=":"/>
+            </DataTemplate>
+            <DataTemplate x:Key="ThumbnailTemplate">
+                <Image MaxWidth="64" MaxHeight="64" Source="{Binding ImageSource}"/>
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="200"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
             <Button Click="ClickProject" Margin="10,10,10,0">Go</Button>
             <Button Click="ClickPaste" Margin="10,10,10,0">Paste</Button>
+        </StackPanel>
+        <StackPanel Grid.Column="2">
+            <Button Margin="10,10,10,0">View</Button>
+            <DataGrid x:Name="ActiveGrid" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Gripper" CellTemplate="{StaticResource GrippieTemplate}"/>
+                    <DataGridTemplateColumn Header="Thumbnail" CellTemplate="{StaticResource ThumbnailTemplate}"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
         
     </Grid>
