@@ -1,0 +1,14 @@
+﻿<Window x:Class="BeeBurn.Projection"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BeeBurn"
+        mc:Ignorable="d"
+        Title="Projection" Height="450" Width="800"
+        WindowState="Maximized"
+        WindowStyle="None">
+    <Grid x:Name="GridImage" Background="Black">
+        <!--<Image x:Name="ImgFull" Margin="0,0,0,0"></Image>-->
+    </Grid>
+</Window>
