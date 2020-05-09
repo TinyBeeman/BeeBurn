@@ -17,10 +17,12 @@
             <Button Click="ClickProject" Margin="10,10,10,0">Go</Button>
             <Button Click="ClickPaste" Margin="10,10,10,0">Paste</Button>
         </StackPanel>
+        <Image Grid.Column="1" Source="{Binding Path=SelectedImage}"/>
         <Grid Grid.Column="2">
-            <local:BeeImageList ImageList="{Binding Path=ActiveImages, Mode=TwoWay}" Panel.ZIndex="6"/>
-            <!--<local:BeeImageList x:Name="ActiveImagesControl"/>-->
-            
+            <local:BeeImageList
+                x:Name="ActiveImageList"
+                ImageList="{Binding Path=ActiveImages, Mode=TwoWay}"
+                SelectionIndex="{Binding Path=ActiveSelectionIndex, Mode=TwoWay}"/>
         </Grid>
         
     </Grid>

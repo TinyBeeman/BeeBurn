@@ -27,10 +27,19 @@ namespace BeeBurn
         private int m_pasteCounter = 0;
 
         private ObservableCollection<BeeImage> m_activeImages;
+        
         public ObservableCollection<BeeImage> ActiveImages
         {
-            get { return m_activeImages; }
+            get => m_activeImages;
             set { m_activeImages = value; OnPropertyChanged(); }
+        }
+
+        private int m_activeSelectionIndex;
+
+        private int ActiveSelectionIndex
+        {
+            get => m_activeSelectionIndex;
+            set { m_activeSelectionIndex = value; OnPropertyChanged(); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

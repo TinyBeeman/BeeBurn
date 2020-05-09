@@ -35,9 +35,28 @@ namespace BeeBurn
 
         public static readonly DependencyProperty ImageListProperty =
                 DependencyProperty.Register("ImageList",
-                typeof(ObservableCollection<BeeImage>),
-                typeof(BeeImageList),
-                new PropertyMetadata(null));
+                    typeof(ObservableCollection<BeeImage>),
+                    typeof(BeeImageList),
+                    new PropertyMetadata(null));
+
+        public int SelectionIndex
+        {
+            get
+            {
+                return (int)GetValue(SelectionIndexProperty);
+            }
+            set
+            {
+                SetValue(SelectionIndexProperty, value);
+            }
+        }
+
+        public static DependencyProperty SelectionIndexProperty =
+        DependencyProperty.Register("SelectionIndex",
+            typeof(int),
+            typeof(BeeImageList),
+            new PropertyMetadata(-1));
+
 
         public BeeImageList()
         {
