@@ -61,6 +61,7 @@ namespace BeeBurn
 
                 // Start with 0 opacity
                 m_imgNew.Opacity = 0;
+                m_imgNew.Stretch = Stretch.None;
 
                 GridImage.Children.Add(m_imgNew);
 
@@ -70,12 +71,19 @@ namespace BeeBurn
                 m_imgNew.RenderTransformOrigin = new Point(0.5, 0.5);
                 m_imgNew.RenderTransform = scale;
 
-                DoubleAnimation animScaleX = new DoubleAnimation(1, 2, TimeSpan.FromSeconds(10));
-                DoubleAnimation animScaleY = new DoubleAnimation(1, 2, TimeSpan.FromSeconds(10));
-                
+                OffsetScale os1 = bi.GetStartOffsetScale(new Rect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
+                OffsetScale os2 = bi.GetEndOffsetScale(new Rect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
+
+                DoubleAnimation animScaleX = new DoubleAnimation(os1.Scale, os2.Scale, TimeSpan.FromSeconds(10));
+                DoubleAnimation animScaleY = new DoubleAnimation(os1.Scale, os2.Scale, TimeSpan.FromSeconds(10));
+                PointAnimation animOrigin = new PointAnimation(new Point(os1.OriginX, os1.OriginY), new Point(os2.OriginX, os2.OriginY), TimeSpan.FromSeconds(10));
+                //DoubleAnimation animOriginX = new DoubleAnimation(os1.OffsetX, os2.OffsetX, TimeSpan.FromSeconds(10));
+                //DoubleAnimation animOriginY = new DoubleAnimation(os1.OffsetY, os2.OffsetY, TimeSpan.FromSeconds(10));
+
                 m_imgNew.BeginAnimation(Canvas.OpacityProperty, animFadeIn);
                 scale.BeginAnimation(ScaleTransform.ScaleXProperty, animScaleX);
                 scale.BeginAnimation(ScaleTransform.ScaleYProperty, animScaleY);
+                m_imgNew.BeginAnimation(Canvas.RenderTransformOriginProperty, animOrigin);                
 
             }
 

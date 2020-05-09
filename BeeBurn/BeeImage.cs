@@ -21,6 +21,17 @@ namespace BeeBurn
             Height = h;
         }
     }
+
+    public struct OffsetScale
+    {
+        public double OffsetX;
+        public double OffsetY;
+        public double Scale;
+        public double OriginX;
+        public double OriginY;
+
+    }
+
     public class BeeImage
     {
         public ImageSource ImageSource { get; set; }
@@ -33,11 +44,8 @@ namespace BeeBurn
         {
             Name = name;
             ImageSource = src;
-            StartRect.Left = 0;
-            StartRect.Top = 0;
-            StartRect.Width = src.Width;
-            StartRect.Height = src.Height;
-            EndRect = StartRect;
+            StartRect = GetImageRect(src);
+            EndRect = new Rect(50, 50, 100, 100);
         }
 
         public void ShrinkEnd(double margin)
@@ -47,5 +55,30 @@ namespace BeeBurn
             EndRect.Width = StartRect.Width - margin - margin;
             EndRect.Height = StartRect.Height- margin - margin;
         }
+
+        public Rect GetImageRect(ImageSource src)
+        {
+            return new Rect(0, 0, src.Width, src.Height);
+        }
+
+        private OffsetScale GetOffsetAndScaleFromRect(Rect rFocus, Rect rContainer)
+        {
+            
+            double aspContainer = rContainer.Width / rContainer.Height;
+            double aspFocus = rFocus.Width / rFocus.Height;
+            bool fitWidth = (aspFocus < aspContainer);
+
+            OffsetScale ret;
+            ret.Scale = fitWidth ? (rContainer.Height / rFocus.Height) : (rContainer.Width / rFocus.Width);
+            ret.OffsetX = rFocus.Left + (rFocus.Width / 2);
+            ret.OffsetY = rFocus.Top + (rFocus.Height / 2);
+            ret.OriginX = ret.OffsetX / ImageSource.Width;
+            ret.OriginY = ret.OffsetY / ImageSource.Height;
+
+            return ret;
+        }
+
+        public OffsetScale GetStartOffsetScale(Rect rContainer) { return GetOffsetAndScaleFromRect(StartRect, rContainer);  }
+        public OffsetScale GetEndOffsetScale(Rect rContainer) { return GetOffsetAndScaleFromRect(EndRect, rContainer); }
     }
 }
