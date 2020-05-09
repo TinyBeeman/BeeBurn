@@ -18,7 +18,12 @@
             </DataTemplate>
         </Grid.Resources>
         <ScrollViewer>
-            <DataGrid x:Name="ActiveGrid" AutoGenerateColumns="False" ItemsSource="{Binding Path=ImageList, ElementName=ImageListControl, diag:PresentationTraceSources.TraceLevel=High}">
+            <DataGrid
+                x:Name="ActiveGrid"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding Path=ImageList, ElementName=ImageListControl, diag:PresentationTraceSources.TraceLevel=High}"
+                SelectedIndex="{Binding Path=SelectionIndex, Mode=TwoWay}"
+                >
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Gripper" CellTemplate="{StaticResource GrippieTemplate}"/>
                     <DataGridTemplateColumn Header="Thumbnail" CellTemplate="{StaticResource ThumbnailTemplate}"/>

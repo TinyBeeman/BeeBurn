@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BeeBurn"
         mc:Ignorable="d"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -17,7 +16,7 @@
             <Button Click="ClickProject" Margin="10,10,10,0">Go</Button>
             <Button Click="ClickPaste" Margin="10,10,10,0">Paste</Button>
         </StackPanel>
-        <Image Grid.Column="1" Source="{Binding Path=SelectedImage}"/>
+        <Image Grid.Column="1" Source="{Binding Path=ImageSourceToDisplay}"/>
         <Grid Grid.Column="2">
             <local:BeeImageList
                 x:Name="ActiveImageList"
