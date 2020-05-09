@@ -26,7 +26,12 @@ namespace BeeBurn
         private Projection m_proj = null;
         private int m_pasteCounter = 0;
 
-        public ObservableCollection<BeeImage> ActiveImages { get; set; }
+        private ObservableCollection<BeeImage> m_activeImages;
+        public ObservableCollection<BeeImage> ActiveImages
+        {
+            get { return m_activeImages; }
+            set { m_activeImages = value; OnPropertyChanged(); }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -55,13 +60,8 @@ namespace BeeBurn
             }
 
             ActiveImages.Add(new BeeImage(BeeClipboard.ImageFromClipboardDib(), m_pasteCounter.ToString()));
-
-            OnPropertyChanged("ActiveImages");
-
             if (m_proj != null)
                 m_proj.PasteImage();
-
-
         }
     }
 }

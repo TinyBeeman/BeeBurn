@@ -23,12 +23,18 @@ namespace BeeBurn
     {
         public ObservableCollection<BeeImage> ImageList
         {
-            get { return (ObservableCollection<BeeImage>)GetValue(ImageListProperty); }
-            set { SetValue(ImageListProperty, value); }
+            get
+            {
+                return (ObservableCollection<BeeImage>)GetValue(ImageListProperty);
+            }
+            set
+            {
+                SetValue(ImageListProperty, value);
+            }
         }
 
         public static readonly DependencyProperty ImageListProperty =
-            DependencyProperty.Register("ImageList",
+                DependencyProperty.Register("ImageList",
                 typeof(ObservableCollection<BeeImage>),
                 typeof(BeeImageList),
                 new PropertyMetadata(null));
