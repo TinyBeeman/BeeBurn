@@ -17,11 +17,14 @@
                 <Image MaxWidth="64" MaxHeight="64" Source="{Binding Path=ImageSource}"/>
             </DataTemplate>
         </Grid.Resources>
-        <DataGrid x:Name="ActiveGrid" AutoGenerateColumns="False" ItemsSource="{Binding Path=ImageList, ElementName=ImageListControl, diag:PresentationTraceSources.TraceLevel=High}">
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Gripper" CellTemplate="{StaticResource GrippieTemplate}"/>
-                <DataGridTemplateColumn Header="Thumbnail" CellTemplate="{StaticResource ThumbnailTemplate}"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <ScrollViewer>
+            <DataGrid x:Name="ActiveGrid" AutoGenerateColumns="False" ItemsSource="{Binding Path=ImageList, ElementName=ImageListControl, diag:PresentationTraceSources.TraceLevel=High}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Gripper" CellTemplate="{StaticResource GrippieTemplate}"/>
+                    <DataGridTemplateColumn Header="Thumbnail" CellTemplate="{StaticResource ThumbnailTemplate}"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
     </Grid>
 </UserControl>

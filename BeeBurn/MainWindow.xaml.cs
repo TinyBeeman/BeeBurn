@@ -59,7 +59,8 @@ namespace BeeBurn
                 ActiveImages = new ObservableCollection<BeeImage>();
             }
 
-            ActiveImages.Add(new BeeImage(BeeClipboard.ImageFromClipboardDib(), m_pasteCounter.ToString()));
+            ActiveImages.Add(new BeeImage(BeeClipboard.ImageFromClipboardDib(), "Paste-" + m_pasteCounter.ToString("D" + 4)));
+            m_pasteCounter++;
             if (m_proj != null)
                 m_proj.PasteImage();
         }

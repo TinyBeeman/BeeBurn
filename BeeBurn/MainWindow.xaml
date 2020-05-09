@@ -11,17 +11,17 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="200"></ColumnDefinition>
+            <ColumnDefinition Width="300"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
             <Button Click="ClickProject" Margin="10,10,10,0">Go</Button>
             <Button Click="ClickPaste" Margin="10,10,10,0">Paste</Button>
         </StackPanel>
-        <StackPanel Grid.Column="2">
-            <local:BeeImageList ImageList="{Binding Path=ActiveImages, Mode=TwoWay}"/>
+        <Grid Grid.Column="2">
+            <local:BeeImageList ImageList="{Binding Path=ActiveImages, Mode=TwoWay}" Panel.ZIndex="6"/>
             <!--<local:BeeImageList x:Name="ActiveImagesControl"/>-->
             
-        </StackPanel>
+        </Grid>
         
     </Grid>
 </Window>
