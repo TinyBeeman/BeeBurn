@@ -90,8 +90,12 @@ namespace BeeBurn
         private void ClickProject(object sender, RoutedEventArgs e)
         {
             if (m_proj == null)
+            {
                 m_proj = new Projection();
+            }
+
             m_proj.Show();
+            m_proj.ProjectList(m_VM.ActiveImages);
         }
 
         private void ClickPaste(object sender, RoutedEventArgs e)
