@@ -1,24 +1,78 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace BeeBurn
 {
-    public struct Rect
+    public class Rect : INotifyPropertyChanged
     {
-        public double Left;
-        public double Top;
-        public double Width;
-        public double Height;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+
+        private double m_left;
+        private double m_top;
+        private double m_width;
+        private double m_height;
+
+        public double Left
+        {
+            get => m_left;
+            set
+            {
+                m_left = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double Top
+        {
+            get => m_top;
+            set
+            {
+                m_top = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double Width
+        {
+            get => m_width;
+            set
+            {
+                m_width = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double Height
+        {
+            get => m_height;
+            set
+            {
+                m_height = value;
+                OnPropertyChanged();
+            }
+        }
 
         public double Right => Left + Width;
         public double Bottom => Top + Height;
 
+
+
         public Rect(double l = 0, double t = 0, double w = 0, double h = 0)
         {
-            Left = l;
-            Top = t;
-            Width = w;
-            Height = h;
+            m_left = l;
+            m_top = t;
+            m_width = w;
+            m_height = h;
         }
     }
 
@@ -32,28 +86,75 @@ namespace BeeBurn
 
     }
 
-    public class BeeImage
+    public class BeeImage : INotifyPropertyChanged
     {
-        public ImageSource ImageSource { get; set; }
-        public string Name { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
 
-        public Rect StartRect;
-        public Rect EndRect;
+        public void UpdateAllProps()
+        {
+            OnPropertyChanged("BitmapFrame");
+            OnPropertyChanged("StartRect");
+            OnPropertyChanged("EndRect");
 
-        public BeeImage(ImageSource src, string name)
+        }
+
+        private BitmapFrame m_bitmapFrame;
+        private Rect m_startRect;
+        private Rect m_endRect;
+        private string m_name;
+
+        public BitmapFrame BitmapFrame
+        {
+            get => m_bitmapFrame;
+            set
+            {
+                m_bitmapFrame = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Name {
+            get => m_name;
+            set
+            {
+                m_name = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Rect StartRect
+        {
+            get => m_startRect;
+            set
+            {
+                m_startRect = value;
+                OnPropertyChanged();
+            }
+        }
+        public Rect EndRect
+        {
+            get => m_endRect;
+            set
+            {
+                m_endRect = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public BeeImage(BitmapFrame src, string name)
         {
             Name = name;
-            ImageSource = src;
+            BitmapFrame = src;
             StartRect = GetImageRect(src);
             EndRect = new Rect(50, 50, 100, 100);
         }
 
         public void ShrinkEnd(double margin)
         {
-            EndRect.Left = StartRect.Left + margin;
-            EndRect.Top = StartRect.Top + margin;
-            EndRect.Width = StartRect.Width - margin - margin;
-            EndRect.Height = StartRect.Height- margin - margin;
+            EndRect = new Rect(StartRect.Left + margin, StartRect.Top + margin, StartRect.Width - margin - margin, StartRect.Height - margin - margin);
         }
 
         public Rect GetImageRect(ImageSource src)
@@ -63,22 +164,43 @@ namespace BeeBurn
 
         private OffsetScale GetOffsetAndScaleFromRect(Rect rFocus, Rect rContainer)
         {
-            
+
             double aspContainer = rContainer.Width / rContainer.Height;
             double aspFocus = rFocus.Width / rFocus.Height;
             bool fitWidth = (aspFocus < aspContainer);
 
             OffsetScale ret;
             ret.Scale = fitWidth ? (rContainer.Height / rFocus.Height) : (rContainer.Width / rFocus.Width);
-            ret.OffsetX = rFocus.Left + (rFocus.Width / 2);
-            ret.OffsetY = rFocus.Top + (rFocus.Height / 2);
-            ret.OriginX = ret.OffsetX / ImageSource.Width;
-            ret.OriginY = ret.OffsetY / ImageSource.Height;
+            ret.OffsetX = -(rFocus.Left + (rFocus.Width / 2));
+            ret.OffsetY = -(rFocus.Top + (rFocus.Height / 2));
+            ret.OriginX = ret.OffsetX / BitmapFrame.Width;
+            ret.OriginY = ret.OffsetY / BitmapFrame.Height;
 
             return ret;
         }
 
-        public OffsetScale GetStartOffsetScale(Rect rContainer) { return GetOffsetAndScaleFromRect(StartRect, rContainer);  }
+        public OffsetScale GetStartOffsetScale(Rect rContainer) { return GetOffsetAndScaleFromRect(StartRect, rContainer); }
         public OffsetScale GetEndOffsetScale(Rect rContainer) { return GetOffsetAndScaleFromRect(EndRect, rContainer); }
+
+
+        public bool SaveImage(string filepath)
+        {
+            try
+            {
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame);
+                using (var fileStream = new System.IO.FileStream(filepath, System.IO.FileMode.Create))
+                {
+                    encoder.Save(fileStream);
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+
+        }
     }
 }

@@ -26,8 +26,9 @@ namespace BeeBurn
 
         private Image m_imgOld;
         private Image m_imgNew;
-        private int m_index;
         private DispatcherTimer m_dispatcherTimer;
+        private static int s_fadeSeconds = 2;
+        private static int s_panSeconds = 30;
 
         public Projection()
         {
@@ -37,7 +38,6 @@ namespace BeeBurn
         public void ProjectList(ObservableCollection<BeeImage> imgList)
         {
             m_imgList = imgList;
-            m_index = 0;
 
             QueueNextImage();
         }
@@ -49,48 +49,55 @@ namespace BeeBurn
 
         public void QueueNextImage()
         {
-            if (m_index < m_imgList.Count)
-            {
-                if (m_imgOld != null)
-                    GridImage.Children.Remove(m_imgOld);
+            
+            if (m_imgOld != null)
+                GridImage.Children.Remove(m_imgOld);
 
-                BeeImage bi = m_imgList[m_index++];
-                m_imgOld = m_imgNew;
-                m_imgNew = new Image();
-                m_imgNew.Source = bi.ImageSource;
+                
+            BeeImage bi = m_imgList[0];
+            m_imgList.Remove(bi);
+            m_imgList.Add(bi);
+            m_imgOld = m_imgNew;
+            m_imgNew = new Image();
+            m_imgNew.Source = bi.BitmapFrame;
 
-                // Start with 0 opacity
-                m_imgNew.Opacity = 0;
-                m_imgNew.Stretch = Stretch.None;
+            // Start with 0 opacity
+            m_imgNew.Opacity = 0;
+            m_imgNew.Stretch = Stretch.None;
 
-                GridImage.Children.Add(m_imgNew);
+            GridImage.Children.Add(m_imgNew);
 
-                DoubleAnimation animFadeIn = new DoubleAnimation(1, TimeSpan.FromSeconds(2));
+            DoubleAnimation animFadeIn = new DoubleAnimation(1, TimeSpan.FromSeconds(s_fadeSeconds));
 
-                ScaleTransform scale = new ScaleTransform(1, 1);
-                m_imgNew.RenderTransformOrigin = new Point(0.5, 0.5);
-                m_imgNew.RenderTransform = scale;
+            ScaleTransform scale = new ScaleTransform(1, 1);
+            TransformGroup group = new TransformGroup();
+            group.Children.Add(scale);
 
-                OffsetScale os1 = bi.GetStartOffsetScale(new Rect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
-                OffsetScale os2 = bi.GetEndOffsetScale(new Rect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
+            m_imgNew.RenderTransformOrigin = new Point(0, 0);
+            m_imgNew.RenderTransform = group;
 
-                DoubleAnimation animScaleX = new DoubleAnimation(os1.Scale, os2.Scale, TimeSpan.FromSeconds(10));
-                DoubleAnimation animScaleY = new DoubleAnimation(os1.Scale, os2.Scale, TimeSpan.FromSeconds(10));
-                PointAnimation animOrigin = new PointAnimation(new Point(os1.OriginX, os1.OriginY), new Point(os2.OriginX, os2.OriginY), TimeSpan.FromSeconds(10));
-                //DoubleAnimation animOriginX = new DoubleAnimation(os1.OffsetX, os2.OffsetX, TimeSpan.FromSeconds(10));
-                //DoubleAnimation animOriginY = new DoubleAnimation(os1.OffsetY, os2.OffsetY, TimeSpan.FromSeconds(10));
+            OffsetScale os1 = bi.GetStartOffsetScale(new Rect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
+            OffsetScale os2 = bi.GetEndOffsetScale(new Rect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
 
-                m_imgNew.BeginAnimation(Canvas.OpacityProperty, animFadeIn);
-                scale.BeginAnimation(ScaleTransform.ScaleXProperty, animScaleX);
-                scale.BeginAnimation(ScaleTransform.ScaleYProperty, animScaleY);
-                m_imgNew.BeginAnimation(Canvas.RenderTransformOriginProperty, animOrigin);                
+            DoubleAnimation animScaleX = new DoubleAnimation(os1.Scale, os2.Scale, TimeSpan.FromSeconds(s_panSeconds));
+            DoubleAnimation animScaleY = new DoubleAnimation(os1.Scale, os2.Scale, TimeSpan.FromSeconds(s_panSeconds));
+            DoubleAnimation animOffsetX = new DoubleAnimation(-os1.OffsetX, -os2.OffsetX, TimeSpan.FromSeconds(s_panSeconds));
+            DoubleAnimation animOffsetY = new DoubleAnimation(-os1.OffsetY, -os2.OffsetY, TimeSpan.FromSeconds(s_panSeconds));
 
-            }
+            m_imgNew.BeginAnimation(Canvas.OpacityProperty, animFadeIn);
+            scale.BeginAnimation(ScaleTransform.ScaleXProperty, animScaleX);
+            scale.BeginAnimation(ScaleTransform.ScaleYProperty, animScaleY);
+            scale.BeginAnimation(ScaleTransform.CenterXProperty, animOffsetX);
+            scale.BeginAnimation(ScaleTransform.CenterYProperty, animOffsetY);
 
             //  DispatcherTimer setup
-            m_dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-            m_dispatcherTimer.Tick += new EventHandler(NextImageTimerTick);
-            m_dispatcherTimer.Interval = new TimeSpan(0, 0, 10);
+            if (m_dispatcherTimer == null)
+            {
+                m_dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+                m_dispatcherTimer.Tick += new EventHandler(NextImageTimerTick);
+            }
+
+            m_dispatcherTimer.Interval = new TimeSpan(0, 0, s_panSeconds);
             m_dispatcherTimer.Start();
         }
         
@@ -120,9 +127,19 @@ namespace BeeBurn
         {
             Image imgNew = new Image();
 
-            imgNew.Source = BeeClipboard.ImageFromClipboardDib();
+            imgNew.Source = BeeClipboard.BitmapFrameFromClipboardDib();
             ReplaceImage(imgNew);
         }
 
+        public delegate void CloseHandler();
+
+        public event CloseHandler OnClose;
+
+
+        private void ProjectionClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            m_dispatcherTimer.Stop();
+            OnClose?.Invoke();
+        }
     }
 }

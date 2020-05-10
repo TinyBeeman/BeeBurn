@@ -36,7 +36,7 @@ namespace BeeBurn
             public int biClrImportant;
         }
 
-        public static ImageSource ImageFromClipboardDib()
+        public static BitmapFrame BitmapFrameFromClipboardDib()
         {
             MemoryStream ms = Clipboard.GetData("DeviceIndependentBitmap") as MemoryStream;
             if (ms != null)

@@ -6,6 +6,18 @@
         xmlns:local="clr-namespace:BeeBurn"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New"/>
+                <MenuItem Header="_Open"/>
+                <MenuItem Header="_Save" />
+                <MenuItem Header="Save _As..." Click="MenuItem_Click" />
+                <Separator />
+                <MenuItem Header="E_xit" />
+            </MenuItem>
+        </Menu>    
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"></ColumnDefinition>
@@ -16,7 +28,7 @@
             <Button Click="ClickProject" Margin="10,10,10,0">Go</Button>
             <Button Click="ClickPaste" Margin="10,10,10,0">Paste</Button>
         </StackPanel>
-        <Image Grid.Column="1" Source="{Binding Path=ImageSourceToDisplay}"/>
+        <local:BeeImageEditor Grid.Column="1" BeeImg="{Binding Path=BeeImgToDisplay}"/>
         <Grid Grid.Column="2">
             <local:BeeImageList
                 x:Name="ActiveImageList"
@@ -25,4 +37,5 @@
         </Grid>
         
     </Grid>
+    </DockPanel>
 </Window>
