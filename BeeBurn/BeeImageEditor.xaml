@@ -19,6 +19,7 @@
                 MouseDown="OnImageMouseDown"
                 MouseUp="OnImageMouseUp"
                 MouseMove="OnImageMouseMove"
+                MouseLeave="OnImageMouseLeave"
                 />
             <Rectangle
                 Canvas.Left="{Binding Path=BeeImg.StartRect.Left}"

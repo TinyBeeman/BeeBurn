@@ -99,6 +99,9 @@ namespace BeeBurn
 
         private void OnImageMouseUp(object sender, MouseButtonEventArgs e)
         {
+            if (m_dragState == DragState.None)
+                return;
+
             Point ptMouse = e.GetPosition((IInputElement)sender);
 
             if (e.ChangedButton == MouseButton.Left)
@@ -116,6 +119,9 @@ namespace BeeBurn
             }
         }
 
-
+        private void OnImageMouseLeave(object sender, MouseEventArgs e)
+        {
+            m_dragState = DragState.None;
+        }
     }
 }

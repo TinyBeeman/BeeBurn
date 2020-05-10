@@ -10,9 +10,9 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_New"/>
-                <MenuItem Header="_Open"/>
+                <MenuItem x:Name="OpenButton" Header="_Open" Click="OpenButton_Click"/>
                 <MenuItem Header="_Save" />
-                <MenuItem Header="Save _As..." Click="MenuItem_Click" />
+                <MenuItem x:Name="SaveAsButton" Header="Save _As..." Click="SaveAsButton_Click" />
                 <Separator />
                 <MenuItem Header="E_xit" />
             </MenuItem>

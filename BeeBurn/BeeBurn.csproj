@@ -55,9 +55,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BeeBurnVM.cs" />
     <Compile Include="BeeProgress.xaml.cs">
       <DependentUpon>BeeProgress.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BeeRect.cs" />
     <Compile Include="Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>

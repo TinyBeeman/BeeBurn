@@ -10,6 +10,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="ColDefA" Width="0.0*"/>
             <ColumnDefinition x:Name="ColDefB" Width="1.0*"/>
+            <ColumnDefinition x:Name="ColDefC" Width="0.0*"/>
         </Grid.ColumnDefinitions>
         <Rectangle Grid.Column="1" Fill="Gray"/>
     </Grid>

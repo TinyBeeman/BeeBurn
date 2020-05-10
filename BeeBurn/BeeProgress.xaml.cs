@@ -34,8 +34,9 @@ namespace BeeBurn
             }
             set
             {
-                ColDefA.Width = new GridLength(value, GridUnitType.Star);
+                ColDefA.Width = new GridLength(value / 2, GridUnitType.Star);
                 ColDefB.Width = new GridLength(1.0 - value, GridUnitType.Star);
+                ColDefC.Width = new GridLength(value / 2, GridUnitType.Star);
                 SetValue(PercentCompleteProperty, value);
             }
         }

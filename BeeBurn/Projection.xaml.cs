@@ -29,9 +29,8 @@ namespace BeeBurn
 
         private DateTime m_timerStart;
         private DispatcherTimer m_dispatcherTimer;
-        private static double s_fadeSeconds = 2;
-        private static double s_panSeconds = 30;
-
+        private double m_fadeSeconds = BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImageFadeTime) ?? 2;
+        private double m_panSeconds = BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImagePanTime) ?? 30;
 
 
         public Projection()
@@ -49,7 +48,7 @@ namespace BeeBurn
         private void NextImageTimerTick(object sender, EventArgs e)
         {
             var elapsed = DateTime.Now - m_timerStart;
-            double pctComplete = Math.Min(1.0, elapsed.TotalSeconds / s_panSeconds);
+            double pctComplete = Math.Min(1.0, elapsed.TotalSeconds / m_panSeconds);
 
             Progress.PercentComplete = pctComplete;
 
@@ -81,8 +80,8 @@ namespace BeeBurn
 
             GridImage.Children.Add(m_imgNew);
 
-            DoubleAnimation animFadeIn = new DoubleAnimation(1, TimeSpan.FromSeconds(s_fadeSeconds));
-            DoubleAnimation animFadeOut = new DoubleAnimation(0, TimeSpan.FromSeconds(s_fadeSeconds));
+            DoubleAnimation animFadeIn = new DoubleAnimation(1, TimeSpan.FromSeconds(m_fadeSeconds));
+            DoubleAnimation animFadeOut = new DoubleAnimation(0, TimeSpan.FromSeconds(m_fadeSeconds));
 
             ScaleTransform scale = new ScaleTransform(1, 1);
             TransformGroup group = new TransformGroup();
@@ -91,13 +90,13 @@ namespace BeeBurn
             m_imgNew.RenderTransformOrigin = new Point(0, 0);
             m_imgNew.RenderTransform = group;
 
-            OffsetScale os1 = bi.GetStartOffsetScale(new Rect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
-            OffsetScale os2 = bi.GetEndOffsetScale(new Rect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
+            OffsetScale os1 = bi.GetStartOffsetScale(new BeeRect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
+            OffsetScale os2 = bi.GetEndOffsetScale(new BeeRect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
 
-            DoubleAnimation animScaleX = new DoubleAnimation(os1.Scale, os2.Scale, TimeSpan.FromSeconds(s_panSeconds));
-            DoubleAnimation animScaleY = new DoubleAnimation(os1.Scale, os2.Scale, TimeSpan.FromSeconds(s_panSeconds));
-            DoubleAnimation animOffsetX = new DoubleAnimation(-os1.OffsetX, -os2.OffsetX, TimeSpan.FromSeconds(s_panSeconds));
-            DoubleAnimation animOffsetY = new DoubleAnimation(-os1.OffsetY, -os2.OffsetY, TimeSpan.FromSeconds(s_panSeconds));
+            DoubleAnimation animScaleX = new DoubleAnimation(os1.Scale, os2.Scale, TimeSpan.FromSeconds(m_panSeconds + m_fadeSeconds));
+            DoubleAnimation animScaleY = new DoubleAnimation(os1.Scale, os2.Scale, TimeSpan.FromSeconds(m_panSeconds + m_fadeSeconds));
+            DoubleAnimation animOffsetX = new DoubleAnimation(-os1.OffsetX, -os2.OffsetX, TimeSpan.FromSeconds(m_panSeconds + m_fadeSeconds));
+            DoubleAnimation animOffsetY = new DoubleAnimation(-os1.OffsetY, -os2.OffsetY, TimeSpan.FromSeconds(m_panSeconds + m_fadeSeconds));
 
             m_imgNew.BeginAnimation(Canvas.OpacityProperty, animFadeIn);
             if (m_imgOld != null)
