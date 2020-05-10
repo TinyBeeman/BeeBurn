@@ -31,7 +31,7 @@ namespace BeeBurn
             set { m_activeImages = value; OnPropertyChanged(); }
         }
 
-        private int m_activeSelectionIndex;
+        private int m_activeSelectionIndex = -1;
 
         public int ActiveSelectionIndex
         {

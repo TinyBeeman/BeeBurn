@@ -23,11 +23,16 @@
                 AutoGenerateColumns="False"
                 ItemsSource="{Binding Path=ImageList, ElementName=ImageListControl, diag:PresentationTraceSources.TraceLevel=High}"
                 SelectedIndex="{Binding Path=SelectionIndex, Mode=TwoWay}"
+                SelectionMode="Extended"
+                SelectionUnit="FullRow"
+                AllowDrop="True"
+                Drop="ActiveGrid_Drop"
+                PreviewMouseLeftButtonDown="ActiveGrid_PreviewMouseLeftButtonDown"
                 >
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Gripper" CellTemplate="{StaticResource GrippieTemplate}"/>
                     <DataGridTemplateColumn Header="Thumbnail" CellTemplate="{StaticResource ThumbnailTemplate}"/>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Path=Name}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>
