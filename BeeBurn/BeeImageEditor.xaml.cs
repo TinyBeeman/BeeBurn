@@ -59,17 +59,33 @@ namespace BeeBurn
 
         private void OnImageMouseMove(object sender, MouseEventArgs e)
         {
+            if (m_dragState == DragState.None)
+                return;
+
             Point ptMouse = e.GetPosition((IInputElement)sender);
 
-            if (m_dragState == DragState.LeftStarted)
+            BeeRect r = (m_dragState == DragState.LeftStarted) ? BeeImg.StartRect : BeeImg.EndRect;
+
+            double deltaX = (ptMouse.X - r.Left);
+            double deltaY = (ptMouse.Y - r.Top);
+            if (deltaX > 0)
             {
-                BeeImg.StartRect.Width = ptMouse.X - BeeImg.StartRect.Left;
-                BeeImg.StartRect.Height = ptMouse.Y - BeeImg.StartRect.Top;
+                r.Width = deltaX;
             }
-            else if (m_dragState == DragState.RightStarted)
+            else
             {
-                BeeImg.EndRect.Width = ptMouse.X - BeeImg.EndRect.Left;
-                BeeImg.EndRect.Height = ptMouse.Y - BeeImg.EndRect.Top; ;
+                r.Left += deltaX;
+                r.Width -= deltaX;
+            }
+            
+            if (deltaY > 0)
+            {
+                r.Height = deltaY;
+            }
+            else
+            {
+                r.Top += deltaY;
+                r.Height -= deltaY;
             }
         }
 
@@ -83,8 +99,8 @@ namespace BeeBurn
 
                 BeeImg.StartRect.Left = ptMouse.X;
                 BeeImg.StartRect.Top = ptMouse.Y;
-                BeeImg.StartRect.Width = 100;
-                BeeImg.StartRect.Height = 100;
+                BeeImg.StartRect.Width = 1;
+                BeeImg.StartRect.Height = 1;
             }
             else
             {
@@ -92,31 +108,14 @@ namespace BeeBurn
 
                 BeeImg.EndRect.Left = ptMouse.X;
                 BeeImg.EndRect.Top = ptMouse.Y;
-                BeeImg.EndRect.Width = 100;
-                BeeImg.EndRect.Height = 100;
+                BeeImg.EndRect.Width = 1;
+                BeeImg.EndRect.Height = 1;
             }
         }
 
         private void OnImageMouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (m_dragState == DragState.None)
-                return;
-
-            Point ptMouse = e.GetPosition((IInputElement)sender);
-
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                BeeImg.StartRect.Width = ptMouse.X - BeeImg.StartRect.Left;
-                BeeImg.StartRect.Height = ptMouse.Y - BeeImg.StartRect.Top;
-                m_dragState = DragState.None;
-            }
-            else
-            {
-                BeeImg.EndRect.Width = ptMouse.X - BeeImg.EndRect.Left;
-                BeeImg.EndRect.Height = ptMouse.Y - BeeImg.EndRect.Top; ;
-                m_dragState = DragState.None;
-
-            }
+            m_dragState = DragState.None;
         }
 
         private void OnImageMouseLeave(object sender, MouseEventArgs e)
