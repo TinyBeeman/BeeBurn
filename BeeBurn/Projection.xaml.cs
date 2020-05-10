@@ -26,9 +26,13 @@ namespace BeeBurn
 
         private Image m_imgOld;
         private Image m_imgNew;
+
+        private DateTime m_timerStart;
         private DispatcherTimer m_dispatcherTimer;
-        private static int s_fadeSeconds = 2;
-        private static int s_panSeconds = 30;
+        private static double s_fadeSeconds = 2;
+        private static double s_panSeconds = 30;
+
+
 
         public Projection()
         {
@@ -44,7 +48,17 @@ namespace BeeBurn
 
         private void NextImageTimerTick(object sender, EventArgs e)
         {
-            QueueNextImage();
+            var elapsed = DateTime.Now - m_timerStart;
+            double pctComplete = Math.Min(1.0, elapsed.TotalSeconds / s_panSeconds);
+
+            Progress.PercentComplete = pctComplete;
+
+            if (pctComplete >= 1.0)
+            {
+                m_dispatcherTimer.Stop();
+                m_dispatcherTimer = null;
+                QueueNextImage();
+            }
         }
 
         public void QueueNextImage()
@@ -68,6 +82,7 @@ namespace BeeBurn
             GridImage.Children.Add(m_imgNew);
 
             DoubleAnimation animFadeIn = new DoubleAnimation(1, TimeSpan.FromSeconds(s_fadeSeconds));
+            DoubleAnimation animFadeOut = new DoubleAnimation(0, TimeSpan.FromSeconds(s_fadeSeconds));
 
             ScaleTransform scale = new ScaleTransform(1, 1);
             TransformGroup group = new TransformGroup();
@@ -85,6 +100,8 @@ namespace BeeBurn
             DoubleAnimation animOffsetY = new DoubleAnimation(-os1.OffsetY, -os2.OffsetY, TimeSpan.FromSeconds(s_panSeconds));
 
             m_imgNew.BeginAnimation(Canvas.OpacityProperty, animFadeIn);
+            if (m_imgOld != null)
+                m_imgOld.BeginAnimation(Canvas.OpacityProperty, animFadeOut);
             scale.BeginAnimation(ScaleTransform.ScaleXProperty, animScaleX);
             scale.BeginAnimation(ScaleTransform.ScaleYProperty, animScaleY);
             scale.BeginAnimation(ScaleTransform.CenterXProperty, animOffsetX);
@@ -97,8 +114,12 @@ namespace BeeBurn
                 m_dispatcherTimer.Tick += new EventHandler(NextImageTimerTick);
             }
 
-            m_dispatcherTimer.Interval = new TimeSpan(0, 0, s_panSeconds);
+            Progress.PercentComplete = 0;
+            m_timerStart = DateTime.Now;
+            m_dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
             m_dispatcherTimer.Start();
+
+            
         }
         
 

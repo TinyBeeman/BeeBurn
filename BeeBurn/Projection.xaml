@@ -9,7 +9,33 @@
         WindowState="Maximized"
         WindowStyle="None"
         Closing="ProjectionClosing">
-    <Grid x:Name="GridImage" Background="Black">
-        <!--<Image x:Name="ImgFull" Margin="0,0,0,0"></Image>-->
-    </Grid>
+    <Canvas x:Name="RootCanvas" Background="Black">
+        <Grid x:Name="GridImage"
+              Background="Black"
+               Width="{Binding ActualWidth, ElementName=RootCanvas}"
+               Height="{Binding ActualHeight, ElementName=RootCanvas}"
+              >
+            <!--<Image x:Name="ImgFull" Margin="0,0,0,0"></Image>-->
+        </Grid>
+        <Grid
+            Width="{Binding ActualWidth, ElementName=RootCanvas}"
+            Height="{Binding ActualHeight, ElementName=RootCanvas}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20" />
+            </Grid.RowDefinitions>
+            <local:BeeProgress
+                Grid.Column="1"
+                Grid.Row="1"
+                VerticalAlignment="Top"
+                x:Name="Progress"
+                PercentComplete="0.3"
+                Height="10" />
+        </Grid>
+    </Canvas>
 </Window>
