@@ -136,5 +136,19 @@ namespace BeeBurn
             }
             return curIndex;
         }
+
+        private void BtnRandom_Click(object sender, RoutedEventArgs e)
+        {
+            Random rng = new Random();
+            int n = ImageList.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                var val = ImageList[k];
+                ImageList[k] = ImageList[n];
+                ImageList[n] = val;
+            }
+        }
     }
 }
