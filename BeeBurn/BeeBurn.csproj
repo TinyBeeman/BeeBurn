@@ -56,34 +56,34 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BeeBurnVM.cs" />
-    <Compile Include="BeeProgress.xaml.cs">
+    <Compile Include="XAML\BeeProgress.xaml.cs">
       <DependentUpon>BeeProgress.xaml</DependentUpon>
     </Compile>
     <Compile Include="BeeRect.cs" />
     <Compile Include="BeeStack.cs" />
-    <Compile Include="BeeStackEditor.xaml.cs">
+    <Compile Include="XAML\BeeStackEditor.xaml.cs">
       <DependentUpon>BeeStackEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Window1.xaml.cs">
+    <Compile Include="XAML\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
-    <Page Include="BeeImageEditor.xaml">
+    <Page Include="XAML\BeeImageEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BeeImageList.xaml">
+    <Page Include="XAML\BeeImageList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BeeProgress.xaml">
+    <Page Include="XAML\BeeProgress.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BeeStackEditor.xaml">
+    <Page Include="XAML\BeeStackEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="XAML\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -93,28 +93,28 @@
     </Compile>
     <Compile Include="BeeClipboard.cs" />
     <Compile Include="BeeImage.cs" />
-    <Compile Include="BeeImageEditor.xaml.cs">
+    <Compile Include="XAML\BeeImageEditor.xaml.cs">
       <DependentUpon>BeeImageEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="BinaryStructConverter.cs" />
-    <Compile Include="BeeImageList.xaml.cs">
+    <Compile Include="XAML\BeeImageList.xaml.cs">
       <DependentUpon>BeeImageList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="XAML\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Projection.xaml">
+    <Page Include="XAML\Projection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Window1.xaml">
+    <Page Include="XAML\Window1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Projection.xaml.cs">
+    <Compile Include="XAML\Projection.xaml.cs">
       <DependentUpon>Projection.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">

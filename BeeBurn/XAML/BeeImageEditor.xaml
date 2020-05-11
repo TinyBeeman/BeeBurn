@@ -12,6 +12,9 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Canvas Grid.Row="0">
+            <Canvas.LayoutTransform>
+                <ScaleTransform ScaleX="{Binding ElementName=ZoomSlider,Path=Value}" ScaleY="{Binding ElementName=ZoomSlider,Path=Value}"/>
+            </Canvas.LayoutTransform>
             <Image
                 x:Name="ImgControl"
                 Source="{Binding Path=BeeImg.BitmapFrame}"
@@ -39,6 +42,7 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Button>Start</Button>
             <Button>Stop</Button>
+            <Slider Name="ZoomSlider" Value="1" Minimum="0.1" Maximum="4" Height="20" Width="200" />
         </StackPanel>
     </Grid>
 
