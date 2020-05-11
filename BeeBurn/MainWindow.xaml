@@ -27,7 +27,9 @@
         <StackPanel Grid.Column="0">
             <Button Click="ClickProject" Margin="10,10,10,0">Go</Button>
                 <Button Click="ClickLoadImages" Margin="10,10,10,0">Load Image(s) From Disk</Button>
+                <Button Click="ClickEditStack" Margin="10,10,10,0">Edit Stack</Button>
                 <Button Click="ClickPaste" Margin="10,10,10,0">Paste</Button>
+                
         </StackPanel>
         <local:BeeImageEditor Grid.Column="1" BeeImg="{Binding Path=ActiveStack.BeeImgToDisplay}"/>
         <Grid Grid.Column="2">

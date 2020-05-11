@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Windows.Media.Imaging;
 
 namespace BeeBurn
 {
@@ -102,6 +103,15 @@ namespace BeeBurn
             {
                 BeeImage bi = new BeeImage(imgs[i], rootpath + "\\" + fileNameNaked + "\\");
                 ActiveImages.Add(bi);
+            }
+        }
+
+        public void PasteImage()
+        {
+            BitmapFrame srcClip = BeeClipboard.BitmapFrameFromClipboardDib();
+            if (srcClip != null)
+            {
+                ActiveImages.Add(new BeeImage(srcClip, "Paste-" + BeeBurnVM.Get().PasteCounter.ToString("D" + 4))); ;
             }
         }
     }

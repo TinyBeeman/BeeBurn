@@ -1,0 +1,28 @@
+﻿<Window x:Class="BeeBurn.BeeStackEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BeeBurn"
+        mc:Ignorable="d"
+        Title="BeeStackEditor" Height="450" Width="800"
+        >
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition Width="300"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <Button Click="ClickLoadImages" Margin="10,10,10,0">Load Image(s)</Button>
+            <Button Click="ClickPaste" Margin="10,10,10,0">Paste Image</Button>
+        </StackPanel>
+        <Grid Grid.Column="1">
+            <local:BeeImageList
+                x:Name="ImageListControl"
+                Stack="{Binding Path=Stack, Mode=TwoWay}"
+                SelectionIndex="{Binding Path=Stack.ActiveSelectionIndex, Mode=TwoWay}"/>
+        </Grid>
+        <local:BeeImageEditor Grid.Column="2" BeeImg="{Binding Path=Stack.BeeImgToDisplay}"/>
+    </Grid>
+</Window>

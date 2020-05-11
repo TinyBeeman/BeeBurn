@@ -22,8 +22,11 @@ namespace BeeBurn
         private Dictionary<ConfigKey, double> m_configDoubles = new Dictionary<ConfigKey, double>();
         private int m_pasteCounter = 0;
         private BeeStack m_activeStack = new BeeStack();
-        
 
+        public int PasteCounter
+        {
+            get { return m_pasteCounter++; }
+        }
 
         public static BeeBurnVM Get()
         {
@@ -73,17 +76,6 @@ namespace BeeBurn
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public void PasteToList()
-        {
-            BitmapFrame srcClip = BeeClipboard.BitmapFrameFromClipboardDib();
-            if (srcClip != null)
-            {
-                ActiveStack.ActiveImages.Add(new BeeImage(srcClip, "Paste-" + m_pasteCounter.ToString("D" + 4))); ;
-                m_pasteCounter++;
-            }
-        }
-
-
         public BeeStack ActiveStack
         {
             get => m_activeStack;
@@ -94,6 +86,25 @@ namespace BeeBurn
             }
         }
 
+        public static bool LoadImagesToStack(BeeStack stack)
+        {
+            var dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.InitialDirectory = Get().GetConfigString(ConfigKey.ImageLoadPath);
+            dlg.Multiselect = true;
+            dlg.Filter = "Image Files(*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg|All files (*.*)|*.*";
 
+            if (dlg.ShowDialog() == true)
+            {
+                foreach (string filepath in dlg.FileNames)
+                {
+                    BeeImage bi = new BeeImage(filepath);
+                    stack.ActiveImages.Add(bi);
+                }
+                return true;
+            }
+
+            return false;
+
+        }
     }
 }

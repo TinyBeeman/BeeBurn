@@ -47,23 +47,11 @@ namespace BeeBurn
 
         private void ClickPaste(object sender, RoutedEventArgs e)
         {
-            m_VM.PasteToList();
+            m_VM.ActiveStack.PasteImage();
         }
         private void ClickLoadImages(object sender, RoutedEventArgs e)
         {
-            var dlg = new OpenFileDialog();
-            dlg.InitialDirectory = m_VM.GetConfigString(ConfigKey.ImageLoadPath);
-            dlg.Multiselect = true;
-            dlg.Filter = "Image Files(*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg|All files (*.*)|*.*";
-
-            if (dlg.ShowDialog() == true)
-            {
-                foreach (string filepath in dlg.FileNames)
-                {
-                    BeeImage bi = new BeeImage(filepath);
-                    m_VM.ActiveStack.ActiveImages.Add(bi);
-                }
-            }
+            BeeBurnVM.LoadImagesToStack(m_VM.ActiveStack);
         }
 
         private void SaveAsButton_Click(object sender, RoutedEventArgs e)
@@ -104,6 +92,12 @@ namespace BeeBurn
             {
                 m_VM.ActiveStack.LoadStack(dlg.FileName);
             }
+        }
+
+        private void ClickEditStack(object sender, RoutedEventArgs e)
+        {
+            var dlgEditStack = new BeeStackEditor(m_VM.ActiveStack);
+            dlgEditStack.ShowDialog();
         }
     }
 }
