@@ -49,6 +49,22 @@ namespace BeeBurn
         {
             m_VM.PasteToList();
         }
+        private void ClickLoadImages(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog();
+            dlg.InitialDirectory = m_VM.GetConfigString(ConfigKey.ImageLoadPath);
+            dlg.Multiselect = true;
+            dlg.Filter = "Image Files(*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg|All files (*.*)|*.*";
+
+            if (dlg.ShowDialog() == true)
+            {
+                foreach (string filepath in dlg.FileNames)
+                {
+                    BeeImage bi = new BeeImage(filepath);
+                    m_VM.ActiveStack.ActiveImages.Add(bi);
+                }
+            }
+        }
 
         private void SaveAsButton_Click(object sender, RoutedEventArgs e)
         {

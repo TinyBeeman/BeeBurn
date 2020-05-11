@@ -81,7 +81,7 @@ namespace BeeBurn
             Name = name;
             BitmapFrame = src;
             StartRect = GetImageRect(src);
-            EndRect = new BeeRect(50, 50, 100, 100);
+            ShrinkEnd(StartRect.Width * 0.2);
         }
 
         public BeeImage(string serial, string childPath)
@@ -90,14 +90,25 @@ namespace BeeBurn
             Deserialize(serial, childPath);
         }
 
-        public void ShrinkEnd(double margin)
+        public BeeImage(string filePath)
+        {
+            SetBitmapFrameFromFilePath(filePath);
+            StartRect = GetImageRect(BitmapFrame);
+            ShrinkEnd(StartRect.Width * 0.2);
+            Name = System.IO.Path.GetFileNameWithoutExtension(filePath);
+        }
+
+        private void ShrinkEnd(double margin)
         {
             EndRect = new BeeRect(StartRect.Left + margin, StartRect.Top + margin, StartRect.Width - margin - margin, StartRect.Height - margin - margin);
         }
 
         public BeeRect GetImageRect(ImageSource src)
         {
-            return new BeeRect(0, 0, src.Width, src.Height);
+            if (src != null)
+                return new BeeRect(0, 0, src.Width, src.Height);
+            else
+                return new BeeRect();
         }
 
         private OffsetScale GetOffsetAndScaleFromRect(BeeRect rFocus, BeeRect rContainer)
@@ -158,6 +169,27 @@ namespace BeeBurn
                    EndRect.Height + ";";
         }
 
+        private bool SetBitmapFrameFromFilePath(string filePath)
+        {
+            Stream imgStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            string ext = System.IO.Path.GetExtension(filePath);
+            if (ext.Equals(".png", StringComparison.OrdinalIgnoreCase))
+            {
+                PngBitmapDecoder decoder = new PngBitmapDecoder(imgStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+                BitmapFrame = decoder.Frames[0];
+                return true;
+            }
+            else if (ext.Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                     ext.Equals(".jpeg", StringComparison.OrdinalIgnoreCase))
+            {
+                JpegBitmapDecoder decoder = new JpegBitmapDecoder(imgStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+                BitmapFrame = decoder.Frames[0];
+                return true;
+            }
+
+            return false;
+        }
+
         public void Deserialize(string str, string childPath)
         {
             string[] rgLines = str.Split(new char[] { '\n' }, 2, StringSplitOptions.RemoveEmptyEntries);
@@ -171,9 +203,7 @@ namespace BeeBurn
             StartRect = new BeeRect(Double.Parse(rgStartDims[0]), Double.Parse(rgStartDims[1]), Double.Parse(rgStartDims[2]), Double.Parse(rgStartDims[3]));
             EndRect = new BeeRect(Double.Parse(rgEndDims[0]), Double.Parse(rgEndDims[1]), Double.Parse(rgEndDims[2]), Double.Parse(rgEndDims[3]));
 
-            Stream pngStream = new FileStream(childPath + "\\" + fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            PngBitmapDecoder decoder = new PngBitmapDecoder(pngStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-            BitmapFrame = decoder.Frames[0];
+            SetBitmapFrameFromFilePath(childPath + "\\" + fileName);
         }
     }
 }

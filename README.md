@@ -8,7 +8,6 @@ Hit Go to present the slide show in a new HWND.
 
 TODO:
 
-* Load individual images from Disk
 * Libraries: List Libraries, Automatically Import
 * Hot Key for Paste
 * Ability to Pause Slide Show

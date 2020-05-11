@@ -8,6 +8,7 @@ namespace BeeBurn
     public enum ConfigKey : int
     {
         LibraryPath,
+        ImageLoadPath,
         SavePath,
         ImageFadeTime,
         ImagePanTime
@@ -41,6 +42,7 @@ namespace BeeBurn
         {
             m_configStrings.Add(ConfigKey.LibraryPath, "N:\\Data\\Dropbox\\Shared\\DocumentaryImages");
             m_configStrings.Add(ConfigKey.SavePath, "D:\\Temp\\BeeBurn");
+            m_configStrings.Add(ConfigKey.ImageLoadPath, "D:\\Users\\tony\\Downloads");
             m_configDoubles.Add(ConfigKey.ImageFadeTime, 2.0);
             m_configDoubles.Add(ConfigKey.ImagePanTime, 10.0);
         }
