@@ -11,6 +11,5 @@ TODO:
 * Libraries: List Libraries, Automatically Import
 * Hot Key for Paste
 * Ability to Pause Slide Show
-* Delete invididual image from list.
 * Multiple Simultaneous Lists to Switch Between
 * Interleave between multiple lists (Like "Water" and "1920s")

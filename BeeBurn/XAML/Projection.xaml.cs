@@ -32,6 +32,8 @@ namespace BeeBurn
         private double m_fadeSeconds = BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImageFadeTime) ?? 2;
         private double m_panSeconds = BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImagePanTime) ?? 30;
 
+        private Storyboard m_currentStoryboard = null;
+
 
         public Projection()
         {
@@ -45,7 +47,7 @@ namespace BeeBurn
             QueueNextImage();
         }
 
-        private void NextImageTimerTick(object sender, EventArgs e)
+        private void ProjectionTimerTick(object sender, EventArgs e)
         {
             var elapsed = DateTime.Now - m_timerStart;
             double pctComplete = Math.Min(1.0, elapsed.TotalSeconds / m_panSeconds);
@@ -66,6 +68,7 @@ namespace BeeBurn
             if (m_imgOld != null)
                 GridImage.Children.Remove(m_imgOld);
 
+            m_currentStoryboard = new Storyboard();
                 
             BeeImage bi = m_imgList[0];
             m_imgList.Remove(bi);
@@ -81,36 +84,62 @@ namespace BeeBurn
             GridImage.Children.Add(m_imgNew);
 
             DoubleAnimation animFadeIn = new DoubleAnimation(1, TimeSpan.FromSeconds(m_fadeSeconds));
-            DoubleAnimation animFadeOut = new DoubleAnimation(0, TimeSpan.FromSeconds(m_fadeSeconds));
 
-            ScaleTransform scale = new ScaleTransform(1, 1);
-            TransformGroup group = new TransformGroup();
-            group.Children.Add(scale);
+
+            ScaleTransform scaleTransform = new ScaleTransform(1, 1);
 
             m_imgNew.RenderTransformOrigin = new Point(0, 0);
-            m_imgNew.RenderTransform = group;
+            m_imgNew.RenderTransform = scaleTransform;
 
             OffsetScale os1 = bi.GetStartOffsetScale(new BeeRect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
             OffsetScale os2 = bi.GetEndOffsetScale(new BeeRect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
 
-            DoubleAnimation animScaleX = new DoubleAnimation(os1.Scale, os2.Scale, TimeSpan.FromSeconds(m_panSeconds + m_fadeSeconds));
-            DoubleAnimation animScaleY = new DoubleAnimation(os1.Scale, os2.Scale, TimeSpan.FromSeconds(m_panSeconds + m_fadeSeconds));
-            DoubleAnimation animOffsetX = new DoubleAnimation(-os1.OffsetX, -os2.OffsetX, TimeSpan.FromSeconds(m_panSeconds + m_fadeSeconds));
-            DoubleAnimation animOffsetY = new DoubleAnimation(-os1.OffsetY, -os2.OffsetY, TimeSpan.FromSeconds(m_panSeconds + m_fadeSeconds));
+            TimeSpan tsAnim = TimeSpan.FromSeconds(m_panSeconds + m_fadeSeconds);
+            
+            m_currentStoryboard.Duration = tsAnim;
 
-            m_imgNew.BeginAnimation(Canvas.OpacityProperty, animFadeIn);
+            DoubleAnimation animScaleX = new DoubleAnimation(os1.Scale, os2.Scale, tsAnim);
+            DoubleAnimation animScaleY = new DoubleAnimation(os1.Scale, os2.Scale, tsAnim);
+            DoubleAnimation animOffsetX = new DoubleAnimation(-os1.OffsetX, -os2.OffsetX, tsAnim);
+            DoubleAnimation animOffsetY = new DoubleAnimation(-os1.OffsetY, -os2.OffsetY, tsAnim);
+
+            Storyboard.SetTarget(animScaleX, m_imgNew);
+            Storyboard.SetTargetProperty(animScaleX, new PropertyPath("RenderTransform.ScaleX"));
+            m_currentStoryboard.Children.Add(animScaleX);
+            
+            Storyboard.SetTarget(animScaleY, m_imgNew);
+            Storyboard.SetTargetProperty(animScaleY, new PropertyPath("RenderTransform.ScaleY"));
+            m_currentStoryboard.Children.Add(animScaleY);
+
+            Storyboard.SetTarget(animOffsetX, m_imgNew);
+            Storyboard.SetTargetProperty(animOffsetX, new PropertyPath("RenderTransform.CenterX"));
+            m_currentStoryboard.Children.Add(animOffsetX);
+
+            Storyboard.SetTarget(animOffsetY, m_imgNew);
+            Storyboard.SetTargetProperty(animOffsetY, new PropertyPath("RenderTransform.CenterY"));
+            m_currentStoryboard.Children.Add(animOffsetY);
+
             if (m_imgOld != null)
-                m_imgOld.BeginAnimation(Canvas.OpacityProperty, animFadeOut);
-            scale.BeginAnimation(ScaleTransform.ScaleXProperty, animScaleX);
-            scale.BeginAnimation(ScaleTransform.ScaleYProperty, animScaleY);
-            scale.BeginAnimation(ScaleTransform.CenterXProperty, animOffsetX);
-            scale.BeginAnimation(ScaleTransform.CenterYProperty, animOffsetY);
+            {
+                DoubleAnimation animFadeOut = new DoubleAnimation(0, TimeSpan.FromSeconds(m_fadeSeconds));
+                Storyboard.SetTarget(animFadeOut, m_imgOld);
+                Storyboard.SetTargetProperty(animFadeOut, new PropertyPath("Opacity"));
+                m_currentStoryboard.Children.Add(animFadeOut);
+            }
+
+            
+            Storyboard.SetTarget(animFadeIn, m_imgNew);
+            Storyboard.SetTargetProperty(animFadeIn, new PropertyPath("Opacity"));
+            m_currentStoryboard.Children.Add(animFadeIn);
+            m_currentStoryboard.Duration = new Duration(tsAnim);
+
+            m_currentStoryboard.Begin();
 
             //  DispatcherTimer setup
             if (m_dispatcherTimer == null)
             {
                 m_dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-                m_dispatcherTimer.Tick += new EventHandler(NextImageTimerTick);
+                m_dispatcherTimer.Tick += new EventHandler(ProjectionTimerTick);
             }
 
             Progress.PercentComplete = 0;
