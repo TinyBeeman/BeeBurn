@@ -12,7 +12,7 @@ namespace BeeBurn
     {
         private static string s_sep = "---\n";
 
-        private List<string> m_tags = new List<string>();
+        private RangeObservableCollection<string> m_tags = new RangeObservableCollection<string>();
 
         private ObservableCollection<BeeImage> m_activeImages = new ObservableCollection<BeeImage>();
         private int m_activeSelectionIndex = -1;
@@ -54,12 +54,29 @@ namespace BeeBurn
             }
         }
 
-        public List<string> Tags
+        public RangeObservableCollection<string> Tags
         {
             get => m_tags;
             set
             {
                 m_tags = value;
+                OnPropertyChanged();
+                OnPropertyChanged("AllTags");
+            }
+        }
+
+        public string AllTags
+        {
+            get
+            {
+                return string.Join(", ", m_tags);
+            }
+            set
+            {
+                m_tags.Clear();
+                m_tags.AddRange(value.Split(new string[] { ", ", "," }, StringSplitOptions.RemoveEmptyEntries));
+                OnPropertyChanged("Tags");
+                OnPropertyChanged("AllTags");
             }
         }
 
@@ -74,7 +91,7 @@ namespace BeeBurn
             fullText += "tags,";
             foreach (var s in m_tags)
             {
-                fullText += "m_tags,";
+                fullText += s + ",";
             }
             fullText += "\n" + s_sep;
             foreach (var bi in ActiveImages)
@@ -97,7 +114,7 @@ namespace BeeBurn
             string[] imgs = strAll.Split(new string[] { s_sep }, StringSplitOptions.RemoveEmptyEntries);
             string childPath = imgs[0];
             string tags = imgs[1].Trim(new char[] { '\n', ' ' });
-            Tags.AddRange(tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
+            Tags.AddRange(tags.Split(new string[] { ", ", "," }, StringSplitOptions.RemoveEmptyEntries));
             Tags.RemoveAt(0);
             for (int i = 2; i < imgs.Length; i++)
             {

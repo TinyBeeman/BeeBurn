@@ -1,0 +1,20 @@
+﻿<Window x:Class="BeeBurn.XAML.BeeTagEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BeeBurn.XAML"
+        mc:Ignorable="d"
+        Title="BeeTagEditor" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="TextBox" Grid.Row="0"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="CancelBtn" Width="100" Margin="0,0,10,0" IsCancel="True" Click="CancelBtn_Click">Cancel</Button>
+            <Button x:Name="OkayBtn" Width="100" IsDefault="True" Click="OkayBtn_Click">Okay</Button>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeeBurn.XAML;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,6 +52,14 @@ namespace BeeBurn
         private void ClickPaste(object sender, RoutedEventArgs e)
         {
             Stack.PasteImage();
+        }
+
+        private void ClickEditTags(object sender, RoutedEventArgs e)
+        {
+            BeeTagEditor dlg = new BeeTagEditor();
+            dlg.TextBox.Text = Stack.AllTags;
+            if (dlg.ShowDialog() == true)
+                Stack.AllTags = dlg.TextBox.Text;
         }
     }
 }

@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -56,6 +58,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BeeBurnVM.cs" />
+    <Compile Include="RangeObservableCollection.cs" />
     <Compile Include="XAML\BeeProgress.xaml.cs">
       <DependentUpon>BeeProgress.xaml</DependentUpon>
     </Compile>
@@ -80,6 +83,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="XAML\BeeTagEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="XAML\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -96,6 +103,9 @@
     <Compile Include="BinaryStructConverter.cs" />
     <Compile Include="XAML\BeeImageList.xaml.cs">
       <DependentUpon>BeeImageList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XAML\BeeTagEditor.xaml.cs">
+      <DependentUpon>BeeTagEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="XAML\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
