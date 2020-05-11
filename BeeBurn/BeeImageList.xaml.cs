@@ -26,21 +26,21 @@ namespace BeeBurn
     {
         private int m_dragIndex = -1;
 
-        public ObservableCollection<BeeImage> ImageList
+        public BeeStack Stack
         {
             get
             {
-                return (ObservableCollection<BeeImage>)GetValue(ImageListProperty);
+                return (BeeStack)GetValue(StackProperty);
             }
             set
             {
-                SetValue(ImageListProperty, value);
+                SetValue(StackProperty, value);
             }
         }
 
-        public static readonly DependencyProperty ImageListProperty =
-                DependencyProperty.Register("ImageList",
-                    typeof(ObservableCollection<BeeImage>),
+        public static readonly DependencyProperty StackProperty =
+                DependencyProperty.Register("Stack",
+                    typeof(BeeStack),
                     typeof(BeeImageList),
                     new PropertyMetadata(null));
 
@@ -82,9 +82,9 @@ namespace BeeBurn
                 return;
             }*/
 
-            var biMoved = ImageList[m_dragIndex];
-            ImageList.RemoveAt(m_dragIndex);
-            ImageList.Insert(iInsert, biMoved);
+            var biMoved = Stack.ActiveImages[m_dragIndex];
+            Stack.ActiveImages.RemoveAt(m_dragIndex);
+            Stack.ActiveImages.Insert(iInsert, biMoved);
 
 
         }
@@ -140,20 +140,20 @@ namespace BeeBurn
         private void BtnRandom_Click(object sender, RoutedEventArgs e)
         {
             Random rng = new Random();
-            int n = ImageList.Count;
+            int n = Stack.ActiveImages.Count;
             while (n > 1)
             {
                 n--;
                 int k = rng.Next(n + 1);
-                var val = ImageList[k];
-                ImageList[k] = ImageList[n];
-                ImageList[n] = val;
+                var val = Stack.ActiveImages[k];
+                Stack.ActiveImages[k] = Stack.ActiveImages[n];
+                Stack.ActiveImages[n] = val;
             }
         }
 
         private void BtnClear_Click(object sender, RoutedEventArgs e)
         {
-            ImageList.Clear();
+            Stack.ActiveImages.Clear();
         }
     }
 }

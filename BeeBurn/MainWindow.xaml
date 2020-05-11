@@ -28,12 +28,12 @@
             <Button Click="ClickProject" Margin="10,10,10,0">Go</Button>
             <Button Click="ClickPaste" Margin="10,10,10,0">Paste</Button>
         </StackPanel>
-        <local:BeeImageEditor Grid.Column="1" BeeImg="{Binding Path=BeeImgToDisplay}"/>
+        <local:BeeImageEditor Grid.Column="1" BeeImg="{Binding Path=ActiveStack.BeeImgToDisplay}"/>
         <Grid Grid.Column="2">
             <local:BeeImageList
                 x:Name="ActiveImageList"
-                ImageList="{Binding Path=ActiveImages, Mode=TwoWay}"
-                SelectionIndex="{Binding Path=ActiveSelectionIndex, Mode=TwoWay}"/>
+                Stack="{Binding Path=ActiveStack, Mode=TwoWay}"
+                SelectionIndex="{Binding Path=ActiveStack.ActiveSelectionIndex, Mode=TwoWay}"/>
         </Grid>
         
     </Grid>

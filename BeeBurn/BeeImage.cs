@@ -162,7 +162,7 @@ namespace BeeBurn
         {
             string[] rgLines = str.Split(new char[] { '\n' }, 2, StringSplitOptions.RemoveEmptyEntries);
             string fileName = rgLines[0];
-            Name = fileName.Substring(4); // Remove 0000-
+            Name = fileName.Substring(5); // Remove 0000-
             Name = Name.Substring(0, Name.Length - 4); // remove .png
 
             var rgRects = rgLines[1].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);

@@ -25,7 +25,7 @@
             <DataGrid
                 x:Name="ActiveGrid"
                 AutoGenerateColumns="False"
-                ItemsSource="{Binding Path=ImageList, ElementName=ImageListControl, diag:PresentationTraceSources.TraceLevel=High}"
+                ItemsSource="{Binding Path=Stack.ActiveImages, ElementName=ImageListControl, diag:PresentationTraceSources.TraceLevel=High}"
                 SelectedIndex="{Binding Path=SelectionIndex, Mode=TwoWay}"
                 SelectionMode="Extended"
                 SelectionUnit="FullRow"

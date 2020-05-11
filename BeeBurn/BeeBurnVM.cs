@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
 
@@ -23,9 +20,8 @@ namespace BeeBurn
         private Dictionary<ConfigKey, string> m_configStrings = new Dictionary<ConfigKey, string>();
         private Dictionary<ConfigKey, double> m_configDoubles = new Dictionary<ConfigKey, double>();
         private int m_pasteCounter = 0;
-        private int m_activeSelectionIndex = -1;
-        private ObservableCollection<BeeImage> m_activeImages = new ObservableCollection<BeeImage>();
-        private BeeImage m_beeImgToDisplay;
+        private BeeStack m_activeStack = new BeeStack();
+        
 
 
         public static BeeBurnVM Get()
@@ -66,36 +62,7 @@ namespace BeeBurn
         }
 
 
-        public ObservableCollection<BeeImage> ActiveImages
-        {
-            get => m_activeImages;
-            set { m_activeImages = value; OnPropertyChanged(); }
-        }
         
-
-        public int ActiveSelectionIndex
-        {
-            get => m_activeSelectionIndex;
-            set
-            {
-                m_activeSelectionIndex = value;
-                OnPropertyChanged();
-                if (value >= 0 && value < m_activeImages.Count)
-                    BeeImgToDisplay = m_activeImages[value];
-            }
-        }
-
-        
-        public BeeImage BeeImgToDisplay
-        {
-            get => m_beeImgToDisplay;
-            set
-            {
-                m_beeImgToDisplay = value;
-                OnPropertyChanged();
-                m_beeImgToDisplay.UpdateAllProps();
-            }
-        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -109,50 +76,22 @@ namespace BeeBurn
             BitmapFrame srcClip = BeeClipboard.BitmapFrameFromClipboardDib();
             if (srcClip != null)
             {
-                ActiveImages.Add(new BeeImage(srcClip, "Paste-" + m_pasteCounter.ToString("D" + 4))); ;
+                ActiveStack.ActiveImages.Add(new BeeImage(srcClip, "Paste-" + m_pasteCounter.ToString("D" + 4))); ;
                 m_pasteCounter++;
             }
         }
 
-        public void ClearList()
+
+        public BeeStack ActiveStack
         {
-            ActiveImages.Clear();
-        }
-
-        private static string s_sep = "---\n";
-
-        internal void SaveStack(string fileNameNaked, string savePath)
-        {
-
-            int i = 0;
-            string childPath = savePath + "\\" + fileNameNaked;
-            Directory.CreateDirectory(childPath);
-
-            string fullText = fileNameNaked + "\n" + s_sep;
-            foreach (var bi in ActiveImages)
+            get => m_activeStack;
+            set
             {
-                fullText += bi.Serialize(i++, childPath) + "\n";
-                fullText += s_sep;
-            }
-            File.WriteAllText(savePath + "\\" + fileNameNaked + ".bstack", fullText);
-        }
-
-        internal void LoadStack(string filePath)
-        {
-            if (!File.Exists(filePath))
-                return;
-
-            string rootpath = Path.GetDirectoryName(filePath);
-            string fileNameNaked = Path.GetFileNameWithoutExtension(filePath);
-
-            string strAll = File.ReadAllText(filePath);
-            string[] imgs = strAll.Split(new string[] { s_sep }, StringSplitOptions.RemoveEmptyEntries);
-            string childPath = imgs[0];
-            for (int i = 1; i < imgs.Length; i++)
-            {
-                BeeImage bi = new BeeImage(imgs[i], rootpath + "\\" + fileNameNaked + "\\");
-                ActiveImages.Add(bi);
+                m_activeStack = value;
+                OnPropertyChanged();
             }
         }
+
+
     }
 }

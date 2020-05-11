@@ -42,7 +42,7 @@ namespace BeeBurn
             }
 
             m_proj.Show();
-            m_proj.ProjectList(m_VM.ActiveImages);
+            m_proj.ProjectList(m_VM.ActiveStack.ActiveImages);
         }
 
         private void ClickPaste(object sender, RoutedEventArgs e)
@@ -71,7 +71,7 @@ namespace BeeBurn
                     dlg.FileName += ".bstack";
                 }
 
-                m_VM.SaveStack(fileNameNaked, savePath);
+                m_VM.ActiveStack.SaveStack(fileNameNaked, savePath);
 
             }
             
@@ -86,7 +86,7 @@ namespace BeeBurn
 
             if (dlg.ShowDialog() == true)
             {
-                m_VM.LoadStack(dlg.FileName);
+                m_VM.ActiveStack.LoadStack(dlg.FileName);
             }
         }
     }

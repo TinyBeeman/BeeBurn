@@ -60,6 +60,7 @@
       <DependentUpon>BeeProgress.xaml</DependentUpon>
     </Compile>
     <Compile Include="BeeRect.cs" />
+    <Compile Include="BeeStack.cs" />
     <Compile Include="Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
