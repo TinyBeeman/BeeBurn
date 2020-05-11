@@ -155,5 +155,15 @@ namespace BeeBurn
         {
             Stack.ActiveImages.Clear();
         }
+
+        private void BtnDel_Click(object sender, RoutedEventArgs e)
+        {
+            int i = Stack.ActiveSelectionIndex;
+            if (i >= 0 && i < Stack.ActiveImages.Count)
+            {
+                Stack.ActiveImages.RemoveAt(i);
+                Stack.ActiveSelectionIndex = Math.Min(i, Stack.ActiveImages.Count - 1);
+            }
+        }
     }
 }

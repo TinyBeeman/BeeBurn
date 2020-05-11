@@ -34,7 +34,6 @@
                 PreviewMouseLeftButtonDown="ActiveGrid_PreviewMouseLeftButtonDown"
                 >
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Gripper" CellTemplate="{StaticResource GrippieTemplate}"/>
                     <DataGridTemplateColumn Header="Thumbnail" CellTemplate="{StaticResource ThumbnailTemplate}"/>
                     <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Path=Name}"/>
                 </DataGrid.Columns>
@@ -43,8 +42,9 @@
         <StackPanel
             Orientation="Horizontal"
             Grid.Row="1">
-            <Button x:Name="BtnRandom" Click="BtnRandom_Click">Randomize</Button>
-            <Button x:Name="BtnClear" Click="BtnClear_Click">Clear</Button>
+            <Button x:Name="BtnRandom" Click="BtnRandom_Click" Width="50">Rnd</Button>
+            <Button x:Name="BtnClear" Click="BtnClear_Click" Width="50">Clear</Button>
+            <Button x:Name="BtnDel" Click="BtnDel_Click" Width="50">Del</Button>
         </StackPanel>
     </Grid>
 </UserControl>
