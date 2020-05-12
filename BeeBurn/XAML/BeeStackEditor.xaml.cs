@@ -46,7 +46,7 @@ namespace BeeBurn
 
         private void ClickLoadImages(object sender, RoutedEventArgs e)
         {
-            BeeBurnVM.LoadImagesToStack(Stack);
+            BeeBurnIO.LoadImagesToStack(Stack);
         }
 
         private void ClickPaste(object sender, RoutedEventArgs e)

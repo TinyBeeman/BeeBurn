@@ -66,9 +66,6 @@ namespace BeeBurn
             return null;
         }
 
-
-        
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
@@ -86,10 +83,15 @@ namespace BeeBurn
             }
         }
 
+
+    }
+
+    public static class BeeBurnIO
+    {
         public static bool LoadImagesToStack(BeeStack stack)
         {
             var dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.InitialDirectory = Get().GetConfigString(ConfigKey.ImageLoadPath);
+            dlg.InitialDirectory = BeeBurnVM.Get().GetConfigString(ConfigKey.ImageLoadPath);
             dlg.Multiselect = true;
             dlg.Filter = "Image Files(*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg|All files (*.*)|*.*";
 
@@ -104,7 +106,33 @@ namespace BeeBurn
             }
 
             return false;
+        }
 
+        public static string SerializeDictionary(Dictionary<string, string> dict, char sep = '|', char assign = ':')
+        {
+            string ret = "";
+            
+            foreach (var kvp in dict)
+            {
+                if (ret.Length > 0)
+                    ret += sep;
+                ret += kvp.Key + ":" + kvp.Value;
+            }
+
+            return ret;
+        }
+
+        public static Dictionary<string, string> DeserializeDictionary(string str, string[] sep, char assign = ':')
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+
+            foreach(string skv in str.Split(sep, System.StringSplitOptions.RemoveEmptyEntries))
+            {
+                string[] kv = skv.Split(new char[] { assign });
+                dict[kv[0].Trim()] = kv[1].Trim();
+            }
+
+            return dict;
         }
     }
 }

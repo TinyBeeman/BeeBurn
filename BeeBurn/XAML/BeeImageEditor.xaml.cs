@@ -87,6 +87,8 @@ namespace BeeBurn
                 r.Top += deltaY;
                 r.Height -= deltaY;
             }
+
+            BeeImg.Edited = true;
         }
 
         private void OnImageMouseDown(object sender, MouseButtonEventArgs e)
@@ -101,6 +103,7 @@ namespace BeeBurn
                 BeeImg.StartRect.Top = ptMouse.Y;
                 BeeImg.StartRect.Width = 1;
                 BeeImg.StartRect.Height = 1;
+                BeeImg.Edited = true;
             }
             else
             {
@@ -110,6 +113,7 @@ namespace BeeBurn
                 BeeImg.EndRect.Top = ptMouse.Y;
                 BeeImg.EndRect.Width = 1;
                 BeeImg.EndRect.Height = 1;
+                BeeImg.Edited = true;
             }
         }
 

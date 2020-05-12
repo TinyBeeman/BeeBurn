@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -38,6 +39,8 @@ namespace BeeBurn
         private BeeRect m_startRect;
         private BeeRect m_endRect;
         private string m_name;
+        private bool m_fromLibrary = false;
+        private bool m_edited = false;
 
         public BitmapFrame BitmapFrame
         {
@@ -72,6 +75,28 @@ namespace BeeBurn
             set
             {
                 m_endRect = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        
+
+        public bool Edited
+        {
+            get => m_edited;
+            set
+            {
+                m_edited = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool FromLibrary
+        {
+            get => m_fromLibrary;
+            set
+            {
+                m_fromLibrary = value;
                 OnPropertyChanged();
             }
         }
@@ -157,16 +182,19 @@ namespace BeeBurn
                 MessageBox.Show("Failed to save image: " + e.Message);
                 return null;
             }
-                
-            return saveName + "\n" +
-                   StartRect.Left + "," +
-                   StartRect.Top + "," +
-                   StartRect.Width + "," +
-                   StartRect.Height + ";" +
-                   EndRect.Left + "," +
-                   EndRect.Top + "," +
-                   EndRect.Width + "," +
-                   EndRect.Height + ";";
+
+            Dictionary<string, string> imgStrings = new Dictionary<string, string>();
+            imgStrings["SaveName"] = saveName;
+            imgStrings["StartLeft"] = StartRect.Left.ToString();
+            imgStrings["StartTop"] = StartRect.Top.ToString();
+            imgStrings["StartWidth"] = StartRect.Width.ToString();
+            imgStrings["StartHeight"] = StartRect.Height.ToString();
+            imgStrings["EndLeft"] = EndRect.Left.ToString();
+            imgStrings["EndTop"] = EndRect.Top.ToString();
+            imgStrings["EndWidth"] = EndRect.Width.ToString();
+            imgStrings["EndHeight"] = EndRect.Height.ToString();
+            imgStrings["Edited"] = Edited ? "1" : "0";
+            return BeeBurnIO.SerializeDictionary(imgStrings);
         }
 
         private bool SetBitmapFrameFromFilePath(string filePath)
@@ -192,16 +220,14 @@ namespace BeeBurn
 
         public void Deserialize(string str, string childPath)
         {
-            string[] rgLines = str.Split(new char[] { '\n' }, 2, StringSplitOptions.RemoveEmptyEntries);
-            string fileName = rgLines[0];
-            Name = fileName.Substring(5); // Remove 0000-
+            str = str.Trim(new char[] { ' ', '\t', '\n', '\r' });
+            var d = BeeBurnIO.DeserializeDictionary(str, new string[] { "|", "| " });
+            string fileName = d["SaveName"];
+            Name = d["SaveName"].Substring(5); // Remove 0000-
             Name = Name.Substring(0, Name.Length - 4); // remove .png
-
-            var rgRects = rgLines[1].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-            var rgStartDims = rgRects[0].Split(new char[] { ',' }, 4, StringSplitOptions.RemoveEmptyEntries);
-            var rgEndDims = rgRects[1].Split(new char[] { ',' }, 4, StringSplitOptions.RemoveEmptyEntries);
-            StartRect = new BeeRect(Double.Parse(rgStartDims[0]), Double.Parse(rgStartDims[1]), Double.Parse(rgStartDims[2]), Double.Parse(rgStartDims[3]));
-            EndRect = new BeeRect(Double.Parse(rgEndDims[0]), Double.Parse(rgEndDims[1]), Double.Parse(rgEndDims[2]), Double.Parse(rgEndDims[3]));
+            StartRect = new BeeRect(double.Parse(d["StartLeft"]), double.Parse(d["StartTop"]), double.Parse(d["StartWidth"]), double.Parse(d["StartHeight"]));
+            EndRect = new BeeRect(double.Parse(d["EndLeft"]), double.Parse(d["EndTop"]), double.Parse(d["EndWidth"]), double.Parse(d["EndHeight"]));
+            Edited = (d["Edited"][0] == '1');
 
             SetBitmapFrameFromFilePath(childPath + "\\" + fileName);
         }

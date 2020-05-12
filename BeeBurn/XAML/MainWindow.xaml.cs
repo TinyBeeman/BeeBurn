@@ -51,7 +51,7 @@ namespace BeeBurn
         }
         private void ClickLoadImages(object sender, RoutedEventArgs e)
         {
-            BeeBurnVM.LoadImagesToStack(m_VM.ActiveStack);
+            BeeBurnIO.LoadImagesToStack(m_VM.ActiveStack);
         }
 
         private void SaveAsButton_Click(object sender, RoutedEventArgs e)

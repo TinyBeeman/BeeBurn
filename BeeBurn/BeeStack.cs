@@ -88,10 +88,10 @@ namespace BeeBurn
             Directory.CreateDirectory(childPath);
 
             string fullText = fileNameNaked + "\n" + s_sep;
-            fullText += "tags,";
+            fullText += "Tags:";
             foreach (var s in m_tags)
             {
-                fullText += s + ",";
+                fullText += s + "|";
             }
             fullText += "\n" + s_sep;
             foreach (var bi in ActiveImages)
@@ -114,8 +114,8 @@ namespace BeeBurn
             string[] imgs = strAll.Split(new string[] { s_sep }, StringSplitOptions.RemoveEmptyEntries);
             string childPath = imgs[0];
             string tags = imgs[1].Trim(new char[] { '\n', ' ' });
-            Tags.AddRange(tags.Split(new string[] { ", ", "," }, StringSplitOptions.RemoveEmptyEntries));
-            Tags.RemoveAt(0);
+            // Substring is to remove "tags:"
+            Tags.AddRange(tags.Substring(5).Split(new string[] { "|", "| " }, StringSplitOptions.RemoveEmptyEntries));
             for (int i = 2; i < imgs.Length; i++)
             {
                 BeeImage bi = new BeeImage(imgs[i], rootpath + "\\" + fileNameNaked + "\\");
