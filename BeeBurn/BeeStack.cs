@@ -5,15 +5,17 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
+using System.Linq;
 
 namespace BeeBurn
 {
     public class BeeStack : INotifyPropertyChanged
     {
         private static string s_sep = "---\n";
+        private static int s_nextStack = 1;
 
+        private string m_name;
         private RangeObservableCollection<string> m_tags = new RangeObservableCollection<string>();
-
         private ObservableCollection<BeeImage> m_activeImages = new ObservableCollection<BeeImage>();
         private int m_activeSelectionIndex = -1;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -22,6 +24,21 @@ namespace BeeBurn
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public BeeStack()
+        {
+            m_name = "Stack " + (s_nextStack++).ToString("D" + 3);
+        }
+
+        public string Name
+        {
+            get => m_name;
+            set
+            {
+                m_name = value;
+                OnPropertyChanged();
+            }
         }
 
         public ObservableCollection<BeeImage> ActiveImages
@@ -74,32 +91,42 @@ namespace BeeBurn
             set
             {
                 m_tags.Clear();
-                m_tags.AddRange(value.Split(new string[] { ", ", "," }, StringSplitOptions.RemoveEmptyEntries));
+                IEnumerable<string> tags = new List<string>(value.Split(new string[] { ", ", "," }, StringSplitOptions.RemoveEmptyEntries)).Distinct().OrderBy(s => s);
+                m_tags.AddRange(tags);
                 OnPropertyChanged("Tags");
                 OnPropertyChanged("AllTags");
             }
         }
 
-        internal void SaveStack(string fileNameNaked, string savePath)
+        internal bool SaveStack(string fileNameNaked, string savePath)
         {
-
-            int i = 0;
-            string childPath = savePath + "\\" + fileNameNaked;
-            Directory.CreateDirectory(childPath);
-
-            string fullText = fileNameNaked + "\n" + s_sep;
-            fullText += "Tags:";
-            foreach (var s in m_tags)
+            try
             {
-                fullText += s + "|";
+                int i = 0;
+                string childPath = savePath + "\\" + fileNameNaked;
+                Directory.CreateDirectory(childPath);
+
+                string fullText = fileNameNaked + "\n" + s_sep;
+                fullText += "Tags:";
+                foreach (var s in m_tags)
+                {
+                    fullText += s + "|";
+                }
+                fullText += "\n" + s_sep;
+                foreach (var bi in ActiveImages)
+                {
+                    fullText += bi.Serialize(i++, childPath) + "\n";
+                    fullText += s_sep;
+                }
+                File.WriteAllText(savePath + "\\" + fileNameNaked + ".bstack", fullText);
             }
-            fullText += "\n" + s_sep;
-            foreach (var bi in ActiveImages)
+            catch (System.IO.IOException ex)
             {
-                fullText += bi.Serialize(i++, childPath) + "\n";
-                fullText += s_sep;
+                System.Windows.MessageBox.Show("Failed to save " + fileNameNaked + " stack to " + savePath + ": " + ex.Message);
+                return false;
             }
-            File.WriteAllText(savePath + "\\" + fileNameNaked + ".bstack", fullText);
+
+            return true;
         }
 
         internal void LoadStack(string filePath)

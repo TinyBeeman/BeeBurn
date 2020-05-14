@@ -15,3 +15,4 @@ TODO:
 * Multiple Simultaneous Lists to Switch Between
 * Interleave between multiple lists (Like "Water" and "1920s")
 * Sort Tags and Remove Dups
+* Presenter Control

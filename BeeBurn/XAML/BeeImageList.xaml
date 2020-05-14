@@ -33,6 +33,20 @@
                 Drop="ActiveGrid_Drop"
                 PreviewMouseLeftButtonDown="ActiveGrid_PreviewMouseLeftButtonDown"
                 >
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="FontStyle" Value="Normal"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=Edited}" Value="false">
+                                <Setter Property="Background" Value="AliceBlue"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=FromLibrary}" Value="true">
+                                <Setter Property="FontStyle" Value="Italic"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Thumbnail" CellTemplate="{StaticResource ThumbnailTemplate}"/>
                     <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Path=Name}"/>

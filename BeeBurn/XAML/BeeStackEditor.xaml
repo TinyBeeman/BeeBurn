@@ -14,10 +14,13 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
+            <TextBox Text="{Binding Path=Stack.Name}" Margin="10,10,10,0"/>
             <Button Click="ClickLoadImages" Margin="10,10,10,0">Load Image(s)</Button>
             <Button Click="ClickPaste" Margin="10,10,10,0">Paste Image</Button>
-            <TextBlock Margin="10,10,10,0" Text="{Binding Path=Stack.AllTags}" />
-            <Button Click="ClickEditTags" Margin="10,10,10,0">EditTags</Button>
+            <TextBlock Margin="10,10,10,0" Text="{Binding Path=Stack.AllTags}" TextWrapping="Wrap" />
+            <Button Click="ClickEditTags" Margin="10,10,10,0">Edit Tags</Button>
+            <Separator Margin="10,10,10,0" />
+            <Button Click="ClickSaveList" Margin="10,10,10,0">Save List</Button>
         </StackPanel>
         <Grid Grid.Column="1">
             <local:BeeImageList

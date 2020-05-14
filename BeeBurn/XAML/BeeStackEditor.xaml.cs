@@ -61,5 +61,10 @@ namespace BeeBurn
             if (dlg.ShowDialog() == true)
                 Stack.AllTags = dlg.TextBox.Text;
         }
+
+        private void ClickSaveList(object sender, RoutedEventArgs e)
+        {
+            BeeBurnIO.SaveAsStack(Stack);
+        }
     }
 }
