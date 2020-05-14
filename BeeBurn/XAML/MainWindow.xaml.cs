@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using BeeBurn.XAML;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,9 @@ namespace BeeBurn
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Projection m_proj = null;
+        
         private BeeBurnVM m_VM = null;
-
+        private PresenterView m_presenterView = null;
 
         public MainWindow()
         {
@@ -33,30 +34,33 @@ namespace BeeBurn
             DataContext = m_VM;
         }
 
+        private void EnsurePresenterView()
+        {
+            if (m_presenterView == null)
+            {
+                m_presenterView = new PresenterView();
+                m_presenterView.OnClose += () => { m_presenterView = null; };
+            }
+        }
+
         private void ClickProject(object sender, RoutedEventArgs e)
         {
-            if (m_proj == null)
-            {
-                m_proj = new Projection();
-                m_proj.OnClose += () => { m_proj = null; };
-            }
-
-            m_proj.Show();
-            m_proj.ProjectList(m_VM.ActiveStack.ActiveImages);
+            EnsurePresenterView();
+            m_presenterView.Show();
         }
 
         private void ClickPaste(object sender, RoutedEventArgs e)
         {
-            m_VM.ActiveStack.PasteImage();
+            m_VM.SelectedStack.PasteImage();
         }
         private void ClickLoadImages(object sender, RoutedEventArgs e)
         {
-            BeeBurnIO.LoadImagesToStack(m_VM.ActiveStack);
+            BeeBurnIO.LoadImagesToStack(m_VM.SelectedStack);
         }
 
         private void SaveAsButton_Click(object sender, RoutedEventArgs e)
         {
-            BeeBurnIO.SaveAsStack(m_VM.ActiveStack);
+            BeeBurnIO.SaveAsStack(m_VM.SelectedStack);
         }
 
         private void OpenButton_Click(object sender, RoutedEventArgs e)
@@ -67,13 +71,13 @@ namespace BeeBurn
 
             if (dlg.ShowDialog() == true)
             {
-                m_VM.ActiveStack.LoadStack(dlg.FileName);
+                m_VM.SelectedStack.LoadStack(dlg.FileName);
             }
         }
 
         private void ClickEditStack(object sender, RoutedEventArgs e)
         {
-            var dlgEditStack = new BeeStackEditor(m_VM.ActiveStack);
+            var dlgEditStack = new BeeStackEditor(m_VM.SelectedStack);
             dlgEditStack.ShowDialog();
         }
     }

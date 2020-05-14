@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace BeeBurn
+namespace BeeBurn.XAML
 {
     /// <summary>
     /// Interaction logic for BeeStackEditor.xaml

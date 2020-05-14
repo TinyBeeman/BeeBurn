@@ -25,7 +25,7 @@
 
         #region Private Fields    
         [NonSerialized]
-        private DeferredEventsCollection? _deferredEvents;
+        private DeferredEventsCollection _deferredEvents;
         #endregion Private Fields
 
 
@@ -75,7 +75,7 @@
         //------------------------------------------------------
 
         #region Public Properties
-        EqualityComparer<T>? _Comparer;
+        EqualityComparer<T> _Comparer;
         public EqualityComparer<T> Comparer
         {
             get => _Comparer ??= EqualityComparer<T>.Default;
@@ -191,7 +191,7 @@
 
             var clusters = new Dictionary<int, List<T>>();
             var lastIndex = -1;
-            List<T>? lastCluster = null;
+            List<T> lastCluster = null;
             foreach (T item in collection)
             {
                 var index = IndexOf(item);
@@ -253,7 +253,7 @@
             if (Count == 0)
                 return 0;
 
-            List<T>? cluster = null;
+            List<T> cluster = null;
             var clusterIndex = -1;
             var removedCount = 0;
 
@@ -408,7 +408,7 @@
                 var addedCount = list.Count;
 
                 var changesMade = false;
-                List<T>?
+                List<T>
                   newCluster = null,
                   oldCluster = null;
 

@@ -14,7 +14,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace BeeBurn
+namespace BeeBurn.XAML
 {
 
     /// <summary>

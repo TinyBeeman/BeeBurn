@@ -19,7 +19,8 @@ namespace BeeBurn
         private ObservableCollection<BeeImage> m_activeImages = new ObservableCollection<BeeImage>();
         private int m_activeSelectionIndex = -1;
         public event PropertyChangedEventHandler PropertyChanged;
-        private BeeImage m_beeImgToDisplay;
+        private BeeImage m_beeImgToDisplay = null;
+        private bool m_isLibrary = false;
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -45,6 +46,16 @@ namespace BeeBurn
         {
             get => m_activeImages;
             set { m_activeImages = value; OnPropertyChanged(); }
+        }
+
+        public bool IsLibrary
+        {
+            get => m_isLibrary;
+            set
+            {
+                m_isLibrary = value;
+                OnPropertyChanged();
+            }
         }
 
 

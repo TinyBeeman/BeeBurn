@@ -60,6 +60,9 @@
     <Compile Include="BeeBurnIO.cs" />
     <Compile Include="BeeBurnVM.cs" />
     <Compile Include="RangeObservableCollection.cs" />
+    <Compile Include="XAML\BeeStackList.xaml.cs">
+      <DependentUpon>BeeStackList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="XAML\BeeProgress.xaml.cs">
       <DependentUpon>BeeProgress.xaml</DependentUpon>
     </Compile>
@@ -71,6 +74,10 @@
     <Page Include="XAML\BeeImageEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XAML\BeeStackList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="XAML\BeeImageList.xaml">
       <SubType>Designer</SubType>
@@ -108,16 +115,24 @@
     <Compile Include="XAML\BeeTagEditor.xaml.cs">
       <DependentUpon>BeeTagEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="XAML\EnumBooleanConverter.cs" />
     <Compile Include="XAML\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="XAML\PresenterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="XAML\Projection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="XAML\PresenterView.xaml.cs">
+      <DependentUpon>PresenterView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="XAML\Projection.xaml.cs">
       <DependentUpon>Projection.xaml</DependentUpon>
     </Compile>

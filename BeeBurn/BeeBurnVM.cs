@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
@@ -21,7 +22,9 @@ namespace BeeBurn
         private Dictionary<ConfigKey, string> m_configStrings = new Dictionary<ConfigKey, string>();
         private Dictionary<ConfigKey, double> m_configDoubles = new Dictionary<ConfigKey, double>();
         private int m_pasteCounter = 0;
-        private BeeStack m_activeStack = new BeeStack();
+        private BeeStack m_SelectedStack;
+        private ObservableCollection<BeeStack> m_stacks = new ObservableCollection<BeeStack>();
+        private int m_SelectedStackIndex;
 
         public int PasteCounter
         {
@@ -39,6 +42,9 @@ namespace BeeBurn
         private BeeBurnVM()
         {
             InitializeDefaultSettings();
+            m_stacks.Add(new BeeStack());
+            m_stacks.Add(new BeeStack());  // Temporary for testing.
+            m_SelectedStack = m_stacks[0];
         }
 
         private void InitializeDefaultSettings()
@@ -73,16 +79,31 @@ namespace BeeBurn
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public BeeStack ActiveStack
+        public int SelectedStackIndex
         {
-            get => m_activeStack;
+            get => m_SelectedStackIndex;
             set
             {
-                m_activeStack = value;
+                m_SelectedStackIndex = value;
                 OnPropertyChanged();
+                OnPropertyChanged("SelectedStack");
             }
         }
 
+        public ObservableCollection<BeeStack> Stacks
+        {
+            get => m_stacks;
+        }
+
+        public BeeStack SelectedStack
+        {
+            get => m_stacks[m_SelectedStackIndex];
+            set
+            {
+                if (m_stacks.Contains(value))
+                    SelectedStackIndex = m_stacks.IndexOf(value);
+            }
+        }
 
     }
 }

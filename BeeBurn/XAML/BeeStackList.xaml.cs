@@ -17,53 +17,51 @@ using System.Windows.Shapes;
 
 namespace BeeBurn.XAML
 {
-    public delegate Point GetPosition(IInputElement element);
-
     /// <summary>
     /// Interaction logic for ImageList.xaml
     /// </summary>
-    public partial class BeeImageList : UserControl
+    public partial class BeeStackList : UserControl
     {
         private int m_dragIndex = -1;
 
-        public BeeStack Stack
+        public ObservableCollection<BeeStack> Stacks
         {
             get
             {
-                return (BeeStack)GetValue(StackProperty);
+                return (ObservableCollection<BeeStack>)GetValue(StacksProperty);
             }
             set
             {
-                SetValue(StackProperty, value);
+                SetValue(StacksProperty, value);
             }
         }
 
-        public static readonly DependencyProperty StackProperty =
-                DependencyProperty.Register("Stack",
-                    typeof(BeeStack),
-                    typeof(BeeImageList),
+        public static readonly DependencyProperty StacksProperty =
+                DependencyProperty.Register("Stacks",
+                    typeof(ObservableCollection<BeeStack>),
+                    typeof(BeeStackList),
                     new PropertyMetadata(null));
 
-        public int SelectionIndex
+        public int SelectedStackIndex
         {
             get
             {
-                return (int)GetValue(SelectionIndexProperty);
+                return (int)GetValue(SelectedStackIndexProperty);
             }
             set
             {
-                SetValue(SelectionIndexProperty, value);
+                SetValue(SelectedStackIndexProperty, value);
             }
         }
 
-        public static DependencyProperty SelectionIndexProperty =
-        DependencyProperty.Register("SelectionIndex",
+        public static DependencyProperty SelectedStackIndexProperty =
+        DependencyProperty.Register("SelectedStackIndex",
             typeof(int),
-            typeof(BeeImageList),
+            typeof(BeeStackList),
             new PropertyMetadata(-1));
 
 
-        public BeeImageList()
+        public BeeStackList()
         {
             InitializeComponent();
         }
@@ -82,9 +80,9 @@ namespace BeeBurn.XAML
                 return;
             }*/
 
-            var biMoved = Stack.ActiveImages[m_dragIndex];
-            Stack.ActiveImages.RemoveAt(m_dragIndex);
-            Stack.ActiveImages.Insert(iInsert, biMoved);
+            var biMoved = Stacks[m_dragIndex];
+            Stacks.RemoveAt(m_dragIndex);
+            Stacks.Insert(iInsert, biMoved);
 
 
         }
@@ -96,13 +94,13 @@ namespace BeeBurn.XAML
                 return;
 
             ActiveGrid.SelectedIndex = m_dragIndex;
-            BeeImage biSel = ActiveGrid.Items[m_dragIndex] as BeeImage;
-            if (biSel == null)
+            BeeStack bsSel = ActiveGrid.Items[m_dragIndex] as BeeStack;
+            if (bsSel == null)
                 return;
             var dragEffects = DragDropEffects.Move;
-            if (DragDrop.DoDragDrop(ActiveGrid, biSel, dragEffects) != DragDropEffects.None)
+            if (DragDrop.DoDragDrop(ActiveGrid, bsSel, dragEffects) != DragDropEffects.None)
             {
-                ActiveGrid.SelectedItem = biSel;
+                ActiveGrid.SelectedItem = bsSel;
             }
         }
 
@@ -140,29 +138,29 @@ namespace BeeBurn.XAML
         private void BtnRandom_Click(object sender, RoutedEventArgs e)
         {
             Random rng = new Random();
-            int n = Stack.ActiveImages.Count;
+            int n = Stacks.Count;
             while (n > 1)
             {
                 n--;
                 int k = rng.Next(n + 1);
-                var val = Stack.ActiveImages[k];
-                Stack.ActiveImages[k] = Stack.ActiveImages[n];
-                Stack.ActiveImages[n] = val;
+                var val = Stacks[k];
+                Stacks[k] = Stacks[n];
+                Stacks[n] = val;
             }
         }
 
         private void BtnClear_Click(object sender, RoutedEventArgs e)
         {
-            Stack.ActiveImages.Clear();
+            Stacks.Clear();
         }
 
         private void BtnDel_Click(object sender, RoutedEventArgs e)
         {
-            int i = Stack.ActiveSelectionIndex;
-            if (i >= 0 && i < Stack.ActiveImages.Count)
+            int i = SelectedStackIndex;
+            if (i >= 0 && i < Stacks.Count)
             {
-                Stack.ActiveImages.RemoveAt(i);
-                Stack.ActiveSelectionIndex = Math.Min(i, Stack.ActiveImages.Count - 1);
+                Stacks.RemoveAt(i);
+                SelectedStackIndex = Math.Min(i, Stacks.Count - 1);
             }
         }
     }
