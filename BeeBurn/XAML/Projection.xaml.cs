@@ -22,13 +22,9 @@ namespace BeeBurn.XAML
     /// </summary>
     public partial class Projection : Window
     {
-        private ObservableCollection<BeeImage> m_imgList;
-
         private Image m_imgOld;
         private Image m_imgNew;
 
-        private DateTime m_timerStart;
-        private DispatcherTimer m_dispatcherTimer;
         private double m_fadeSeconds = BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImageFadeTime) ?? 2;
         private double m_panSeconds = BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImagePanTime) ?? 30;
 
@@ -40,39 +36,38 @@ namespace BeeBurn.XAML
             InitializeComponent();
         }
 
-        public void ProjectList(ObservableCollection<BeeImage> imgList)
-        {
-            m_imgList = imgList;
-
-            QueueNextImage();
-        }
-
         private void ProjectionTimerTick(object sender, EventArgs e)
         {
-            var elapsed = DateTime.Now - m_timerStart;
-            double pctComplete = Math.Min(1.0, elapsed.TotalSeconds / m_panSeconds);
-
-            Progress.PercentComplete = pctComplete;
-
-            if (pctComplete >= 1.0)
-            {
-                m_dispatcherTimer.Stop();
-                m_dispatcherTimer = null;
-                QueueNextImage();
-            }
         }
 
-        public void QueueNextImage()
+        public void FadeToBlack()
         {
-            
             if (m_imgOld != null)
                 GridImage.Children.Remove(m_imgOld);
 
-            m_currentStoryboard = new Storyboard();
-                
-            BeeImage bi = m_imgList[0];
-            m_imgList.Remove(bi);
-            m_imgList.Add(bi);
+            m_imgOld = m_imgNew;
+            m_imgNew = null;
+
+            if (m_imgOld != null)
+            {
+                m_currentStoryboard = new Storyboard();
+                m_currentStoryboard.Duration = TimeSpan.FromSeconds(m_fadeSeconds);
+
+                DoubleAnimation animFadeOut = new DoubleAnimation(0, TimeSpan.FromSeconds(m_fadeSeconds));
+                Storyboard.SetTarget(animFadeOut, m_imgOld);
+                Storyboard.SetTargetProperty(animFadeOut, new PropertyPath("Opacity"));
+                m_currentStoryboard.Children.Add(animFadeOut);
+                m_currentStoryboard.Begin();
+            }
+
+
+        }
+
+        public void QueueImage(BeeImage bi)
+        {
+            if (m_imgOld != null)
+                GridImage.Children.Remove(m_imgOld);
+            
             m_imgOld = m_imgNew;
             m_imgNew = new Image();
             m_imgNew.Source = bi.BitmapFrame;
@@ -85,7 +80,6 @@ namespace BeeBurn.XAML
 
             DoubleAnimation animFadeIn = new DoubleAnimation(1, TimeSpan.FromSeconds(m_fadeSeconds));
 
-
             ScaleTransform scaleTransform = new ScaleTransform(1, 1);
 
             m_imgNew.RenderTransformOrigin = new Point(0, 0);
@@ -96,6 +90,7 @@ namespace BeeBurn.XAML
 
             TimeSpan tsAnim = TimeSpan.FromSeconds(m_panSeconds + m_fadeSeconds);
             
+            m_currentStoryboard = new Storyboard();
             m_currentStoryboard.Duration = tsAnim;
 
             DoubleAnimation animScaleX = new DoubleAnimation(os1.Scale, os2.Scale, tsAnim);
@@ -106,7 +101,7 @@ namespace BeeBurn.XAML
             Storyboard.SetTarget(animScaleX, m_imgNew);
             Storyboard.SetTargetProperty(animScaleX, new PropertyPath("RenderTransform.ScaleX"));
             m_currentStoryboard.Children.Add(animScaleX);
-            
+
             Storyboard.SetTarget(animScaleY, m_imgNew);
             Storyboard.SetTargetProperty(animScaleY, new PropertyPath("RenderTransform.ScaleY"));
             m_currentStoryboard.Children.Add(animScaleY);
@@ -127,67 +122,26 @@ namespace BeeBurn.XAML
                 m_currentStoryboard.Children.Add(animFadeOut);
             }
 
-            
+
             Storyboard.SetTarget(animFadeIn, m_imgNew);
             Storyboard.SetTargetProperty(animFadeIn, new PropertyPath("Opacity"));
             m_currentStoryboard.Children.Add(animFadeIn);
             m_currentStoryboard.Duration = new Duration(tsAnim);
 
             m_currentStoryboard.Begin();
-
-            //  DispatcherTimer setup
-            if (m_dispatcherTimer == null)
-            {
-                m_dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-                m_dispatcherTimer.Tick += new EventHandler(ProjectionTimerTick);
-            }
-
-            Progress.PercentComplete = 0;
-            m_timerStart = DateTime.Now;
-            m_dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
-            m_dispatcherTimer.Start();
-
-            
-        }
-        
-
-        public void ReplaceImage(Image img)
-        {
-            if (m_imgOld != null)
-                GridImage.Children.Remove(m_imgOld);
-
-            m_imgOld = m_imgNew;
-            m_imgNew = img;
-            m_imgNew.Opacity = 0;
-
-            DoubleAnimation animShow = new DoubleAnimation(1, TimeSpan.FromSeconds(2));
-            
-            
-            GridImage.Children.Add(m_imgNew);
-            if (m_imgOld != null)
-            {
-                DoubleAnimation animHide = new DoubleAnimation(0, TimeSpan.FromSeconds(2));
-                m_imgOld.BeginAnimation(Canvas.OpacityProperty, animHide);
-            }
-            m_imgNew.BeginAnimation(Canvas.OpacityProperty, animShow);
         }
 
-        public void PasteImage()
+        public void UpdateProgress(double pct)
         {
-            Image imgNew = new Image();
-
-            imgNew.Source = BeeClipboard.BitmapFrameFromClipboardDib();
-            ReplaceImage(imgNew);
+            Progress.PercentComplete = pct;
         }
 
         public delegate void CloseHandler();
 
         public event CloseHandler OnClose;
 
-
         private void ProjectionClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            m_dispatcherTimer.Stop();
             OnClose?.Invoke();
         }
     }

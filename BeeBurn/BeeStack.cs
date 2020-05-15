@@ -14,6 +14,7 @@ namespace BeeBurn
         private static string s_sep = "---\n";
         private static int s_nextStack = 1;
 
+        private BeeImage m_nextImage = null;
         private string m_name;
         private RangeObservableCollection<string> m_tags = new RangeObservableCollection<string>();
         private ObservableCollection<BeeImage> m_activeImages = new ObservableCollection<BeeImage>();
@@ -30,6 +31,56 @@ namespace BeeBurn
         public BeeStack()
         {
             m_name = "Stack " + (s_nextStack++).ToString("D" + 3);
+        }
+
+        public void ResetNextImage()
+        {
+            m_nextImage = m_activeImages.Count > 0 ? m_activeImages[0] : null;
+            BeeImage.SetNextImage(m_nextImage);
+        }
+
+        public BeeImage GetNextImage()
+        {
+            // Empty List? Set everything to null.
+            if (m_activeImages.Count == 0)
+            {
+                m_nextImage = null;
+                BeeImage.SetNextImage(null);
+                return null;
+            }
+
+            // If we don't have an empty list, but also no next image
+            // let's reset the next image.
+            if (m_nextImage == null)
+            {
+                ResetNextImage();
+            }
+
+            int iNext = m_activeImages.IndexOf(m_nextImage);
+
+            // Weird case where m_nextImage isn't in the list anymore.
+            if (iNext == -1)
+            {
+                ResetNextImage();
+                iNext = 0;
+            }
+
+            BeeImage biRet = m_nextImage;
+            if (biRet != null)
+                biRet.IsNext = false;
+
+            int iNewNext = iNext + 1;
+            if (iNewNext >= m_activeImages.Count)
+            {
+                ResetNextImage();
+            }
+            else
+            {
+                m_nextImage = m_activeImages[iNewNext];
+                BeeImage.SetNextImage(m_nextImage);
+            }
+
+            return biRet;
         }
 
         public string Name

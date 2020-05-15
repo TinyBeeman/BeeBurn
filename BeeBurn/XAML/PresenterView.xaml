@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:BeeBurn.XAML"
         mc:Ignorable="d"
         Title="PresenterView"
+        Closing="PresenterClosing"
         Height="800" Width="800">
     <Window.Resources>
         <local:EnumBooleanConverter x:Key="enumBooleanConverter"/>

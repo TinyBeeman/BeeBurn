@@ -25,6 +25,7 @@ namespace BeeBurn
         private BeeStack m_SelectedStack;
         private ObservableCollection<BeeStack> m_stacks = new ObservableCollection<BeeStack>();
         private int m_SelectedStackIndex;
+        private BeeStack m_activeStack;
 
         public int PasteCounter
         {
@@ -104,6 +105,37 @@ namespace BeeBurn
                     SelectedStackIndex = m_stacks.IndexOf(value);
             }
         }
+
+        public BeeStack ActiveStack
+        {
+            get => m_activeStack;
+            set
+            {
+                m_activeStack = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public BeeStack EnsureActiveStack()
+        {
+            if (ActiveStack != null)
+                return ActiveStack;
+            
+            if (SelectedStack != null)
+            {
+                ActiveStack = SelectedStack;
+                return ActiveStack;
+            }
+
+            if (m_stacks.Count == 0)
+            {
+                m_stacks.Add(new BeeStack());
+            }
+
+            ActiveStack = m_stacks[0];
+            return ActiveStack;
+        }
+
 
     }
 }

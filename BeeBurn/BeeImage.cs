@@ -21,10 +21,24 @@ namespace BeeBurn
 
     public class BeeImage : INotifyPropertyChanged
     {
+        private int m_sessionId;
+        private static int s_nextSessionId = 0;
+        private static BeeImage s_nextImage = null;
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public static void SetNextImage(BeeImage biNext)
+        {
+            if (s_nextImage != null)
+                s_nextImage.IsNext = false;
+
+            s_nextImage = biNext;
+            if (s_nextImage != null)
+                biNext.IsNext = true;
         }
 
         public void UpdateAllProps()
@@ -41,6 +55,10 @@ namespace BeeBurn
         private string m_name;
         private bool m_fromLibrary = false;
         private bool m_edited = false;
+        private bool m_isShowing;
+        private bool m_isNext;
+
+        public int SessionId => m_sessionId;
 
         public BitmapFrame BitmapFrame
         {
@@ -51,6 +69,27 @@ namespace BeeBurn
                 OnPropertyChanged();
             }
         }
+
+        public bool IsShowing
+        {
+            get => m_isShowing;
+            set
+            {
+                m_isShowing = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsNext
+        {
+            get => m_isNext;
+            set
+            {
+                m_isNext = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string Name {
             get => m_name;
             set
@@ -101,8 +140,14 @@ namespace BeeBurn
             }
         }
 
+        private void InitializeSessionId()
+        {
+            m_sessionId = s_nextSessionId++;
+        }
+
         public BeeImage(BitmapFrame src, string name)
         {
+            InitializeSessionId();
             Name = name;
             BitmapFrame = src;
             StartRect = GetImageRect(src);
@@ -111,12 +156,14 @@ namespace BeeBurn
 
         public BeeImage(string serial, string childPath)
         {
+            InitializeSessionId();
             BitmapFrame = null;
             Deserialize(serial, childPath);
         }
 
         public BeeImage(string filePath)
         {
+            InitializeSessionId();
             SetBitmapFrameFromFilePath(filePath);
             StartRect = GetImageRect(BitmapFrame);
             ShrinkEnd(StartRect.Width * 0.2);
