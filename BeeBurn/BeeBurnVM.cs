@@ -22,9 +22,8 @@ namespace BeeBurn
         private Dictionary<ConfigKey, string> m_configStrings = new Dictionary<ConfigKey, string>();
         private Dictionary<ConfigKey, double> m_configDoubles = new Dictionary<ConfigKey, double>();
         private int m_pasteCounter = 0;
-        private BeeStack m_SelectedStack;
         private ObservableCollection<BeeStack> m_stacks = new ObservableCollection<BeeStack>();
-        private int m_SelectedStackIndex;
+        private int m_selectedStackIndex;
         private BeeStack m_activeStack;
 
         public int PasteCounter
@@ -44,8 +43,7 @@ namespace BeeBurn
         {
             InitializeDefaultSettings();
             m_stacks.Add(new BeeStack());
-            m_stacks.Add(new BeeStack());  // Temporary for testing.
-            m_SelectedStack = m_stacks[0];
+            SelectedStack = m_stacks[0];
         }
 
         private void InitializeDefaultSettings()
@@ -54,7 +52,7 @@ namespace BeeBurn
             m_configStrings.Add(ConfigKey.SavePath, "D:\\Temp\\BeeBurn");
             m_configStrings.Add(ConfigKey.ImageLoadPath, "D:\\Users\\tony\\Downloads");
             m_configDoubles.Add(ConfigKey.ImageFadeTime, 2.0);
-            m_configDoubles.Add(ConfigKey.ImagePanTime, 10.0);
+            m_configDoubles.Add(ConfigKey.ImagePanTime, 60.0);
         }
 
         public double? GetConfigDouble(ConfigKey configKey)
@@ -82,10 +80,10 @@ namespace BeeBurn
 
         public int SelectedStackIndex
         {
-            get => m_SelectedStackIndex;
+            get => m_selectedStackIndex;
             set
             {
-                m_SelectedStackIndex = value;
+                m_selectedStackIndex = value;
                 OnPropertyChanged();
                 OnPropertyChanged("SelectedStack");
             }
@@ -98,7 +96,13 @@ namespace BeeBurn
 
         public BeeStack SelectedStack
         {
-            get => m_stacks[m_SelectedStackIndex];
+            get
+            {
+                if (m_selectedStackIndex >= 0 && m_selectedStackIndex < m_stacks.Count)
+                    return m_stacks[m_selectedStackIndex];
+                else
+                    return null;
+            }
             set
             {
                 if (m_stacks.Contains(value))

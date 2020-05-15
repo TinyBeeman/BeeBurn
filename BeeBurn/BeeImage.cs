@@ -24,6 +24,7 @@ namespace BeeBurn
         private int m_sessionId;
         private static int s_nextSessionId = 0;
         private static BeeImage s_nextImage = null;
+        private static BeeImage s_showingImage = null;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string name = null)
@@ -37,8 +38,20 @@ namespace BeeBurn
                 s_nextImage.IsNext = false;
 
             s_nextImage = biNext;
+
             if (s_nextImage != null)
                 biNext.IsNext = true;
+        }
+
+        public static void SetShowingImage(BeeImage biShowing)
+        {
+            if (s_showingImage != null)
+                s_showingImage.IsShowing = false;
+
+            s_showingImage = biShowing;
+
+            if (s_showingImage != null)
+                biShowing.IsShowing = true;
         }
 
         public void UpdateAllProps()

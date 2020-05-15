@@ -135,6 +135,11 @@ namespace BeeBurn.XAML
             return curIndex;
         }
 
+        private void BtnNew_Click(object sender, RoutedEventArgs e)
+        {
+            Stacks.Add(new BeeStack());
+        }
+
         private void BtnRandom_Click(object sender, RoutedEventArgs e)
         {
             Random rng = new Random();
@@ -153,6 +158,8 @@ namespace BeeBurn.XAML
         {
             Stacks.Clear();
         }
+
+
 
         private void BtnDel_Click(object sender, RoutedEventArgs e)
         {

@@ -51,7 +51,8 @@ namespace BeeBurn
 
         private void ClickPaste(object sender, RoutedEventArgs e)
         {
-            m_VM.SelectedStack.PasteImage();
+            if (m_VM.SelectedStack != null)
+                m_VM.SelectedStack.PasteImage();
         }
         private void ClickLoadImages(object sender, RoutedEventArgs e)
         {
@@ -71,7 +72,10 @@ namespace BeeBurn
 
             if (dlg.ShowDialog() == true)
             {
-                m_VM.SelectedStack.LoadStack(dlg.FileName);
+                BeeStack bsNew = new BeeStack();
+                m_VM.Stacks.Add(bsNew);
+                bsNew.LoadStack(dlg.FileName);
+                m_VM.ActiveStack = bsNew;
             }
         }
 

@@ -77,24 +77,27 @@ namespace BeeBurn
             }
 
             BeeImage biRet = m_nextImage;
-            if (biRet != null)
-                biRet.IsNext = false;
-
             int iNewNext = iNext + 1;
             if (iNewNext >= m_activeImages.Count)
             {
-                if (!loop)
+                // If we're at the end of the list,
+                // we set the next image to null,
+                // unless we're looping, in which case
+                // we Reset it (to 0, presumably).
+                if (loop)
                 {
-                    m_nextImage = null;
-                    m_atEnd = true;
+                    ResetNextImage();
                 }
                 else
                 {
-                    ResetNextImage();
+                    m_nextImage = null;
+                    m_atEnd = true;
+                    BeeImage.SetNextImage(null);
                 }
             }
             else
             {
+                // Set up our next image.
                 m_nextImage = m_activeImages[iNewNext];
                 BeeImage.SetNextImage(m_nextImage);
             }
@@ -229,6 +232,7 @@ namespace BeeBurn
                 BeeImage bi = new BeeImage(imgs[i], rootpath + "\\" + fileNameNaked + "\\");
                 ActiveImages.Add(bi);
             }
+            Name = fileNameNaked;
         }
 
         public void PasteImage()

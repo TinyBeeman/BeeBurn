@@ -53,6 +53,7 @@
         <StackPanel
             Orientation="Horizontal"
             Grid.Row="1">
+            <Button x:Name="BtnNew" Click="BtnNew_Click" Width="50">New</Button>
             <Button x:Name="BtnRandom" Click="BtnRandom_Click" Width="50">Rnd</Button>
             <Button x:Name="BtnClear" Click="BtnClear_Click" Width="50">Clear</Button>
             <Button x:Name="BtnDel" Click="BtnDel_Click" Width="50">Del</Button>

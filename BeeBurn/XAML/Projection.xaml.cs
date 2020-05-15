@@ -24,12 +24,12 @@ namespace BeeBurn.XAML
     {
         private Image m_imgOld;
         private Image m_imgNew;
+        private Random m_rng = new Random();
 
         private double m_fadeSeconds = BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImageFadeTime) ?? 2;
         private double m_panSeconds = BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImagePanTime) ?? 30;
 
         private Storyboard m_currentStoryboard = null;
-
 
         public Projection()
         {
@@ -42,6 +42,8 @@ namespace BeeBurn.XAML
 
         public void FadeToBlack()
         {
+            BeeImage.SetShowingImage(null);
+
             if (m_imgOld != null)
                 GridImage.Children.Remove(m_imgOld);
 
@@ -63,8 +65,11 @@ namespace BeeBurn.XAML
 
         }
 
-        public void QueueImage(BeeImage bi)
+        public double QueueImage(BeeImage bi)
         {
+
+            BeeImage.SetShowingImage(bi);
+
             if (m_imgOld != null)
                 GridImage.Children.Remove(m_imgOld);
             
@@ -88,7 +93,12 @@ namespace BeeBurn.XAML
             OffsetScale os1 = bi.GetStartOffsetScale(new BeeRect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
             OffsetScale os2 = bi.GetEndOffsetScale(new BeeRect(0, 0, GridImage.ActualWidth, GridImage.ActualHeight));
 
-            TimeSpan tsAnim = TimeSpan.FromSeconds(m_panSeconds + m_fadeSeconds);
+            // Let's animate a random amount of time between 0.25 and 1.0 of the configuration value.
+            double mult = (m_rng.NextDouble() * 0.75) + 0.25;
+            double panSeconds = mult * m_panSeconds;
+
+
+            TimeSpan tsAnim = TimeSpan.FromSeconds(panSeconds + m_fadeSeconds);
             
             m_currentStoryboard = new Storyboard();
             m_currentStoryboard.Duration = tsAnim;
@@ -129,6 +139,8 @@ namespace BeeBurn.XAML
             m_currentStoryboard.Duration = new Duration(tsAnim);
 
             m_currentStoryboard.Begin();
+
+            return panSeconds;
         }
 
         public void UpdateProgress(double pct)

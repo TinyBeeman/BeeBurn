@@ -26,6 +26,7 @@ namespace BeeBurn.XAML
         private DispatcherTimer m_dispatcherTimer = null;
         private DateTime m_timerStart;
         private double m_panSeconds = BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImagePanTime) ?? 30;
+        
         private bool m_paused = true;
 
         public PresenterView()
@@ -69,7 +70,7 @@ namespace BeeBurn.XAML
         private void PresenterClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             PauseProjection();
-            m_proj.Close();
+            m_proj?.Close();
             OnClose?.Invoke();
         }
 
@@ -130,7 +131,7 @@ namespace BeeBurn.XAML
                 }
             }
 
-            m_proj.QueueImage(biNext);
+            double panSeconds = m_proj.QueueImage(biNext) + BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImageFadeTime) ?? 2;
 
             //  DispatcherTimer setup
             if (m_dispatcherTimer == null)
@@ -138,6 +139,8 @@ namespace BeeBurn.XAML
                 m_dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
                 m_dispatcherTimer.Tick += new EventHandler(ProjectionTimerTick);
             }
+
+            m_dispatcherTimer.Tag = panSeconds;
 
             m_proj.UpdateProgress(0);
             m_timerStart = DateTime.Now;
@@ -148,7 +151,8 @@ namespace BeeBurn.XAML
         private void ProjectionTimerTick(object sender, EventArgs e)
         {
             var elapsed = DateTime.Now - m_timerStart;
-            double pctComplete = Math.Min(1.0, elapsed.TotalSeconds / m_panSeconds);
+            double panSeconds = (double)m_dispatcherTimer.Tag;
+            double pctComplete = Math.Min(1.0, elapsed.TotalSeconds / panSeconds);
             
             m_proj?.UpdateProgress(pctComplete);
 

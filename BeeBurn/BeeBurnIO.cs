@@ -19,8 +19,16 @@ namespace BeeBurn
             {
                 foreach (string filepath in dlg.FileNames)
                 {
-                    BeeImage bi = new BeeImage(filepath);
-                    stack.ActiveImages.Add(bi);
+                    try
+                    {
+                        BeeImage bi = new BeeImage(filepath);
+                        stack.ActiveImages.Add(bi);
+                    }
+                    catch (Exception)
+                    {
+                        // TODO: Handle better.
+                        continue;
+                    }
                 }
                 return true;
             }

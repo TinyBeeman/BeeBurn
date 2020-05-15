@@ -37,13 +37,20 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Setter Property="Background" Value="White"/>
+                        <Setter Property="FontWeight" Value="Normal"/>
                         <Setter Property="FontStyle" Value="Normal"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=Edited}" Value="false">
-                                <Setter Property="Background" Value="AliceBlue"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Path=FromLibrary}" Value="true">
                                 <Setter Property="FontStyle" Value="Italic"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=IsShowing}" Value="true">
+                                <Setter Property="Background" Value="LightGreen"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=IsNext}" Value="true">
+                                <Setter Property="Background" Value="LightBlue"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
