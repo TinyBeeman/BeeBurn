@@ -115,7 +115,11 @@ namespace BeeBurn
             get => m_activeStack;
             set
             {
+                if (m_activeStack != null)
+                    m_activeStack.IsActive = false;
+
                 m_activeStack = value;
+                m_activeStack.IsActive = true;
                 OnPropertyChanged();
             }
         }
@@ -124,7 +128,7 @@ namespace BeeBurn
         {
             for (int i = index; i < m_stacks.Count; i++)
             {
-                if (m_stacks[i].ActiveImages.Count > 0)
+                if (m_stacks[i].Images.Count > 0)
                     return m_stacks[i];
             }
 
@@ -132,7 +136,7 @@ namespace BeeBurn
             {
                 for (int i = 0; i < index; i++)
                 {
-                    if (m_stacks[i].ActiveImages.Count > 0)
+                    if (m_stacks[i].Images.Count > 0)
                         return m_stacks[i];
                 }
             }

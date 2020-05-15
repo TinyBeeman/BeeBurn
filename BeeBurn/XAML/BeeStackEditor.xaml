@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BeeBurn.XAML"
         mc:Ignorable="d"
-        Title="BeeStackEditor" Height="450" Width="800"
+        Title="BeeBurn Stack Editor" Height="450" Width="800"
         >
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
         <Grid.ColumnDefinitions>
@@ -26,7 +26,7 @@
             <local:BeeImageList
                 x:Name="ImageListControl"
                 Stack="{Binding Path=Stack, Mode=TwoWay}"
-                SelectionIndex="{Binding Path=Stack.ActiveSelectionIndex, Mode=TwoWay}"/>
+                SelectionIndex="{Binding Path=Stack.SelectedIndex, Mode=TwoWay}"/>
         </Grid>
         <local:BeeImageEditor Grid.Column="2" BeeImg="{Binding Path=Stack.BeeImgToDisplay}"/>
     </Grid>

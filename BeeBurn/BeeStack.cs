@@ -12,17 +12,18 @@ namespace BeeBurn
     public class BeeStack : INotifyPropertyChanged
     {
         private static string s_sep = "---\n";
-        private static int s_nextStack = 1;
+        private static int s_nextStackCounter = 1;
 
         private BeeImage m_nextImage = null;
         private string m_name;
         private RangeObservableCollection<string> m_tags = new RangeObservableCollection<string>();
-        private ObservableCollection<BeeImage> m_activeImages = new ObservableCollection<BeeImage>();
-        private int m_activeSelectionIndex = -1;
+        private ObservableCollection<BeeImage> m_images = new ObservableCollection<BeeImage>();
+        private int m_SelectedIndex = -1;
         public event PropertyChangedEventHandler PropertyChanged;
         private BeeImage m_beeImgToDisplay = null;
         private bool m_isLibrary = false;
         private bool m_atEnd = false;
+        private bool m_isActive;
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -31,20 +32,20 @@ namespace BeeBurn
 
         public BeeStack()
         {
-            m_name = "Stack " + (s_nextStack++).ToString("D" + 3);
+            m_name = "Stack " + (s_nextStackCounter++).ToString("D" + 3);
         }
 
         public void ResetNextImage()
         {
             m_atEnd = false;
-            m_nextImage = m_activeImages.Count > 0 ? m_activeImages[0] : null;
+            m_nextImage = m_images.Count > 0 ? m_images[0] : null;
             BeeImage.SetNextImage(m_nextImage);
         }
 
         public BeeImage GetNextImage(bool loop)
         {
             // Empty List? Set everything to null.
-            if (m_activeImages.Count == 0)
+            if (m_images.Count == 0)
             {
                 m_nextImage = null;
                 BeeImage.SetNextImage(null);
@@ -67,7 +68,7 @@ namespace BeeBurn
                 ResetNextImage();
             }
 
-            int iNext = m_activeImages.IndexOf(m_nextImage);
+            int iNext = m_images.IndexOf(m_nextImage);
 
             // Weird case where m_nextImage isn't in the list anymore.
             if (iNext == -1)
@@ -78,7 +79,7 @@ namespace BeeBurn
 
             BeeImage biRet = m_nextImage;
             int iNewNext = iNext + 1;
-            if (iNewNext >= m_activeImages.Count)
+            if (iNewNext >= m_images.Count)
             {
                 // If we're at the end of the list,
                 // we set the next image to null,
@@ -98,7 +99,7 @@ namespace BeeBurn
             else
             {
                 // Set up our next image.
-                m_nextImage = m_activeImages[iNewNext];
+                m_nextImage = m_images[iNewNext];
                 BeeImage.SetNextImage(m_nextImage);
             }
 
@@ -115,10 +116,10 @@ namespace BeeBurn
             }
         }
 
-        public ObservableCollection<BeeImage> ActiveImages
+        public ObservableCollection<BeeImage> Images
         {
-            get => m_activeImages;
-            set { m_activeImages = value; OnPropertyChanged(); }
+            get => m_images;
+            set { m_images = value; OnPropertyChanged(); }
         }
 
         public bool IsLibrary
@@ -132,15 +133,25 @@ namespace BeeBurn
         }
 
 
-        public int ActiveSelectionIndex
+        public bool IsActive
         {
-            get => m_activeSelectionIndex;
+            get => m_isActive;
             set
             {
-                m_activeSelectionIndex = value;
+                m_isActive = value;
                 OnPropertyChanged();
-                if (value >= 0 && value < m_activeImages.Count)
-                    BeeImgToDisplay = m_activeImages[value];
+            }
+        }
+
+        public int SelectedIndex
+        {
+            get => m_SelectedIndex;
+            set
+            {
+                m_SelectedIndex = value;
+                OnPropertyChanged();
+                if (value >= 0 && value < m_images.Count)
+                    BeeImgToDisplay = m_images[value];
             }
         }
 
@@ -197,7 +208,7 @@ namespace BeeBurn
                     fullText += s + "|";
                 }
                 fullText += "\n" + s_sep;
-                foreach (var bi in ActiveImages)
+                foreach (var bi in Images)
                 {
                     fullText += bi.Serialize(i++, childPath) + "\n";
                     fullText += s_sep;
@@ -230,7 +241,7 @@ namespace BeeBurn
             for (int i = 2; i < imgs.Length; i++)
             {
                 BeeImage bi = new BeeImage(imgs[i], rootpath + "\\" + fileNameNaked + "\\");
-                ActiveImages.Add(bi);
+                Images.Add(bi);
             }
             Name = fileNameNaked;
         }
@@ -240,7 +251,7 @@ namespace BeeBurn
             BitmapFrame srcClip = BeeClipboard.BitmapFrameFromClipboardDib();
             if (srcClip != null)
             {
-                ActiveImages.Add(new BeeImage(srcClip, "Paste-" + BeeBurnVM.Get().PasteCounter.ToString("D" + 4))); ;
+                Images.Add(new BeeImage(srcClip, "Paste-" + BeeBurnVM.Get().PasteCounter.ToString("D" + 4))); ;
             }
         }
     }

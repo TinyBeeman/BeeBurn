@@ -82,9 +82,9 @@ namespace BeeBurn.XAML
                 return;
             }*/
 
-            var biMoved = Stack.ActiveImages[m_dragIndex];
-            Stack.ActiveImages.RemoveAt(m_dragIndex);
-            Stack.ActiveImages.Insert(iInsert, biMoved);
+            var biMoved = Stack.Images[m_dragIndex];
+            Stack.Images.RemoveAt(m_dragIndex);
+            Stack.Images.Insert(iInsert, biMoved);
 
 
         }
@@ -140,30 +140,45 @@ namespace BeeBurn.XAML
         private void BtnRandom_Click(object sender, RoutedEventArgs e)
         {
             Random rng = new Random();
-            int n = Stack.ActiveImages.Count;
+            int n = Stack.Images.Count;
             while (n > 1)
             {
                 n--;
                 int k = rng.Next(n + 1);
-                var val = Stack.ActiveImages[k];
-                Stack.ActiveImages[k] = Stack.ActiveImages[n];
-                Stack.ActiveImages[n] = val;
+                var val = Stack.Images[k];
+                Stack.Images[k] = Stack.Images[n];
+                Stack.Images[n] = val;
             }
         }
 
         private void BtnClear_Click(object sender, RoutedEventArgs e)
         {
-            Stack.ActiveImages.Clear();
+            Stack.Images.Clear();
         }
 
         private void BtnDel_Click(object sender, RoutedEventArgs e)
         {
-            int i = Stack.ActiveSelectionIndex;
-            if (i >= 0 && i < Stack.ActiveImages.Count)
+            int i = Stack.SelectedIndex;
+            if (i >= 0 && i < Stack.Images.Count)
             {
-                Stack.ActiveImages.RemoveAt(i);
-                Stack.ActiveSelectionIndex = Math.Min(i, Stack.ActiveImages.Count - 1);
+                Stack.Images.RemoveAt(i);
+                Stack.SelectedIndex = Math.Min(i, Stack.Images.Count - 1);
             }
+        }
+
+        private void BtnPaste_Click(object sender, RoutedEventArgs e)
+        {
+            Stack.PasteImage();
+        }
+
+        private void BtnReset_Click(object sender, RoutedEventArgs e)
+        {
+            Stack.ResetNextImage();
+        }
+
+        private void BtnLoad_Click(object sender, RoutedEventArgs e)
+        {
+            BeeBurnIO.LoadImagesToStack(Stack);
         }
     }
 }

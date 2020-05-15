@@ -33,8 +33,13 @@ namespace BeeBurn.XAML
         {
             InitializeComponent();
             DataContext = BeeBurnVM.Get();
+        }
 
+        private void PresenterLoaded(object sender, RoutedEventArgs e)
+        {
             EnsureProjectionWindow();
+            m_proj.Show();
+            this.Activate();
         }
 
         public PlayOptions PlayOption

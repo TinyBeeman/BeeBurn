@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Grid.Resources>
             <DataTemplate x:Key="GrippieTemplate">
@@ -36,17 +37,22 @@
                 >
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="FontWeight" Value="Normal"/>
                         <Setter Property="FontStyle" Value="Normal"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=IsLibrary}" Value="true">
                                 <Setter Property="FontStyle" Value="Italic"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=IsActive}" Value="true">
+                                <Setter Property="FontWeight" Value="Bold"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}"/>
-                    <DataGridTextColumn Header="ImageCount" IsReadOnly="True" Binding="{Binding Path=ActiveImages.Count}"/>
+                    <DataGridTextColumn Header="ImageCount" IsReadOnly="True" Binding="{Binding Path=Images.Count}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>
@@ -54,9 +60,14 @@
             Orientation="Horizontal"
             Grid.Row="1">
             <Button x:Name="BtnNew" Click="BtnNew_Click" Width="50">New</Button>
-            <Button x:Name="BtnRandom" Click="BtnRandom_Click" Width="50">Rnd</Button>
-            <Button x:Name="BtnClear" Click="BtnClear_Click" Width="50">Clear</Button>
             <Button x:Name="BtnDel" Click="BtnDel_Click" Width="50">Del</Button>
+            <Button x:Name="BtnClear" Click="BtnClear_Click" Width="50">Clear</Button>
+        </StackPanel>
+        <StackPanel
+            Orientation="Horizontal"
+            Grid.Row="2">
+            <Button x:Name="BtnAct" Click="BtnAct_Click" Width="50">Activate</Button>
+            <Button x:Name="BtnRandom" Click="BtnRandom_Click" Width="50">Rnd</Button>
         </StackPanel>
     </Grid>
 </UserControl>

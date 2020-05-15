@@ -22,7 +22,7 @@ namespace BeeBurn
                     try
                     {
                         BeeImage bi = new BeeImage(filepath);
-                        stack.ActiveImages.Add(bi);
+                        stack.Images.Add(bi);
                     }
                     catch (Exception)
                     {

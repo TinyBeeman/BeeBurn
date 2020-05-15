@@ -170,5 +170,10 @@ namespace BeeBurn.XAML
                 SelectedStackIndex = Math.Min(i, Stacks.Count - 1);
             }
         }
+
+        private void BtnAct_Click(object sender, RoutedEventArgs e)
+        {
+            BeeBurnVM.Get().ActiveStack = Stacks[SelectedStackIndex];
+        }
     }
 }
