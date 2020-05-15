@@ -22,6 +22,7 @@ namespace BeeBurn
         public event PropertyChangedEventHandler PropertyChanged;
         private BeeImage m_beeImgToDisplay = null;
         private bool m_isLibrary = false;
+        private bool m_atEnd = false;
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -35,11 +36,12 @@ namespace BeeBurn
 
         public void ResetNextImage()
         {
+            m_atEnd = false;
             m_nextImage = m_activeImages.Count > 0 ? m_activeImages[0] : null;
             BeeImage.SetNextImage(m_nextImage);
         }
 
-        public BeeImage GetNextImage()
+        public BeeImage GetNextImage(bool loop)
         {
             // Empty List? Set everything to null.
             if (m_activeImages.Count == 0)
@@ -49,6 +51,15 @@ namespace BeeBurn
                 return null;
             }
 
+            // If we're at the end, reset the list but return null
+            // if we're not in a loop.
+            if (m_atEnd)
+            {
+                ResetNextImage();
+                if (!loop)
+                    return null;
+            }
+            
             // If we don't have an empty list, but also no next image
             // let's reset the next image.
             if (m_nextImage == null)
@@ -72,7 +83,15 @@ namespace BeeBurn
             int iNewNext = iNext + 1;
             if (iNewNext >= m_activeImages.Count)
             {
-                ResetNextImage();
+                if (!loop)
+                {
+                    m_nextImage = null;
+                    m_atEnd = true;
+                }
+                else
+                {
+                    ResetNextImage();
+                }
             }
             else
             {

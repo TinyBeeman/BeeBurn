@@ -116,6 +116,37 @@ namespace BeeBurn
             }
         }
 
+        public BeeStack FindNextStackWithImages(int index, bool fLoop)
+        {
+            for (int i = index; i < m_stacks.Count; i++)
+            {
+                if (m_stacks[i].ActiveImages.Count > 0)
+                    return m_stacks[i];
+            }
+
+            if (fLoop)
+            {
+                for (int i = 0; i < index; i++)
+                {
+                    if (m_stacks[i].ActiveImages.Count > 0)
+                        return m_stacks[i];
+                }
+            }
+
+            return null;
+        }
+
+
+        public BeeStack ActivateNextStack(bool loopStacks)
+        {
+            if (ActiveStack == null)
+                return EnsureActiveStack();
+
+            int currentIndex = m_stacks.IndexOf(ActiveStack);
+            ActiveStack = FindNextStackWithImages(currentIndex + 1, loopStacks);
+            return ActiveStack;
+        }
+
         public BeeStack EnsureActiveStack()
         {
             if (ActiveStack != null)

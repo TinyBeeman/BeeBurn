@@ -100,13 +100,34 @@ namespace BeeBurn.XAML
         private void QueueNextImage()
         {
             EnsureProjectionWindow();
-            BeeStack ActiveStack = BeeBurnVM.Get().EnsureActiveStack();
-            BeeImage biNext = ActiveStack.GetNextImage();
+            BeeStack activeStack = BeeBurnVM.Get().EnsureActiveStack();
+            BeeImage biNext = activeStack.GetNextImage(PlayOption == PlayOptions.RepeatThisList);
             
             if (biNext == null)
             {
-                // TODO: Next List? Repeat?
-                return;
+                switch (PlayOption)
+                {
+                    case PlayOptions.NextList:
+                        activeStack = BeeBurnVM.Get().ActivateNextStack(true);
+                        if (activeStack == null)
+                        {
+                            PauseProjection();
+                            m_proj.FadeToBlack();
+                            return;
+                        }
+                        QueueNextImage();
+                        return;
+                    case PlayOptions.RepeatThisList:
+                        // This list must be empty, so fade out, in case any image is showing.
+                        PauseProjection();
+                        m_proj.FadeToBlack();
+                        return;
+                    case PlayOptions.StopAtEnd:
+                        // We are done... fade us out.
+                        PauseProjection();
+                        m_proj.FadeToBlack();
+                        return;
+                }
             }
 
             m_proj.QueueImage(biNext);
@@ -147,11 +168,9 @@ namespace BeeBurn.XAML
             m_paused = true;
         }
 
-
-
         private void ClickSkip(object sender, RoutedEventArgs e)
         {
-
+            QueueNextImage();
         }
 
         private void ClickPasteNext(object sender, RoutedEventArgs e)
