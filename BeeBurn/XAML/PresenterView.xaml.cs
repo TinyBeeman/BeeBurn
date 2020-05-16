@@ -25,7 +25,7 @@ namespace BeeBurn.XAML
         private Projection m_proj = null;
         private DispatcherTimer m_dispatcherTimer = null;
         private DateTime m_timerStart;
-        private double m_panSeconds = BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImagePanTime) ?? 30;
+        private double m_panSeconds = BeeBurnVM.Get().ConfigSettings.ImagePanTime;
         
         private bool m_paused = true;
 
@@ -136,7 +136,7 @@ namespace BeeBurn.XAML
                 }
             }
 
-            double panSeconds = m_proj.QueueImage(biNext) + BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImageFadeTime) ?? 2;
+            double panSeconds = m_proj.QueueImage(biNext) + BeeBurnVM.Get().ConfigSettings.ImageFadeTime;
 
             //  DispatcherTimer setup
             if (m_dispatcherTimer == null)

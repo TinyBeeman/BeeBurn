@@ -67,7 +67,7 @@ namespace BeeBurn
         private void OpenButton_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new OpenFileDialog();
-            dlg.InitialDirectory = m_VM.GetConfigString(ConfigKey.SavePath);
+            dlg.InitialDirectory = BeeBurnVM.Get().ConfigSettings.SavePath;
             dlg.Filter = "BStacks (*.bstack)|*.bstack";
 
             if (dlg.ShowDialog() == true)
@@ -83,6 +83,12 @@ namespace BeeBurn
         {
             var dlgEditStack = new BeeStackEditor(m_VM.SelectedStack);
             dlgEditStack.ShowDialog();
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            BeeConfig bc = new BeeConfig();
+            bc.ShowDialog();
         }
     }
 }

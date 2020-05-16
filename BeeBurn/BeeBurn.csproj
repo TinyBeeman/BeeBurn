@@ -59,7 +59,11 @@
     </ApplicationDefinition>
     <Compile Include="BeeBurnIO.cs" />
     <Compile Include="BeeBurnVM.cs" />
+    <Compile Include="BeeConfigSettings.cs" />
     <Compile Include="RangeObservableCollection.cs" />
+    <Compile Include="XAML\BeeConfig.xaml.cs">
+      <DependentUpon>BeeConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="XAML\BeeStackList.xaml.cs">
       <DependentUpon>BeeStackList.xaml</DependentUpon>
     </Compile>
@@ -71,6 +75,10 @@
     <Compile Include="XAML\BeeStackEditor.xaml.cs">
       <DependentUpon>BeeStackEditor.xaml</DependentUpon>
     </Compile>
+    <Page Include="XAML\BeeConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="XAML\BeeImageEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -116,6 +124,7 @@
       <DependentUpon>BeeTagEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="XAML\EnumBooleanConverter.cs" />
+    <Compile Include="XAML\LabelValueGrid.cs" />
     <Compile Include="XAML\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

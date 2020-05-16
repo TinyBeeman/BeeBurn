@@ -10,7 +10,7 @@ namespace BeeBurn
         {
             var dlg = new OpenFileDialog
             {
-                InitialDirectory = BeeBurnVM.Get().GetConfigString(ConfigKey.ImageLoadPath),
+                InitialDirectory = BeeBurnVM.Get().ConfigSettings.ImageLoadPath,
                 Multiselect = true,
                 Filter = "Image Files(*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg|All files (*.*)|*.*"
             };
@@ -42,7 +42,7 @@ namespace BeeBurn
             var dlg = new SaveFileDialog
             {
                 DefaultExt = ".bstack",
-                InitialDirectory = BeeBurnVM.Get().GetConfigString(ConfigKey.SavePath),
+                InitialDirectory = BeeBurnVM.Get().ConfigSettings.SavePath,
                 Filter = "BStacks (*.bstack)|*.bstack",
                 FileName = filespec + ".bstack"
             };

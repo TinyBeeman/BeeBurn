@@ -13,9 +13,9 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_New"/>
                 <MenuItem x:Name="OpenButton" Header="_Open" Click="OpenButton_Click"/>
-                <MenuItem Header="_Save" />
                 <MenuItem x:Name="SaveAsButton" Header="Save _As..." Click="SaveAsButton_Click" />
                 <Separator />
+                <MenuItem x:Name="SettingsButton" Header="S_ettings" Click="SettingsButton_Click"/>
                 <MenuItem Header="E_xit" />
             </MenuItem>
         </Menu>

@@ -26,8 +26,8 @@ namespace BeeBurn.XAML
         private Image m_imgNew;
         private Random m_rng = new Random();
 
-        private double m_fadeSeconds = BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImageFadeTime) ?? 2;
-        private double m_panSeconds = BeeBurnVM.Get().GetConfigDouble(ConfigKey.ImagePanTime) ?? 30;
+        private double m_fadeSeconds = BeeBurnVM.Get().ConfigSettings.ImageFadeTime;
+        private double m_panSeconds = BeeBurnVM.Get().ConfigSettings.ImagePanTime;
 
         private Storyboard m_currentStoryboard = null;
 

@@ -1,0 +1,40 @@
+﻿<Window x:Class="BeeBurn.XAML.BeeConfig"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BeeBurn.XAML"
+        mc:Ignorable="d"
+        Title="BeeConfig" Height="450" Width="300">
+  <Grid>
+    <local:LabelValueGrid Margin="10,10,10,10">
+      <local:LabelValueGrid.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+          <Setter Property="Margin" Value="0,3,5,3"/>
+        </Style>
+        <Style TargetType="{x:Type CheckBox}">
+          <Setter Property="Margin" Value="0,4,0,0"/>
+        </Style>
+      </local:LabelValueGrid.Resources>
+      
+      <TextBlock>Pan Seconds</TextBlock>
+      <TextBox Text="{Binding Path=ImagePanTime}" />
+      
+      <TextBlock>Fade Seconds</TextBlock>
+      <TextBox Text="{Binding Path=ImageFadeTime}" />
+      
+      <TextBlock>Library Path</TextBlock>
+      <TextBox Text="{Binding Path=LibraryPath}"/>
+      
+      <TextBlock>Image Load Path</TextBlock>
+      <TextBox Text="{Binding Path=ImageLoadPath}"/>
+      
+      <TextBlock>Save Path</TextBlock>
+      <TextBox Text="{Binding Path=SavePath}"/>
+      
+      <TextBlock>Save Empty Stacks</TextBlock>
+      <CheckBox IsChecked="{Binding Path=SaveEmptyStacks}"/>
+    </local:LabelValueGrid>
+  </Grid>
+
+</Window>
