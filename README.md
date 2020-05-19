@@ -11,8 +11,6 @@ TODO:
 * Libraries: List Libraries, Automatically Import
 * Load all bstacks in library folder (on boot?)
 * Hot Key for Paste
-* Ability to Pause Slide Show
-* Multiple Simultaneous Lists to Switch Between
 * Interleave between multiple lists (Like "Water" and "1920s")
-* Sort Tags and Remove Dups
-* Presenter Control
+* Save Settings
+* Error Log / Reporting

@@ -26,7 +26,7 @@ namespace BeeBurn.XAML
         private DispatcherTimer m_dispatcherTimer = null;
         private DateTime m_timerStart;
         private double m_panSeconds = BeeBurnVM.Get().ConfigSettings.ImagePanTime;
-        
+        private bool m_fadeToBlack = true;
         private bool m_paused = true;
 
         public PresenterView()
@@ -74,25 +74,12 @@ namespace BeeBurn.XAML
         }
         private void PresenterClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            PauseProjection();
+            PauseProjection(false);
             m_proj?.Close();
             OnClose?.Invoke();
         }
 
-        private void ClickPlayPause(object sender, RoutedEventArgs e)
-        {
-            m_proj.Show();
-            if (m_paused)
-            {
-                StartProjection();
-                PlayPauseButton.Content = "Pause";
-            }
-            else
-            {
-                PauseProjection();
-                PlayPauseButton.Content = "Play";
-            }
-        }
+        
 
         
 
@@ -117,7 +104,7 @@ namespace BeeBurn.XAML
                         activeStack = BeeBurnVM.Get().ActivateNextStack(true);
                         if (activeStack == null)
                         {
-                            PauseProjection();
+                            PauseProjection(true);
                             m_proj.FadeToBlack();
                             return;
                         }
@@ -125,12 +112,12 @@ namespace BeeBurn.XAML
                         return;
                     case PlayOptions.RepeatThisList:
                         // This list must be empty, so fade out, in case any image is showing.
-                        PauseProjection();
+                        PauseProjection(true);
                         m_proj.FadeToBlack();
                         return;
                     case PlayOptions.StopAtEnd:
                         // We are done... fade us out.
-                        PauseProjection();
+                        PauseProjection(true);
                         m_proj.FadeToBlack();
                         return;
                 }
@@ -166,21 +153,49 @@ namespace BeeBurn.XAML
                 m_dispatcherTimer.Stop();
                 m_dispatcherTimer = null;
                 if (!m_paused)
+                {
                     QueueNextImage();
+                }
                 else
-                    m_proj?.FadeToBlack();
+                {
+                    if (m_fadeToBlack)
+                        m_proj?.FadeToBlack();
+                }
             }
         }
 
-        private void PauseProjection()
+        private void PauseProjection(bool fadeToBlack)
         {
+            m_fadeToBlack = fadeToBlack;
             m_paused = true;
+        }
+
+        private void ClickPlayPause(object sender, RoutedEventArgs e)
+        {
+            m_proj.Show();
+            if (m_paused)
+            {
+                StartProjection();
+                PlayPauseButton.Content = "Pause";
+            }
+            else
+            {
+                PauseProjection(true);
+                PlayPauseButton.Content = "Play";
+            }
         }
 
         private void ClickSkip(object sender, RoutedEventArgs e)
         {
             QueueNextImage();
         }
+
+        private void ClickHold(object sender, RoutedEventArgs e)
+        {
+            PauseProjection(false);
+            PlayPauseButton.Content = "Play";
+        }
+
 
         private void ClickPasteNext(object sender, RoutedEventArgs e)
         {

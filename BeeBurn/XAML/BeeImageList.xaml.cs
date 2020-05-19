@@ -180,5 +180,10 @@ namespace BeeBurn.XAML
         {
             BeeBurnIO.LoadImagesToStack(Stack);
         }
+
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            BeeBurnIO.SaveAsStack(Stack);
+        }
     }
 }

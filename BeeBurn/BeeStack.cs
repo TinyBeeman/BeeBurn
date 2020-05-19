@@ -224,26 +224,35 @@ namespace BeeBurn
             return true;
         }
 
-        internal void LoadStack(string filePath)
+        internal bool LoadStack(string filePath)
         {
             if (!File.Exists(filePath))
-                return;
+                return false;
 
             string rootpath = Path.GetDirectoryName(filePath);
             string fileNameNaked = Path.GetFileNameWithoutExtension(filePath);
 
-            string strAll = File.ReadAllText(filePath);
-            string[] imgs = strAll.Split(new string[] { s_sep }, StringSplitOptions.RemoveEmptyEntries);
-            string childPath = imgs[0];
-            string tags = imgs[1].Trim(new char[] { '\n', ' ' });
-            // Substring is to remove "tags:"
-            Tags.AddRange(tags.Substring(5).Split(new string[] { "|", "| " }, StringSplitOptions.RemoveEmptyEntries));
-            for (int i = 2; i < imgs.Length; i++)
+            try
             {
-                BeeImage bi = new BeeImage(imgs[i], rootpath + "\\" + fileNameNaked + "\\");
-                Images.Add(bi);
+                string strAll = File.ReadAllText(filePath);
+                string[] imgs = strAll.Split(new string[] { s_sep }, StringSplitOptions.RemoveEmptyEntries);
+                string childPath = imgs[0];
+                string tags = imgs[1].Trim(new char[] { '\n', ' ' });
+                // Substring is to remove "tags:"
+                Tags.AddRange(tags.Substring(5).Split(new string[] { "|", "| " }, StringSplitOptions.RemoveEmptyEntries));
+                for (int i = 2; i < imgs.Length; i++)
+                {
+                    BeeImage bi = new BeeImage(imgs[i], rootpath + "\\" + fileNameNaked + "\\");
+                    Images.Add(bi);
+                }
+                Name = fileNameNaked;
             }
-            Name = fileNameNaked;
+            catch (IOException)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void PasteImage()

@@ -25,6 +25,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Grid.Row="1">
                 <Button x:Name="PlayPauseButton" Click="ClickPlayPause" Margin="10,10,10,0">Play</Button>
+                <Button x:Name="HoldButton" Click="ClickHold" Margin="10,10,10,0">Hold</Button>
                 <Button Click="ClickSkip" Margin="10,10,10,0">Skip</Button>
                 <Button Click="ClickPasteNext" Margin="10,10,10,0">Paste Next Image</Button>
                 <Button Click="ClickLoadNext" Margin="10,10,10,0">Load Next Image</Button>

@@ -61,22 +61,12 @@ namespace BeeBurn
 
         private void SaveAsButton_Click(object sender, RoutedEventArgs e)
         {
-            BeeBurnIO.SaveAsStack(m_VM.SelectedStack);
+            BeeBurnIO.SaveAsCollection();
         }
 
         private void OpenButton_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new OpenFileDialog();
-            dlg.InitialDirectory = BeeBurnVM.Get().ConfigSettings.SavePath;
-            dlg.Filter = "BStacks (*.bstack)|*.bstack";
-
-            if (dlg.ShowDialog() == true)
-            {
-                BeeStack bsNew = new BeeStack();
-                m_VM.Stacks.Add(bsNew);
-                bsNew.LoadStack(dlg.FileName);
-                m_VM.ActiveStack = bsNew;
-            }
+            BeeBurnIO.LoadCollection(true);
         }
 
         private void ClickEditStack(object sender, RoutedEventArgs e)

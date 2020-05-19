@@ -1,7 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace BeeBurn
 {
@@ -143,6 +146,84 @@ namespace BeeBurn
             return ActiveStack;
         }
 
+        public void EnsureUniqueStacks()
+        {
+            var names = new HashSet<string>();
+            foreach (var s in Stacks)
+            {
+                int iName = 0;
+                string newName = s.Name;
+                
+                while (names.Contains(newName))
+                {
+                    // Iterate through numbers until we're sure names are unique.
+                    newName = s.Name += iName.ToString("D" + 3);
+                }
+
+                s.Name = newName;
+                names.Add(s.Name);
+
+            }
+        }
+
+
+
+        public bool LoadCollection(string filePath)
+        {
+            if (!File.Exists(filePath))
+                return false;
+
+            string rootpath = Path.GetDirectoryName(filePath);
+
+            List<string> lines = File.ReadLines(filePath).ToList();
+            string fileNameNaked = lines[0];
+            string childPath = rootpath + "\\" + fileNameNaked;
+
+            for (int i = 1; i < lines.Count; i++)
+            {
+                BeeStack bsNew = new BeeStack();
+                if (bsNew.LoadStack(childPath + "\\" + lines[i]))
+                {
+                    Stacks.Add(bsNew);
+                }
+                // TODO: Report failure in error log.
+            }
+
+            return true;
+        }
+
+
+        public bool SaveAll(string fileNameNaked, string savePath)
+        {
+            EnsureUniqueStacks();
+            bool saveEmptyStacks = BeeBurnVM.Get().ConfigSettings.SaveEmptyStacks;
+
+            try
+            {
+                string childPath = savePath + "\\" + fileNameNaked;
+                Directory.CreateDirectory(childPath);
+
+                string fullText = fileNameNaked + "\n";
+
+                foreach (var s in Stacks)
+                {
+                    if (s.Images.Count == 0 && saveEmptyStacks == false)
+                        continue;
+
+                    fullText += s.Name + ".bstack" + "\n";
+                    s.SaveStack(s.Name, childPath);
+                }
+
+                File.WriteAllText(savePath + "\\" + fileNameNaked + ".BeeBurn", fullText);
+            }
+            catch (System.IO.IOException ex)
+            {
+                System.Windows.MessageBox.Show("Failed to save " + fileNameNaked + ".BeeBurn collection to " + savePath + ": " + ex.Message);
+                return false;
+            }
+
+            return true;
+        }
 
     }
 }

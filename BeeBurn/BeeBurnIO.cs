@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace BeeBurn
 {
@@ -30,6 +31,78 @@ namespace BeeBurn
                         continue;
                     }
                 }
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool SaveAsCollection()
+        {
+            string filespec = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+            var dlg = new SaveFileDialog
+            {
+                DefaultExt = ".BeeBurn",
+                InitialDirectory = BeeBurnVM.Get().ConfigSettings.SavePath,
+                Filter = "BeeBurn Collections (*.BeeBurn)|*.BeeBurn",
+                FileName = filespec + ".BeeBurn"
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+                string savePath = System.IO.Path.GetDirectoryName(dlg.FileName);
+                string fileNameNaked = System.IO.Path.GetFileNameWithoutExtension(dlg.FileName);
+                string fileExt = System.IO.Path.GetExtension(dlg.FileName);
+                if (fileExt.Length < 1)
+                {
+                    dlg.FileName += ".BeeBurn";
+                }
+
+                return BeeBurnVM.Get().SaveAll(fileNameNaked, savePath);
+            }
+
+            return false;
+        }
+
+        public static bool LoadCollection(bool clearExisting)
+        {
+            var dlg = new OpenFileDialog
+            {
+                DefaultExt = ".BeeBurn",
+                InitialDirectory = BeeBurnVM.Get().ConfigSettings.SavePath,
+                Filter = "BeeBurn Collections (*.BeeBurn)|*.BeeBurn"
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+                if (!File.Exists(dlg.FileName))
+                    return false;
+
+                if (clearExisting)
+                {
+                    BeeBurnVM.Get().Stacks.Clear();
+                }
+
+                return BeeBurnVM.Get().LoadCollection(dlg.FileName);
+            }
+
+            return false;
+        }
+
+
+        public static bool LoadSingleStack()
+        {
+            // TODO: USE OR DELETE
+            var dlg = new OpenFileDialog();
+            dlg.InitialDirectory = BeeBurnVM.Get().ConfigSettings.SavePath;
+            dlg.Filter = "BStacks (*.bstack)|*.bstack";
+
+            if (dlg.ShowDialog() == true)
+            {
+                BeeStack bsNew = new BeeStack();
+                BeeBurnVM.Get().Stacks.Add(bsNew);
+                bsNew.LoadStack(dlg.FileName);
+                BeeBurnVM.Get().ActiveStack = bsNew;
                 return true;
             }
 
