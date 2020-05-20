@@ -156,13 +156,26 @@ namespace BeeBurn.XAML
             Stack.Images.Clear();
         }
 
+        private HashSet<BeeImage> GetSelectedImages()
+        {
+            var images = new HashSet<BeeImage>();
+            for (int iCell = 0; iCell < ActiveGrid.SelectedCells.Count; iCell++)
+            {
+                int iRow = ActiveGrid.Items.IndexOf(ActiveGrid.SelectedCells[iCell].Item);
+                if (iRow != -1)
+                {
+                    images.Add(Stack.Images[iRow]);
+                }
+            }
+            return images;
+        }
+
         private void BtnDel_Click(object sender, RoutedEventArgs e)
         {
-            int i = Stack.SelectedIndex;
-            if (i >= 0 && i < Stack.Images.Count)
+            var images = GetSelectedImages();
+            foreach (BeeImage bi in images)
             {
-                Stack.Images.RemoveAt(i);
-                Stack.SelectedIndex = Math.Min(i, Stack.Images.Count - 1);
+                Stack.Images.Remove(bi);
             }
         }
 
