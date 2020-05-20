@@ -108,6 +108,9 @@ namespace BeeBurn.XAML
 
         private bool GetMouseTargetRow(Visual theTarget, GetPosition position)
         {
+            if (theTarget == null)
+                return false;
+
             var rect = VisualTreeHelper.GetDescendantBounds(theTarget);
             Point point = position((IInputElement)theTarget);
             return rect.Contains(point);
@@ -128,7 +131,7 @@ namespace BeeBurn.XAML
             for (int i = 0; i < ActiveGrid.Items.Count; i++)
             {
                 DataGridRow itm = GetRowItem(i);
-                if (GetMouseTargetRow(itm, pos))
+                if (itm != null && GetMouseTargetRow(itm, pos))
                 {
                     curIndex = i;
                     break;
