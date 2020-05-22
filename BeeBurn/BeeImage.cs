@@ -163,7 +163,7 @@ namespace BeeBurn
             InitializeSessionId();
             Name = name;
             BitmapFrame = src;
-            StartRect = GetImageRect(src);
+            StartRect = GetRectFromImageSrc(src);
             ShrinkEnd(StartRect.Width * 0.2);
         }
 
@@ -178,7 +178,7 @@ namespace BeeBurn
         {
             InitializeSessionId();
             SetBitmapFrameFromFilePath(filePath);
-            StartRect = GetImageRect(BitmapFrame);
+            StartRect = GetRectFromImageSrc(BitmapFrame);
             ShrinkEnd(StartRect.Width * 0.2);
             Name = System.IO.Path.GetFileNameWithoutExtension(filePath);
         }
@@ -188,13 +188,16 @@ namespace BeeBurn
             EndRect = new BeeRect(StartRect.Left + margin, StartRect.Top + margin, StartRect.Width - margin - margin, StartRect.Height - margin - margin);
         }
 
-        public BeeRect GetImageRect(ImageSource src)
+        public BeeRect GetRectFromImageSrc(ImageSource src)
         {
             if (src != null)
                 return new BeeRect(0, 0, src.Width, src.Height);
             else
                 return new BeeRect();
         }
+
+        public void ResetStartRect() { StartRect = new BeeRect(0, 0, BitmapFrame.Width, BitmapFrame.Height);  }
+        public void ResetEndRect() { EndRect = new BeeRect(0, 0, BitmapFrame.Width, BitmapFrame.Height); }
 
         private OffsetScale GetOffsetAndScaleFromRect(BeeRect rFocus, BeeRect rContainer)
         {

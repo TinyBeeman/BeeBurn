@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prism.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -90,6 +91,9 @@ namespace BeeBurn.XAML
 
             BeeImg.Edited = true;
         }
+
+        public ICommand LeftDoubleClickCommand { get; } = new DelegateCommand<BeeImage>(bi => { bi.ResetStartRect(); });
+        public ICommand RightDoubleClickCommand{ get; } = new DelegateCommand<BeeImage>(bi => { bi.ResetEndRect(); });
 
         private void OnImageMouseDown(object sender, MouseButtonEventArgs e)
         {
