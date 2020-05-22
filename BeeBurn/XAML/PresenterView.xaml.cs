@@ -39,6 +39,7 @@ namespace BeeBurn.XAML
         {
             EnsureProjectionWindow();
             m_proj.Show();
+            RefreshNextImageControl();
             this.Activate();
         }
 
@@ -51,6 +52,7 @@ namespace BeeBurn.XAML
             set
             {
                 SetValue(PlayOptionProperty, value);
+                RefreshNextImageControl();
             }
         }
 
@@ -79,10 +81,6 @@ namespace BeeBurn.XAML
             OnClose?.Invoke();
         }
 
-        
-
-        
-
         private void StartProjection()
         {
             m_paused = false;
@@ -90,38 +88,50 @@ namespace BeeBurn.XAML
             QueueNextImage();
         }
 
+        private BeeImage GetNextImage(bool advancePointers)
+        {
+            BeeStack nextStack = BeeBurnVM.Get().EnsureActiveStack();
+            BeeImage biNext;
+            if (advancePointers)
+                biNext  = nextStack.GetNextImage(PlayOption == PlayOptions.RepeatThisList);
+            else
+                biNext = nextStack.PeekNextImage(PlayOption == PlayOptions.RepeatThisList);
+
+            if (biNext == null && PlayOption == PlayOptions.NextList)
+            {
+                nextStack = BeeBurnVM.Get().GetNextStack(true, advancePointers);
+
+                if (nextStack != null)
+                {
+                    if (advancePointers)
+                        return nextStack.GetNextImage(PlayOption == PlayOptions.RepeatThisList);
+                    else
+                        return nextStack.PeekNextImage(PlayOption == PlayOptions.RepeatThisList);
+                }
+            }
+            return biNext;
+        }
+
+        private void RefreshNextImageControl()
+        {
+            BeeImage biNext = GetNextImage(false);
+            NextImage.Source = biNext?.BitmapFrame;
+        }
+
         private void QueueNextImage()
         {
             EnsureProjectionWindow();
             BeeStack activeStack = BeeBurnVM.Get().EnsureActiveStack();
-            BeeImage biNext = activeStack.GetNextImage(PlayOption == PlayOptions.RepeatThisList);
-            
+            BeeImage biNext = GetNextImage(true);
             if (biNext == null)
             {
-                switch (PlayOption)
-                {
-                    case PlayOptions.NextList:
-                        activeStack = BeeBurnVM.Get().ActivateNextStack(true);
-                        if (activeStack == null)
-                        {
-                            PauseProjection(true);
-                            m_proj.FadeToBlack();
-                            return;
-                        }
-                        QueueNextImage();
-                        return;
-                    case PlayOptions.RepeatThisList:
-                        // This list must be empty, so fade out, in case any image is showing.
-                        PauseProjection(true);
-                        m_proj.FadeToBlack();
-                        return;
-                    case PlayOptions.StopAtEnd:
-                        // We are done... fade us out.
-                        PauseProjection(true);
-                        m_proj.FadeToBlack();
-                        return;
-                }
+                PauseProjection(true);
+                m_proj.FadeToBlack();
+                return;
             }
+
+            CurrentImage.Source = biNext.BitmapFrame;
+            RefreshNextImageControl();
 
             double panSeconds = m_proj.QueueImage(biNext) + BeeBurnVM.Get().ConfigSettings.ImageFadeTime;
 

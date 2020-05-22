@@ -12,9 +12,11 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Canvas Grid.Row="0">
-            <Canvas.LayoutTransform>
-                <ScaleTransform ScaleX="{Binding ElementName=ZoomSlider,Path=Value}" ScaleY="{Binding ElementName=ZoomSlider,Path=Value}"/>
-            </Canvas.LayoutTransform>
+          <Canvas.LayoutTransform>
+              <ScaleTransform
+                ScaleX="{Binding ElementName=ZoomSlider,Path=Value}"
+                ScaleY="{Binding ElementName=ZoomSlider,Path=Value}"/>
+          </Canvas.LayoutTransform>
           <Image
               x:Name="ImgControl"
               Source="{Binding Path=BeeImg.BitmapFrame}"

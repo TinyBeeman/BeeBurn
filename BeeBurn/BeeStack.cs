@@ -42,6 +42,17 @@ namespace BeeBurn
             BeeImage.SetNextImage(m_nextImage);
         }
 
+        public BeeImage PeekNextImage(bool loop)
+        {
+            if (m_nextImage != null || m_images.Count == 0)
+                return m_nextImage;
+
+            if (m_atEnd && loop)
+                return Images[0];
+
+            return null;
+        }
+
         public BeeImage GetNextImage(bool loop)
         {
             // Empty List? Set everything to null.

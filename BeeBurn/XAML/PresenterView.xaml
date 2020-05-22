@@ -32,6 +32,10 @@
                 <RadioButton Content="Auto-Load Next List" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=PlayOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter={x:Static local:PlayOptions.NextList}}" Margin="10,10,10,0"/>
                 <RadioButton Content="Stop At End Of List" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=PlayOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter={x:Static local:PlayOptions.StopAtEnd}}" Margin="10,10,10,0"/>
                 <RadioButton Content="Repeat This List" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=PlayOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter={x:Static local:PlayOptions.RepeatThisList}}" Margin="10,10,10,0"/>
+                <TextBlock Margin="10,10,10,0">Showing</TextBlock>
+                <Image x:Name="CurrentImage" Margin="10,10,10,0" Width="180" Height="180" />
+                <TextBlock Margin="10,10,10,0">Next</TextBlock>
+                <Image x:Name="NextImage" Margin="10,10,10,0" Width="180" Height="180" />
             </StackPanel>
             <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Path=SelectedStack.Name}" Margin="0,10,0,0" />
             <local:BeeImageList

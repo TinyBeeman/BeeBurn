@@ -115,15 +115,17 @@ namespace BeeBurn
             return null;
         }
 
-
-        public BeeStack ActivateNextStack(bool loopStacks)
+        public BeeStack GetNextStack(bool loopStacks, bool activate)
         {
             if (ActiveStack == null)
                 return EnsureActiveStack();
 
             int currentIndex = m_stacks.IndexOf(ActiveStack);
-            ActiveStack = FindNextStackWithImages(currentIndex + 1, loopStacks);
-            return ActiveStack;
+            BeeStack nextStack = FindNextStackWithImages(currentIndex + 1, loopStacks);
+            if (activate)
+                ActiveStack = nextStack;
+
+            return nextStack;
         }
 
         public BeeStack EnsureActiveStack()
