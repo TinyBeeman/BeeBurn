@@ -44,6 +44,19 @@ namespace BeeBurn.XAML
                     typeof(BeeImageList),
                     new PropertyMetadata(null));
 
+        public bool AllowStackEdit
+        {
+            get { return (bool)GetValue(AllowStackEditProperty); }
+            set { SetValue(AllowStackEditProperty, value); }
+        }
+
+        public static DependencyProperty AllowStackEditProperty =
+            DependencyProperty.Register("AllowStackEdit",
+                typeof(bool),
+                typeof(BeeImageList),
+                new PropertyMetadata(true));
+
+
         public int SelectionIndex
         {
             get
@@ -91,6 +104,17 @@ namespace BeeBurn.XAML
 
         private void ActiveGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if (e.ClickCount == 2)
+            {
+                if (AllowStackEdit)
+                {
+                    var dlgEditStack = new BeeStackEditor(Stack);
+                    dlgEditStack.ShowDialog();
+                    e.Handled = true;
+                    return;
+                }
+            }
+
             m_dragIndex = GetCurrentRowIndex(e.GetPosition);
             if (m_dragIndex < 0)
                 return;
@@ -201,5 +225,16 @@ namespace BeeBurn.XAML
         {
             BeeBurnIO.SaveAsStack(Stack);
         }
+
+        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (AllowStackEdit)
+            {
+                var dlgEditStack = new BeeStackEditor(Stack);
+                dlgEditStack.ShowDialog();
+            }
+        }
+
+        
     }
 }

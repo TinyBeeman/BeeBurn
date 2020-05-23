@@ -66,5 +66,10 @@ namespace BeeBurn.XAML
         {
             BeeBurnIO.SaveAsStack(Stack);
         }
+
+        private void ClickDone(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

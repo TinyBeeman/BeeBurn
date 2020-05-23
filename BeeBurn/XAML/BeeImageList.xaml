@@ -34,10 +34,12 @@
                 AllowDrop="True"
                 Drop="ActiveGrid_Drop"
                 ColumnWidth="*"
+                IsReadOnly ="False"
                 PreviewMouseLeftButtonDown="ActiveGrid_PreviewMouseLeftButtonDown"
                 >
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
+                        <!--<EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>-->
                         <Setter Property="Background" Value="White"/>
                         <Setter Property="FontWeight" Value="Normal"/>
                         <Setter Property="FontStyle" Value="Normal"/>

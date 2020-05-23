@@ -42,7 +42,9 @@
                     Grid.Row="1"
                     x:Name="ActiveImageList"
                     Stack="{Binding Path=SelectedStack, Mode=TwoWay}"
-                    SelectionIndex="{Binding Path=SelectedStack.SelectedIndex, Mode=TwoWay}"/>
+                    SelectionIndex="{Binding Path=SelectedStack.SelectedIndex, Mode=TwoWay}"
+                    AllowStackEdit="True"
+                />
 
             <TextBlock Grid.Column="2" Grid.Row="0" Text="Stacks" Margin="0,10,0,0" />
             <lx:BeeStackList

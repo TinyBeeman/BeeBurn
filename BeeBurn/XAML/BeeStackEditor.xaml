@@ -21,12 +21,15 @@
             <Button Click="ClickEditTags" Margin="10,10,10,0">Edit Tags</Button>
             <Separator Margin="10,10,10,0" />
             <Button Click="ClickSaveList" Margin="10,10,10,0">Save List</Button>
+            <Separator Margin="10,10,10,0" />
+            <Button Click="ClickDone" Margin="10,10,10,0">Done</Button>
         </StackPanel>
         <Grid Grid.Column="1">
             <local:BeeImageList
                 x:Name="ImageListControl"
                 Stack="{Binding Path=Stack, Mode=TwoWay}"
-                SelectionIndex="{Binding Path=Stack.SelectedIndex, Mode=TwoWay}"/>
+                SelectionIndex="{Binding Path=Stack.SelectedIndex, Mode=TwoWay}"
+                AllowStackEdit="False" />
         </Grid>
         <local:BeeImageEditor Grid.Column="2" BeeImg="{Binding Path=Stack.BeeImgToDisplay}"/>
     </Grid>
