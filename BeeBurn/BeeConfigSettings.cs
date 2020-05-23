@@ -30,7 +30,7 @@ namespace BeeBurn
 
         private void InitializeDefaultSettings()
         {
-            m_configStrings.Add(ConfigKey.LibraryPath, "N:\\Data\\Dropbox\\Shared\\DocumentaryImages");
+            m_configStrings.Add(ConfigKey.LibraryPath, "N:\\Data\\Dropbox\\Easel\\_Work For Others\\_TonyShows\\4AND20\\BeeBurn\\Libraries");
             m_configStrings.Add(ConfigKey.SavePath, "D:\\Temp\\BeeBurn");
             m_configStrings.Add(ConfigKey.ImageLoadPath, "D:\\Users\\tony\\Downloads");
             m_configDoubles.Add(ConfigKey.ImageFadeTime, 2.0);

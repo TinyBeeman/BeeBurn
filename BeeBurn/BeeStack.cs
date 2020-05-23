@@ -17,6 +17,7 @@ namespace BeeBurn
         private BeeImage m_nextImage = null;
         private string m_name;
         private RangeObservableCollection<string> m_tags = new RangeObservableCollection<string>();
+        private RangeObservableCollection<string> m_decades = new RangeObservableCollection<string>();
         private ObservableCollection<BeeImage> m_images = new ObservableCollection<BeeImage>();
         private int m_SelectedIndex = -1;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -188,6 +189,17 @@ namespace BeeBurn
             }
         }
 
+        public RangeObservableCollection<string> Decades
+        {
+            get => m_decades;
+            set
+            {
+                m_decades = value;
+                OnPropertyChanged();
+                OnPropertyChanged("AllDecades");
+            }
+        }
+
         public string AllTags
         {
             get
@@ -204,6 +216,22 @@ namespace BeeBurn
             }
         }
 
+        public string AllDecades
+        {
+            get
+            {
+                return string.Join(", ", m_decades);
+            }
+            set
+            {
+                m_decades.Clear();
+                IEnumerable<string> decades = new List<string>(value.Split(new string[] { ", ", "," }, StringSplitOptions.RemoveEmptyEntries)).Distinct().OrderBy(s => s);
+                m_tags.AddRange(decades);
+                OnPropertyChanged("Decades");
+                OnPropertyChanged("AllDecades");
+            }
+        }
+
         internal bool SaveStack(string fileNameNaked, string savePath)
         {
             try
@@ -213,12 +241,23 @@ namespace BeeBurn
                 Directory.CreateDirectory(childPath);
 
                 string fullText = fileNameNaked + "\n" + s_sep;
+                
+                // TAGS
                 fullText += "Tags:";
                 foreach (var s in m_tags)
                 {
                     fullText += s + "|";
                 }
                 fullText += "\n" + s_sep;
+
+                // DECADES
+                fullText += "Decades:";
+                foreach (var s in m_decades)
+                {
+                    fullText += s + "|";
+                }
+                fullText += "\n" + s_sep;
+
                 foreach (var bi in Images)
                 {
                     fullText += bi.Serialize(i++, childPath) + "\n";
@@ -247,15 +286,33 @@ namespace BeeBurn
             {
                 string strAll = File.ReadAllText(filePath);
                 string[] imgs = strAll.Split(new string[] { s_sep }, StringSplitOptions.RemoveEmptyEntries);
-                string childPath = imgs[0];
-                string tags = imgs[1].Trim(new char[] { '\n', ' ' });
-                // Substring is to remove "tags:"
-                Tags.AddRange(tags.Substring(5).Split(new string[] { "|", "| " }, StringSplitOptions.RemoveEmptyEntries));
-                for (int i = 2; i < imgs.Length; i++)
+                int iLine = 0;
+                // First line is the name of the path of any child images.
+                string childPath = imgs[iLine++];
+
+                for (int i = iLine; i < imgs.Length; i++)
                 {
-                    BeeImage bi = new BeeImage(imgs[i], rootpath + "\\" + fileNameNaked + "\\");
-                    Images.Add(bi);
+                    string line = imgs[i];
+                    if (string.Compare(line.Substring(0, 5), "tags:", true) == 0)
+                    {
+                        string tagLine = imgs[iLine++].Trim(new char[] { '\n', ' ' });
+                        // Substring is to remove "tags:"
+                        Tags.AddRange(tagLine.Substring(5).Split(new string[] { "|", "| " }, StringSplitOptions.RemoveEmptyEntries));
+                    }
+                    else if (string.Compare(line.Substring(0, 8), "decades:", true) == 0)
+                    {
+                        string decadeLine = line.Trim(new char[] { '\n', ' ' });
+                        // Substring is to remove "decades:"
+                        Decades.AddRange(decadeLine.Substring(8).Split(new string[] { "|", "| " }, StringSplitOptions.RemoveEmptyEntries));
+                    }
+                    else
+                    {
+                        BeeImage bi = new BeeImage(line, rootpath + "\\" + fileNameNaked + "\\");
+                        Images.Add(bi);
+                    }
                 }
+
+
                 Name = fileNameNaked;
             }
             catch (IOException)
