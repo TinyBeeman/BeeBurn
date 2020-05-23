@@ -17,6 +17,8 @@
             <TextBox Text="{Binding Path=Stack.Name}" Margin="10,10,10,0"/>
             <Button Click="ClickLoadImages" Margin="10,10,10,0">Load Image(s)</Button>
             <Button Click="ClickPaste" Margin="10,10,10,0">Paste Image</Button>
+            <TextBlock Margin="10,10,10,0" Text="{Binding Path=Stack.AllDecades}" TextWrapping="Wrap" />
+            <Button Click="ClickEditDecades" Margin="10,10,10,0">Edit Decades</Button>
             <TextBlock Margin="10,10,10,0" Text="{Binding Path=Stack.AllTags}" TextWrapping="Wrap" />
             <Button Click="ClickEditTags" Margin="10,10,10,0">Edit Tags</Button>
             <Separator Margin="10,10,10,0" />

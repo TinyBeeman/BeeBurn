@@ -226,7 +226,7 @@ namespace BeeBurn
             {
                 m_decades.Clear();
                 IEnumerable<string> decades = new List<string>(value.Split(new string[] { ", ", "," }, StringSplitOptions.RemoveEmptyEntries)).Distinct().OrderBy(s => s);
-                m_tags.AddRange(decades);
+                m_decades.AddRange(decades);
                 OnPropertyChanged("Decades");
                 OnPropertyChanged("AllDecades");
             }
