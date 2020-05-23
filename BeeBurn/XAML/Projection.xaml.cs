@@ -24,10 +24,10 @@ namespace BeeBurn.XAML
     {
         private Image m_imgOld;
         private Image m_imgNew;
-        private Random m_rng = new Random();
+        private readonly Random m_rng = new Random();
 
-        private double m_fadeSeconds = BeeBurnVM.Get().ConfigSettings.ImageFadeTime;
-        private double m_panSeconds = BeeBurnVM.Get().ConfigSettings.ImagePanTime;
+        private readonly double m_fadeSeconds = BeeBurnVM.Get().ConfigSettings.ImageFadeTime;
+        private readonly double m_panSeconds = BeeBurnVM.Get().ConfigSettings.ImagePanTime;
 
         private Storyboard m_currentStoryboard = null;
 
@@ -52,8 +52,10 @@ namespace BeeBurn.XAML
 
             if (m_imgOld != null)
             {
-                m_currentStoryboard = new Storyboard();
-                m_currentStoryboard.Duration = TimeSpan.FromSeconds(m_fadeSeconds);
+                m_currentStoryboard = new Storyboard
+                {
+                    Duration = TimeSpan.FromSeconds(m_fadeSeconds)
+                };
 
                 DoubleAnimation animFadeOut = new DoubleAnimation(0, TimeSpan.FromSeconds(m_fadeSeconds));
                 Storyboard.SetTarget(animFadeOut, m_imgOld);
@@ -74,12 +76,14 @@ namespace BeeBurn.XAML
                 GridImage.Children.Remove(m_imgOld);
             
             m_imgOld = m_imgNew;
-            m_imgNew = new Image();
-            m_imgNew.Source = bi.BitmapFrame;
+            m_imgNew = new Image
+            {
+                Source = bi.BitmapFrame,
 
-            // Start with 0 opacity
-            m_imgNew.Opacity = 0;
-            m_imgNew.Stretch = Stretch.None;
+                // Start with 0 opacity
+                Opacity = 0,
+                Stretch = Stretch.None
+            };
 
             GridImage.Children.Add(m_imgNew);
 
@@ -99,9 +103,11 @@ namespace BeeBurn.XAML
 
 
             TimeSpan tsAnim = TimeSpan.FromSeconds(panSeconds + m_fadeSeconds);
-            
-            m_currentStoryboard = new Storyboard();
-            m_currentStoryboard.Duration = tsAnim;
+
+            m_currentStoryboard = new Storyboard
+            {
+                Duration = tsAnim
+            };
 
             DoubleAnimation animScaleX = new DoubleAnimation(os1.Scale, os2.Scale, tsAnim);
             DoubleAnimation animScaleY = new DoubleAnimation(os1.Scale, os2.Scale, tsAnim);

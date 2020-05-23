@@ -93,9 +93,11 @@ namespace BeeBurn
         public static bool LoadSingleStack()
         {
             // TODO: USE OR DELETE
-            var dlg = new OpenFileDialog();
-            dlg.InitialDirectory = BeeBurnVM.Get().ConfigSettings.SavePath;
-            dlg.Filter = "BStacks (*.bstack)|*.bstack";
+            var dlg = new OpenFileDialog
+            {
+                InitialDirectory = BeeBurnVM.Get().ConfigSettings.SavePath,
+                Filter = "BStacks (*.bstack)|*.bstack"
+            };
 
             if (dlg.ShowDialog() == true)
             {
@@ -144,7 +146,7 @@ namespace BeeBurn
             {
                 if (ret.Length > 0)
                     ret += sep;
-                ret += kvp.Key + ":" + kvp.Value;
+                ret += kvp.Key + assign + kvp.Value;
             }
 
             return ret;

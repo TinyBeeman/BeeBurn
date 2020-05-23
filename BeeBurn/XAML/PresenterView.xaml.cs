@@ -25,7 +25,7 @@ namespace BeeBurn.XAML
         private Projection m_proj = null;
         private DispatcherTimer m_dispatcherTimer = null;
         private DateTime m_timerStart;
-        private double m_panSeconds = BeeBurnVM.Get().ConfigSettings.ImagePanTime;
+        private readonly double m_panSeconds = BeeBurnVM.Get().ConfigSettings.ImagePanTime;
         private bool m_fadeToBlack = true;
         private bool m_paused = true;
 
@@ -55,6 +55,8 @@ namespace BeeBurn.XAML
                 RefreshNextImageControl();
             }
         }
+
+        public double PanSeconds => m_panSeconds;
 
         public static readonly DependencyProperty PlayOptionProperty =
          DependencyProperty.Register("PlayOption",

@@ -246,36 +246,40 @@ namespace BeeBurn
                 return null;
             }
 
-            Dictionary<string, string> imgStrings = new Dictionary<string, string>();
-            imgStrings["SaveName"] = saveName;
-            imgStrings["StartLeft"] = StartRect.Left.ToString();
-            imgStrings["StartTop"] = StartRect.Top.ToString();
-            imgStrings["StartWidth"] = StartRect.Width.ToString();
-            imgStrings["StartHeight"] = StartRect.Height.ToString();
-            imgStrings["EndLeft"] = EndRect.Left.ToString();
-            imgStrings["EndTop"] = EndRect.Top.ToString();
-            imgStrings["EndWidth"] = EndRect.Width.ToString();
-            imgStrings["EndHeight"] = EndRect.Height.ToString();
-            imgStrings["Edited"] = Edited ? "1" : "0";
+            Dictionary<string, string> imgStrings = new Dictionary<string, string>
+            {
+                ["SaveName"] = saveName,
+                ["StartLeft"] = StartRect.Left.ToString(),
+                ["StartTop"] = StartRect.Top.ToString(),
+                ["StartWidth"] = StartRect.Width.ToString(),
+                ["StartHeight"] = StartRect.Height.ToString(),
+                ["EndLeft"] = EndRect.Left.ToString(),
+                ["EndTop"] = EndRect.Top.ToString(),
+                ["EndWidth"] = EndRect.Width.ToString(),
+                ["EndHeight"] = EndRect.Height.ToString(),
+                ["Edited"] = Edited ? "1" : "0"
+            };
             return BeeBurnIO.SerializeDictionary(imgStrings);
         }
 
         private bool SetBitmapFrameFromFilePath(string filePath)
         {
-            Stream imgStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            string ext = System.IO.Path.GetExtension(filePath);
-            if (ext.Equals(".png", StringComparison.OrdinalIgnoreCase))
+            using (Stream imgStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                PngBitmapDecoder decoder = new PngBitmapDecoder(imgStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-                BitmapFrame = decoder.Frames[0];
-                return true;
-            }
-            else if (ext.Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
-                     ext.Equals(".jpeg", StringComparison.OrdinalIgnoreCase))
-            {
-                JpegBitmapDecoder decoder = new JpegBitmapDecoder(imgStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-                BitmapFrame = decoder.Frames[0];
-                return true;
+                string ext = System.IO.Path.GetExtension(filePath);
+                if (ext.Equals(".png", StringComparison.OrdinalIgnoreCase))
+                {
+                    PngBitmapDecoder decoder = new PngBitmapDecoder(imgStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+                    BitmapFrame = decoder.Frames[0];
+                    return true;
+                }
+                else if (ext.Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                         ext.Equals(".jpeg", StringComparison.OrdinalIgnoreCase))
+                {
+                    JpegBitmapDecoder decoder = new JpegBitmapDecoder(imgStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+                    BitmapFrame = decoder.Frames[0];
+                    return true;
+                }
             }
 
             return false;

@@ -24,7 +24,7 @@ namespace BeeBurn
     public partial class MainWindow : Window
     {
         
-        private BeeBurnVM m_VM = null;
+        private readonly BeeBurnVM m_VM = null;
         private PresenterView m_presenterView = null;
 
         public MainWindow()
