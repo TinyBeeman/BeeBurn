@@ -54,6 +54,18 @@ namespace BeeBurn
             if (m_VM.SelectedStack != null)
                 m_VM.SelectedStack.PasteImage();
         }
+
+        private void ClickFilterTest(object sender, RoutedEventArgs e)
+        {
+            StackFilterWindow sfw = new StackFilterWindow();
+            sfw.Tags.Add(new BeeBooleanChoice("TagA", false));
+            sfw.Tags.Add(new BeeBooleanChoice("TagB", true));
+            sfw.Decades.Add(new BeeBooleanChoice("1910s", false));
+            sfw.Decades.Add(new BeeBooleanChoice("1920s", false));
+
+            sfw.ShowDialog();
+        }
+
         private void ClickLoadImages(object sender, RoutedEventArgs e)
         {
             BeeBurnIO.LoadImagesToStack(m_VM.SelectedStack);

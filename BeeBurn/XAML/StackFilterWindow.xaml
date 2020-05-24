@@ -1,0 +1,32 @@
+﻿<Window x:Class="BeeBurn.XAML.StackFilterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BeeBurn.XAML"
+        mc:Ignorable="d"
+        Title="StackFilterWindow" Height="600" Width="1000">
+    <Window.Resources>
+        <DataTemplate x:Key="BeeChoiceTemplate">
+            <!--<StackPanel Orientation="Horizontal">-->
+            <CheckBox Content="{Binding Path=Name}" IsChecked="{Binding Path=Value,Mode=TwoWay}"/>
+            <!--</StackPanel>-->
+        </DataTemplate>
+    </Window.Resources>
+    <Grid  DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Orientation="Vertical">
+            <Button x:Name="BtnDone" Margin="10,10,10,0">Done</Button>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+            <ItemsControl ItemsSource="{Binding Path=Decades}" ItemTemplate="{StaticResource BeeChoiceTemplate}"/>
+        </StackPanel>
+        <StackPanel Grid.Column="2" Orientation="Vertical">
+            <ItemsControl ItemsSource="{Binding Path=Tags}" ItemTemplate="{StaticResource BeeChoiceTemplate}"/>
+        </StackPanel>
+    </Grid>
+</Window>

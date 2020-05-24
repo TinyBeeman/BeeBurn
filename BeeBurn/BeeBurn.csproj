@@ -73,6 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BeeBooleanChoice.cs" />
     <Compile Include="BeeBurnIO.cs" />
     <Compile Include="BeeBurnVM.cs" />
     <Compile Include="BeeConfigSettings.cs" />
@@ -90,6 +91,9 @@
     <Compile Include="BeeStack.cs" />
     <Compile Include="XAML\BeeStackEditor.xaml.cs">
       <DependentUpon>BeeStackEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XAML\StackFilterWindow.xaml.cs">
+      <DependentUpon>StackFilterWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="XAML\BeeConfig.xaml">
       <SubType>Designer</SubType>
@@ -150,6 +154,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="XAML\Projection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XAML\StackFilterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
