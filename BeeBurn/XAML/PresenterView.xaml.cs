@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Windows.Forms;
 
 namespace BeeBurn.XAML
 {
@@ -73,6 +74,21 @@ namespace BeeBurn.XAML
             if (m_proj == null)
             {
                 m_proj = new Projection();
+
+                foreach (Screen s in Screen.AllScreens)
+                {
+                    Console.WriteLine(s.DeviceName);
+                }
+                m_proj.Top = Screen.AllScreens[1].WorkingArea.Top;
+                m_proj.Left = Screen.AllScreens[1].WorkingArea.Left;
+                m_proj.Width = Screen.AllScreens[1].WorkingArea.Width;
+                m_proj.Height = Screen.AllScreens[1].WorkingArea.Height;
+                // m_proj.WindowState = WindowState.Maximized;
+
+                Console.WriteLine("Left = " + m_proj.Left);
+                Console.WriteLine("Top = " + m_proj.Top);
+                Console.WriteLine("Width = " + m_proj.Width);
+
                 m_proj.OnClose += () => { m_proj = null; };
             }
         }

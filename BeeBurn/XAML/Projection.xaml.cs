@@ -162,5 +162,10 @@ namespace BeeBurn.XAML
         {
             OnClose?.Invoke();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            (sender as Window).WindowState = WindowState.Maximized;
+        }
     }
 }
