@@ -36,6 +36,30 @@ namespace BeeBurn
             public int biClrImportant;
         }
 
+        public static BitmapImage BitmapImageFromClipboard()
+        {
+            if (Clipboard.ContainsImage())
+            {
+                System.Windows.Media.Imaging.BitmapSource bmp = Clipboard.GetImage();
+                BitmapImage bitmapImage = new BitmapImage();
+                using (var stream = new MemoryStream())
+                {
+                    BitmapEncoder encoder = new BmpBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(bmp));
+                    encoder.Save(stream);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    bitmapImage.BeginInit();
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.StreamSource = stream;
+                    bitmapImage.EndInit();
+                }
+
+                return bitmapImage;
+            }
+
+            return null;
+        }
+
         public static BitmapFrame BitmapFrameFromClipboardDib()
         {
             MemoryStream ms = Clipboard.GetData("DeviceIndependentBitmap") as MemoryStream;

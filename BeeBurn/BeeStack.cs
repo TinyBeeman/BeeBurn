@@ -325,7 +325,7 @@ namespace BeeBurn
 
         public void PasteImage()
         {
-            BitmapFrame srcClip = BeeClipboard.BitmapFrameFromClipboardDib();
+            BitmapImage srcClip = BeeClipboard.BitmapImageFromClipboard();
             if (srcClip != null)
             {
                 Images.Add(new BeeImage(srcClip, "Paste-" + BeeBurnVM.Get().PasteCounter.ToString("D" + 4))); ;

@@ -20,7 +20,7 @@
                 <TextBlock Text=":"/>
             </DataTemplate>
             <DataTemplate x:Key="ThumbnailTemplate">
-                <Image MaxWidth="64" MaxHeight="64" Source="{Binding Path=BitmapFrame}"/>
+                <Image MaxWidth="64" MaxHeight="64" Source="{Binding Path=Image,Mode=OneWay}"/>
             </DataTemplate>
         </Grid.Resources>
         <ScrollViewer Grid.Row="0">
@@ -62,6 +62,7 @@
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Thumbnail" CellTemplate="{StaticResource ThumbnailTemplate}"/>
                     <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Path=Name}"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="Resolution" Binding="{Binding Path=Resolution, Mode=OneWay}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>

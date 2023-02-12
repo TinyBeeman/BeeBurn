@@ -19,7 +19,7 @@
                 <TextBlock Text=":"/>
             </DataTemplate>
             <DataTemplate x:Key="ThumbnailTemplate">
-                <Image MaxWidth="64" MaxHeight="64" Source="{Binding Path=BitmapFrame}"/>
+                <Image MaxWidth="64" MaxHeight="64" Source="{Binding Path=Image,Mode=OneWay}"/>
             </DataTemplate>
         </Grid.Resources>
         <ScrollViewer Grid.Row="0">

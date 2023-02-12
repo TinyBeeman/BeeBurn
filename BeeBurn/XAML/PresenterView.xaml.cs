@@ -133,7 +133,7 @@ namespace BeeBurn.XAML
         private void RefreshNextImageControl()
         {
             BeeImage biNext = GetNextImage(false);
-            NextImage.Source = biNext?.BitmapFrame;
+            NextImage.Source = biNext?.Image;
         }
 
         private void QueueNextImage()
@@ -148,7 +148,7 @@ namespace BeeBurn.XAML
                 return;
             }
 
-            CurrentImage.Source = biNext.BitmapFrame;
+            CurrentImage.Source = biNext.Image;
             RefreshNextImageControl();
 
             double panSeconds = m_proj.QueueImage(biNext) + BeeBurnVM.Get().ConfigSettings.ImageFadeTime;

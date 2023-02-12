@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -56,13 +57,14 @@ namespace BeeBurn
 
         public void UpdateAllProps()
         {
-            OnPropertyChanged("BitmapFrame");
+            OnPropertyChanged("BitmapImage");
             OnPropertyChanged("StartRect");
             OnPropertyChanged("EndRect");
 
         }
 
-        private BitmapFrame m_bitmapFrame;
+        // private BitmapFrame m_bitmapFrame;
+        private BitmapImage m_bitmapImage;
         private BeeRect m_startRect;
         private BeeRect m_endRect;
         private string m_name;
@@ -73,12 +75,22 @@ namespace BeeBurn
 
         public int SessionId => m_sessionId;
 
-        public BitmapFrame BitmapFrame
+        /*public BitmapFrame BitmapFrame
         {
             get => m_bitmapFrame;
             set
             {
                 m_bitmapFrame = value;
+                OnPropertyChanged();
+            }
+        }*/
+
+        public BitmapImage Image
+        {
+            get => m_bitmapImage;
+            set
+            {
+                m_bitmapImage = value;
                 OnPropertyChanged();
             }
         }
@@ -112,6 +124,10 @@ namespace BeeBurn
             }
         }
 
+        public string Resolution
+        {
+            get => Image?.Width.ToString() ?? "0" + ", " + Image?.Height.ToString() ?? "0"; //m_bitmapFrame.Width.ToString() + ", " + m_bitmapFrame.Height.ToString();
+        }
         public BeeRect StartRect
         {
             get => m_startRect;
@@ -158,11 +174,11 @@ namespace BeeBurn
             m_sessionId = s_nextSessionId++;
         }
 
-        public BeeImage(BitmapFrame src, string name)
+        public BeeImage(BitmapImage src, string name)
         {
             InitializeSessionId();
             Name = name;
-            BitmapFrame = src;
+            Image = src;
             StartRect = GetRectFromImageSrc(src);
             ShrinkEnd(StartRect.Width * 0.2);
         }
@@ -170,7 +186,7 @@ namespace BeeBurn
         public BeeImage(string serial, string childPath)
         {
             InitializeSessionId();
-            BitmapFrame = null;
+            Image = null;
             Deserialize(serial, childPath);
         }
 
@@ -178,7 +194,7 @@ namespace BeeBurn
         {
             InitializeSessionId();
             SetBitmapFrameFromFilePath(filePath);
-            StartRect = GetRectFromImageSrc(BitmapFrame);
+            StartRect = GetRectFromImageSrc(Image);
             ShrinkEnd(StartRect.Width * 0.2);
             Name = System.IO.Path.GetFileNameWithoutExtension(filePath);
         }
@@ -196,8 +212,8 @@ namespace BeeBurn
                 return new BeeRect();
         }
 
-        public void ResetStartRect() { StartRect = new BeeRect(0, 0, BitmapFrame.Width, BitmapFrame.Height);  }
-        public void ResetEndRect() { EndRect = new BeeRect(0, 0, BitmapFrame.Width, BitmapFrame.Height); }
+        public void ResetStartRect() { StartRect = new BeeRect(0, 0, Image.Width, Image.Height);  }
+        public void ResetEndRect() { EndRect = new BeeRect(0, 0, Image.Width, Image.Height); }
 
         private OffsetScale GetOffsetAndScaleFromRect(BeeRect rFocus, BeeRect rContainer)
         {
@@ -210,8 +226,8 @@ namespace BeeBurn
             ret.Scale = fitWidth ? (rContainer.Height / rFocus.Height) : (rContainer.Width / rFocus.Width);
             ret.OffsetX = -(rFocus.Left + (rFocus.Width / 2));
             ret.OffsetY = -(rFocus.Top + (rFocus.Height / 2));
-            ret.OriginX = ret.OffsetX / BitmapFrame.Width;
-            ret.OriginY = ret.OffsetY / BitmapFrame.Height;
+            ret.OriginX = ret.OffsetX / Image.Width;
+            ret.OriginY = ret.OffsetY / Image.Height;
 
             return ret;
         }
@@ -222,8 +238,9 @@ namespace BeeBurn
 
         public bool SaveImage(string filepath)
         {
+            
             BitmapEncoder encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame);
+            encoder.Frames.Add(BitmapFrame.Create(Image));
             using (var fileStream = new System.IO.FileStream(filepath, System.IO.FileMode.Create))
             {
                 encoder.Save(fileStream);
@@ -264,25 +281,17 @@ namespace BeeBurn
 
         private bool SetBitmapFrameFromFilePath(string filePath)
         {
+            BitmapImage bmpImg = new BitmapImage();
             using (Stream imgStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                string ext = System.IO.Path.GetExtension(filePath);
-                if (ext.Equals(".png", StringComparison.OrdinalIgnoreCase))
-                {
-                    PngBitmapDecoder decoder = new PngBitmapDecoder(imgStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-                    BitmapFrame = decoder.Frames[0];
-                    return true;
-                }
-                else if (ext.Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
-                         ext.Equals(".jpeg", StringComparison.OrdinalIgnoreCase))
-                {
-                    JpegBitmapDecoder decoder = new JpegBitmapDecoder(imgStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-                    BitmapFrame = decoder.Frames[0];
-                    return true;
-                }
+                bmpImg.BeginInit();
+                bmpImg.CacheOption = BitmapCacheOption.OnLoad;
+                bmpImg.StreamSource = imgStream;
+                bmpImg.EndInit();
+                Image = bmpImg;
             }
 
-            return false;
+            return true;
         }
 
         public void Deserialize(string str, string childPath)

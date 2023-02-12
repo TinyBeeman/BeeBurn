@@ -78,7 +78,7 @@ namespace BeeBurn.XAML
             m_imgOld = m_imgNew;
             m_imgNew = new Image
             {
-                Source = bi.BitmapFrame,
+                Source = bi.Image,
 
                 // Start with 0 opacity
                 Opacity = 0,
