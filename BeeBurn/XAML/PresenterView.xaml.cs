@@ -75,14 +75,32 @@ namespace BeeBurn.XAML
             {
                 m_proj = new Projection();
 
-                foreach (Screen s in Screen.AllScreens)
+                int iScreen = BeeBurnVM.Get().ConfigSettings.ScreenIndex;
+                if (Screen.AllScreens.Length <= iScreen)
+                    iScreen = Screen.AllScreens.Length - 1;
+
+                if (BeeBurnVM.Get().ConfigSettings.FullScreen)
                 {
-                    Console.WriteLine(s.DeviceName);
+                    m_proj.Top = Screen.AllScreens[iScreen].WorkingArea.Top;
+                    m_proj.Left = Screen.AllScreens[iScreen].WorkingArea.Left;
+                    m_proj.Width = Screen.AllScreens[iScreen].WorkingArea.Width;
+                    m_proj.Height = Screen.AllScreens[iScreen].WorkingArea.Height;
                 }
-                m_proj.Top = Screen.AllScreens[1].WorkingArea.Top;
-                m_proj.Left = Screen.AllScreens[1].WorkingArea.Left;
-                m_proj.Width = Screen.AllScreens[1].WorkingArea.Width;
-                m_proj.Height = Screen.AllScreens[1].WorkingArea.Height;
+                else
+                {
+                    int top = Screen.AllScreens[iScreen].WorkingArea.Top;
+                    int left = Screen.AllScreens[iScreen].WorkingArea.Left;
+                    int widthT = Screen.AllScreens[iScreen].WorkingArea.Width;
+                    int heightT = Screen.AllScreens[iScreen].WorkingArea.Height;
+                    int widthW = BeeBurnVM.Get().ConfigSettings.WindowWidth;
+                    int heightW = BeeBurnVM.Get().ConfigSettings.WindowHeight;
+
+                    m_proj.Top = Math.Max(top + 5, top + ((heightT - heightW) / 2));
+                    m_proj.Left = Math.Max(left + 5, left + ((widthT - widthW) / 2));
+                    m_proj.Width = widthW;
+                    m_proj.Height = heightW;
+
+                }
                 // m_proj.WindowState = WindowState.Maximized;
 
                 Console.WriteLine("Left = " + m_proj.Left);

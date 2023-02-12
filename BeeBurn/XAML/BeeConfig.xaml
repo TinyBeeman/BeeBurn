@@ -18,24 +18,40 @@
         </Style>
       </local:LabelValueGrid.Resources>
       
-      <TextBlock>Pan Seconds</TextBlock>
-      <TextBox Text="{Binding Path=ImagePanTime}" />
+            <TextBlock>Pan Seconds</TextBlock>
+            <TextBox Text="{Binding Path=ImagePanTime}" />
       
-      <TextBlock>Crossfade Seconds</TextBlock>
-      <TextBox Text="{Binding Path=ImageFadeTime}" />
+            <TextBlock>Crossfade Seconds</TextBlock>
+            <TextBox Text="{Binding Path=ImageFadeTime}" />
       
-      <TextBlock>Library Path</TextBlock>
-      <TextBox Text="{Binding Path=LibraryPath}"/>
+            <TextBlock>Library Path</TextBlock>
+            <TextBox Text="{Binding Path=LibraryPath}"/>
       
-      <TextBlock>Image Load Path</TextBlock>
-      <TextBox Text="{Binding Path=ImageLoadPath}"/>
+            <TextBlock>Image Load Path</TextBlock>
+            <TextBox Text="{Binding Path=ImageLoadPath}"/>
       
-      <TextBlock>Save Path</TextBlock>
-      <TextBox Text="{Binding Path=SavePath}"/>
+            <TextBlock>Save Path</TextBlock>
+            <TextBox Text="{Binding Path=SavePath}"/>
       
-      <TextBlock>Save Empty Stacks</TextBlock>
-      <CheckBox IsChecked="{Binding Path=SaveEmptyStacks}"/>
-    </local:LabelValueGrid>
+            <TextBlock>Save Empty Stacks</TextBlock>
+            <CheckBox IsChecked="{Binding Path=SaveEmptyStacks}"/>
+
+            <TextBlock>Full Screen</TextBlock>
+            <CheckBox IsChecked="{Binding Path=FullScreen}"/>
+
+            <TextBlock>Screen Index</TextBlock>
+            <TextBox Text="{Binding Path=ScreenIndex}" />
+
+            <TextBlock>Presenter Window Width</TextBlock>
+            <TextBox Text="{Binding Path=WindowWidth}" />
+        
+            <TextBlock>Presenter Window Height</TextBlock>
+            <TextBox Text="{Binding Path=WindowHeight}" />
+        
+            
+
+
+        </local:LabelValueGrid>
   </Grid>
 
 </Window>

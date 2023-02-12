@@ -165,7 +165,10 @@ namespace BeeBurn.XAML
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            (sender as Window).WindowState = WindowState.Maximized;
+            if (BeeBurnVM.Get().ConfigSettings.FullScreen)
+                (sender as Window).WindowState = WindowState.Maximized;
+            else
+                (sender as Window).WindowState = WindowState.Normal;
         }
     }
 }

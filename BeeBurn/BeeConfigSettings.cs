@@ -15,26 +15,32 @@ namespace BeeBurn
         SavePath,
         ImageFadeTime,
         ImagePanTime,
-        SaveEmptyStacks
+        SaveEmptyStacks,
+        Fullscreen,
+        ScreenIndex,
+        WindowWidth,
+        WindowHeight
     }
 
     public class BeeConfigSettings : INotifyPropertyChanged
     {
         private Dictionary<ConfigKey, string> m_configStrings = new Dictionary<ConfigKey, string>();
         private Dictionary<ConfigKey, double> m_configDoubles = new Dictionary<ConfigKey, double>();
+        private Dictionary<ConfigKey, int> m_configInts = new Dictionary<ConfigKey, int>();
         private Dictionary<ConfigKey, bool> m_configBools = new Dictionary<ConfigKey, bool>();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public BeeConfigSettings()
         {
-            InitializeDefaultSettings();
+            InitializeDefaultSettings(true);
         }
 
         public static string SettingsPath { get => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BeeBurnSettings.json");  }
 
         public void SaveToFile()
         {
+            File.Delete(SettingsPath);
             File.WriteAllText(SettingsPath, System.Text.Json.JsonSerializer.Serialize(this));
         }
 
@@ -47,7 +53,9 @@ namespace BeeBurn
                 {
                     jsonString = reader.ReadToEnd();
                 }
-                return System.Text.Json.JsonSerializer.Deserialize<BeeConfigSettings>(jsonString) ?? new BeeConfigSettings();
+                BeeConfigSettings settings = System.Text.Json.JsonSerializer.Deserialize<BeeConfigSettings>(jsonString) ?? new BeeConfigSettings();
+                settings.InitializeDefaultSettings(false);
+                return settings;
             }
             else
             {
@@ -55,14 +63,28 @@ namespace BeeBurn
             }
         }
 
-        private void InitializeDefaultSettings()
+        private void InitializeDefaultSettings(bool overrideAll)
         {
-            m_configStrings.Add(ConfigKey.LibraryPath, "N:\\Data\\Dropbox\\Easel\\_Work For Others\\_TonyShows\\4AND20\\BeeBurn\\Libraries");
-            m_configStrings.Add(ConfigKey.SavePath, "D:\\Temp\\BeeBurn");
-            m_configStrings.Add(ConfigKey.ImageLoadPath, "D:\\Users\\tony\\Downloads");
-            m_configDoubles.Add(ConfigKey.ImageFadeTime, 2.0);
-            m_configDoubles.Add(ConfigKey.ImagePanTime, 60.0);
-            m_configBools.Add(ConfigKey.SaveEmptyStacks, false);
+            if (overrideAll || !m_configStrings.ContainsKey(ConfigKey.LibraryPath))
+                m_configStrings[ConfigKey.LibraryPath] = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (overrideAll || !m_configStrings.ContainsKey(ConfigKey.SavePath))
+                m_configStrings[ConfigKey.SavePath] = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (overrideAll || !m_configStrings.ContainsKey(ConfigKey.ImageLoadPath))
+                m_configStrings[ConfigKey.ImageLoadPath] = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            if (!m_configDoubles.ContainsKey(ConfigKey.ImageFadeTime))
+                m_configDoubles[ConfigKey.ImageFadeTime] = 2.0;
+            if (overrideAll || !m_configDoubles.ContainsKey(ConfigKey.ImagePanTime))
+                m_configDoubles[ConfigKey.ImagePanTime] = 60.0;
+            if (overrideAll || !m_configBools.ContainsKey(ConfigKey.SaveEmptyStacks))
+                m_configBools[ConfigKey.SaveEmptyStacks] = false;
+            if (overrideAll || !m_configBools.ContainsKey(ConfigKey.Fullscreen))
+                m_configBools[ConfigKey.Fullscreen] = true;
+            if (overrideAll || !m_configInts.ContainsKey(ConfigKey.ScreenIndex))
+                m_configInts[ConfigKey.ScreenIndex] = 0;
+            if (overrideAll || !m_configInts.ContainsKey(ConfigKey.WindowWidth))
+                m_configInts[ConfigKey.WindowWidth] = 1024;
+            if (overrideAll || !m_configInts.ContainsKey(ConfigKey.WindowHeight))
+                m_configInts[ConfigKey.WindowHeight] = 768;
         }
 
 
@@ -127,6 +149,46 @@ namespace BeeBurn
             set
             {
                 m_configBools[ConfigKey.SaveEmptyStacks] = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool FullScreen
+        {
+            get { return m_configBools[ConfigKey.Fullscreen]; }
+            set
+            {
+                m_configBools[ConfigKey.Fullscreen] = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int ScreenIndex
+        {
+            get { return m_configInts[ConfigKey.ScreenIndex]; }
+            set
+            {
+                m_configInts[ConfigKey.ScreenIndex] = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int WindowWidth
+        {
+            get { return m_configInts[ConfigKey.WindowWidth]; }
+            set
+            {
+                m_configInts[ConfigKey.WindowWidth] = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int WindowHeight
+        {
+            get { return m_configInts[ConfigKey.WindowHeight]; }
+            set
+            {
+                m_configInts[ConfigKey.WindowHeight] = value;
                 OnPropertyChanged();
             }
         }

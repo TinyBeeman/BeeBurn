@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BeeBurn.XAML"
         mc:Ignorable="d"
-        Title="BeeBurn Projection" Height="450" Width="800"
+        Title="BeeBurn Projection" Width="1024" Height="768"
         WindowStyle="None"
         Closing="ProjectionClosing"
         WindowStartupLocation="Manual"
