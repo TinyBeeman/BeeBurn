@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
+using System.Security.Principal;
 
 namespace BeeBurn
 {
@@ -26,6 +29,30 @@ namespace BeeBurn
         public BeeConfigSettings()
         {
             InitializeDefaultSettings();
+        }
+
+        public static string SettingsPath { get => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BeeBurnSettings.json");  }
+
+        public void SaveToFile()
+        {
+            File.WriteAllText(SettingsPath, System.Text.Json.JsonSerializer.Serialize(this));
+        }
+
+        public static BeeConfigSettings LoadFromFile()
+        {
+            if (File.Exists(SettingsPath))
+            {
+                string jsonString;
+                using (StreamReader reader = new StreamReader(SettingsPath))
+                {
+                    jsonString = reader.ReadToEnd();
+                }
+                return System.Text.Json.JsonSerializer.Deserialize<BeeConfigSettings>(jsonString) ?? new BeeConfigSettings();
+            }
+            else
+            {
+                return new BeeConfigSettings();
+            }
         }
 
         private void InitializeDefaultSettings()

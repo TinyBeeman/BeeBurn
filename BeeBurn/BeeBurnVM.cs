@@ -35,7 +35,7 @@ namespace BeeBurn
 
         private BeeBurnVM()
         {
-            m_configSettings = new BeeConfigSettings();
+            m_configSettings = BeeConfigSettings.LoadFromFile();
             m_stacks.Add(new BeeStack());
             SelectedStack = m_stacks[0];
         }

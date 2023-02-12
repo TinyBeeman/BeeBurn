@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BeeBurn.XAML"
         mc:Ignorable="d"
+        Closed="OnClose"
         Title="BeeConfig" Height="450" Width="300">
   <Grid>
     <local:LabelValueGrid Margin="10,10,10,10">
@@ -20,7 +21,7 @@
       <TextBlock>Pan Seconds</TextBlock>
       <TextBox Text="{Binding Path=ImagePanTime}" />
       
-      <TextBlock>Fade Seconds</TextBlock>
+      <TextBlock>Crossfade Seconds</TextBlock>
       <TextBox Text="{Binding Path=ImageFadeTime}" />
       
       <TextBlock>Library Path</TextBlock>

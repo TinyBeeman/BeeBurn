@@ -24,5 +24,11 @@ namespace BeeBurn.XAML
             InitializeComponent();
             DataContext = BeeBurnVM.Get().ConfigSettings;
         }
+
+        private void OnClose(object sender, EventArgs e)
+        {
+            BeeBurnVM.Get().ConfigSettings.SaveToFile();
+        }
     }
+
 }
