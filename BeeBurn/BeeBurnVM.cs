@@ -5,6 +5,8 @@ using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
 using System.Linq;
 using System.Collections.Generic;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.Command;
 
 namespace BeeBurn
 {
@@ -25,6 +27,12 @@ namespace BeeBurn
             get { return m_pasteCounter++; }
         }
 
+        public ICommand PasteCommand { get; set; }
+        private void Paste()
+        {
+            SelectedStack?.PasteImage();
+        }
+
         public static BeeBurnVM Get()
         {
             if (s_singleton == null)
@@ -38,6 +46,7 @@ namespace BeeBurn
             m_configSettings = BeeConfigSettings.LoadFromFile();
             m_stacks.Add(new BeeStack());
             SelectedStack = m_stacks[0];
+            PasteCommand = new RelayCommand(Paste);
         }
 
         public BeeConfigSettings ConfigSettings => m_configSettings;

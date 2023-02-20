@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BeeBurn.XAML"
         mc:Ignorable="d"
-        Title="BeeBurn Stack Editor" Height="450" Width="800"
+        Title="BeeBurn Stack Editor" Height="800" Width="1280"
         >
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
         <Grid.ColumnDefinitions>
@@ -14,15 +14,12 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
+            <TextBlock Margin="10,10,10,0" Text="Name of Stack" TextWrapping="Wrap" />
             <TextBox Text="{Binding Path=Stack.Name}" Margin="10,10,10,0"/>
             <Button Click="ClickLoadImages" Margin="10,10,10,0">Load Image(s)</Button>
             <Button Click="ClickPaste" Margin="10,10,10,0">Paste Image</Button>
-            <TextBlock Margin="10,10,10,0" Text="{Binding Path=Stack.AllDecades}" TextWrapping="Wrap" />
-            <Button Click="ClickEditDecades" Margin="10,10,10,0">Edit Decades</Button>
-            <TextBlock Margin="10,10,10,0" Text="{Binding Path=Stack.AllTags}" TextWrapping="Wrap" />
-            <Button Click="ClickEditTags" Margin="10,10,10,0">Edit Tags</Button>
             <Separator Margin="10,10,10,0" />
-            <Button Click="ClickSaveList" Margin="10,10,10,0">Save List</Button>
+            <Button Click="ClickSaveList" Margin="10,10,10,0">Backup Stack To Disk</Button>
             <Separator Margin="10,10,10,0" />
             <Button Click="ClickDone" Margin="10,10,10,0">Done</Button>
         </StackPanel>
