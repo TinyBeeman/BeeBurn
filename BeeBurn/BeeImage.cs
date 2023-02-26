@@ -27,6 +27,15 @@ namespace BeeBurn
         private static BeeImage s_nextImage = null;
         private static BeeImage s_showingImage = null;
 
+        private BitmapImage m_bitmapImage;
+        private BeeRect m_startRect;
+        private BeeRect m_endRect;
+        private string m_name;
+        private bool m_fromLibrary = false;
+        private bool m_edited = false;
+        private bool m_isShowing;
+        private bool m_isNext;
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -63,15 +72,7 @@ namespace BeeBurn
 
         }
 
-        // private BitmapFrame m_bitmapFrame;
-        private BitmapImage m_bitmapImage;
-        private BeeRect m_startRect;
-        private BeeRect m_endRect;
-        private string m_name;
-        private bool m_fromLibrary = false;
-        private bool m_edited = false;
-        private bool m_isShowing;
-        private bool m_isNext;
+
 
         public int SessionId => m_sessionId;
 
@@ -91,6 +92,31 @@ namespace BeeBurn
             set
             {
                 m_bitmapImage = value;
+                if (m_bitmapImage != null && (m_bitmapImage.Width > 1024 || m_bitmapImage.Height > 1024))
+                {
+                    double scale = Math.Min(1024.0 / m_bitmapImage.Width, 1024.0 / m_bitmapImage.Height);
+                    BitmapImage newSrc = new BitmapImage();
+                    var targetBitmap = new TransformedBitmap(m_bitmapImage, new ScaleTransform(scale, scale));
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        // Create a BitmapEncoder and set its properties
+                        BitmapEncoder encoder = new PngBitmapEncoder();
+                        // Add the resized bitmap to the encoder
+                        encoder.Frames.Add(BitmapFrame.Create(targetBitmap));
+                        // Save the encoder to the stream
+                        encoder.Save(ms);
+
+                        // Load the stream into the new BitmapImage
+                        newSrc.BeginInit();
+                        newSrc.CacheOption = BitmapCacheOption.OnLoad;
+                        newSrc.StreamSource = new MemoryStream(ms.ToArray());
+                        newSrc.EndInit();
+                    }
+
+                    m_bitmapImage = newSrc;
+                }
+
                 OnPropertyChanged();
             }
         }
@@ -177,6 +203,7 @@ namespace BeeBurn
         public BeeImage(BitmapImage src, string name)
         {
             InitializeSessionId();
+
             Name = name;
             Image = src;
             StartRect = GetRectFromImageSrc(src);

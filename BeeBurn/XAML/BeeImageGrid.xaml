@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="BeeBurn.XAML.BeeImageGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BeeBurn.XAML"
+             mc:Ignorable="d" 
+             x:Name="BeeImageGridControl"
+             d:DesignHeight="200" d:DesignWidth="200">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <DataTemplate x:Key="GrippieTemplate">
+                <TextBlock Text=":"/>
+            </DataTemplate>
+        </Grid.Resources>
+        <ScrollViewer Grid.Row="0" Name="sv"
+                      AllowDrop="True"
+                 DragEnter="ActiveGrid_DragEnter"
+                 Drop="ActiveGrid_Drop">
+            <ItemsControl ItemsSource="{Binding Path=Stack.Images}"
+                 MinWidth="{Binding ElementName=sv, Path=ViewportWidth}"
+                 MinHeight="{Binding ElementName=sv, Path=ViewportHeight}"
+                 AllowDrop="True"
+                 DragEnter="ActiveGrid_DragEnter"
+                 Drop="ActiveGrid_Drop">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel
+                            Orientation="Horizontal"
+                            x:Name="ActiveGrid"
+                            AllowDrop="True"
+                            DragEnter="ActiveGrid_DragEnter"
+                            Drop="ActiveGrid_Drop"
+                        />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image
+                            Source="{Binding Path=Image}"
+                            Tag="{Binding Path=SessionId}"
+                            Width="100"
+                            Height="100"
+                            Margin="5,5,5,5"
+                            PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown"
+                            MouseLeftButtonDown="Image_MouseLeftButtonDown"
+                            MouseMove="Image_MouseMove"
+                            MouseLeftButtonUp="Image_MouseLeftButtonUp"
+                            AllowDrop="True"
+                            DragEnter="Image_DragEnter"
+                            Drop="Image_Drop"
+                            />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <StackPanel
+            Orientation="Horizontal"
+            Grid.Row="1">
+            <Button x:Name="BtnRandom" Click="BtnRandom_Click" Width="50">Rnd</Button>
+            <Button x:Name="BtnClear" Click="BtnClear_Click" Width="50">Clear</Button>
+            <Button x:Name="BtnDel" Click="BtnDel_Click" Width="50">Del</Button>
+        </StackPanel>
+        <StackPanel
+            Orientation="Horizontal"
+            Grid.Row="2">
+            <Button x:Name="BtnReset" Click="BtnReset_Click" Width="50">Reset</Button>
+            <Button x:Name="BtnPaste" Click="BtnPaste_Click" Width="50">Paste</Button>
+            <Button x:Name="BtnLoad" Click="BtnLoad_Click" Width="50">Load</Button>
+        </StackPanel>
+        <StackPanel
+            Orientation="Horizontal"
+            Grid.Row="3">
+            <Button x:Name="BtnSaveStack" Click="BtnSave_Click" Width="50">Save</Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -22,7 +22,9 @@
                 <Image MaxWidth="64" MaxHeight="64" Source="{Binding Path=Image,Mode=OneWay}"/>
             </DataTemplate>
         </Grid.Resources>
-        <ScrollViewer Grid.Row="0">
+        <ScrollViewer
+            Grid.Row="0"
+            Name="sv">
             <DataGrid
                 x:Name="ActiveGrid"
                 AutoGenerateColumns="False"

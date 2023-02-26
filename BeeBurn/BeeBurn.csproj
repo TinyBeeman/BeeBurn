@@ -120,6 +120,9 @@
     <Compile Include="XAML\BeeConfig.xaml.cs">
       <DependentUpon>BeeConfig.xaml</DependentUpon>
     </Compile>
+    <Compile Include="XAML\BeeImageGrid.xaml.cs">
+      <DependentUpon>BeeImageGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="XAML\BeeStackList.xaml.cs">
       <DependentUpon>BeeStackList.xaml</DependentUpon>
     </Compile>
@@ -141,6 +144,10 @@
     <Page Include="XAML\BeeImageEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XAML\BeeImageGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="XAML\BeeStackList.xaml">
       <Generator>MSBuild:Compile</Generator>

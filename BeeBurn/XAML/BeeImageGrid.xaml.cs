@@ -17,14 +17,14 @@ using System.Windows.Shapes;
 
 namespace BeeBurn.XAML
 {
-    public delegate Point GetPosition(IInputElement element);
-
     /// <summary>
     /// Interaction logic for ImageList.xaml
     /// </summary>
-    public partial class BeeImageList : UserControl
+    public partial class BeeImageGrid : UserControl
     {
         private int m_dragIndex = -1;
+        private BeeImage m_dragImg;
+        private BeeImage m_selectedImg;
 
         public BeeStack Stack
         {
@@ -41,7 +41,7 @@ namespace BeeBurn.XAML
         public static readonly DependencyProperty StackProperty =
                 DependencyProperty.Register("Stack",
                     typeof(BeeStack),
-                    typeof(BeeImageList),
+                    typeof(BeeImageGrid),
                     new PropertyMetadata(null));
 
         public bool AllowStackEdit
@@ -53,7 +53,7 @@ namespace BeeBurn.XAML
         public static DependencyProperty AllowStackEditProperty =
             DependencyProperty.Register("AllowStackEdit",
                 typeof(bool),
-                typeof(BeeImageList),
+                typeof(BeeImageGrid),
                 new PropertyMetadata(true));
 
 
@@ -72,16 +72,16 @@ namespace BeeBurn.XAML
         public static DependencyProperty SelectionIndexProperty =
         DependencyProperty.Register("SelectionIndex",
             typeof(int),
-            typeof(BeeImageList),
+            typeof(BeeImageGrid),
             new PropertyMetadata(-1));
 
 
-        public BeeImageList()
+        public BeeImageGrid()
         {
             InitializeComponent();
         }
 
-        private void ActiveGrid_Drop(object sender, DragEventArgs e)
+        /*private void ActiveGrid_Drop(object sender, DragEventArgs e)
         {
             if (m_dragIndex < 0)
                 return;
@@ -89,21 +89,17 @@ namespace BeeBurn.XAML
             if (iInsert < 0 || iInsert == m_dragIndex)
                 return;
 
-            /*if (iInsert == ActiveGrid.Items.Count - 1)
-            {
-                MessageBox.Show("Why can't this be dropped?");
-                return;
-            }*/
-
-            var biMoved = Stack.Images[m_dragIndex];
+                        var biMoved = Stack.Images[m_dragIndex];
             Stack.Images.RemoveAt(m_dragIndex);
             Stack.Images.Insert(iInsert, biMoved);
 
 
-        }
+        }*/
 
-        private void ActiveGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        /*private void ActiveGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+
+
             m_dragIndex = GetCurrentRowIndex(e.GetPosition);
             if (m_dragIndex < 0)
                 return;
@@ -151,7 +147,7 @@ namespace BeeBurn.XAML
                 }
             }
             return curIndex;
-        }
+        }*/
 
         private void BtnRandom_Click(object sender, RoutedEventArgs e)
         {
@@ -172,7 +168,7 @@ namespace BeeBurn.XAML
             Stack.Images.Clear();
         }
 
-        private HashSet<BeeImage> GetSelectedImages()
+        /*private HashSet<BeeImage> GetSelectedImages()
         {
             var images = new HashSet<BeeImage>();
             for (int iCell = 0; iCell < ActiveGrid.SelectedCells.Count; iCell++)
@@ -184,15 +180,15 @@ namespace BeeBurn.XAML
                 }
             }
             return images;
-        }
+        }*/
 
         private void BtnDel_Click(object sender, RoutedEventArgs e)
         {
-            var images = GetSelectedImages();
-            foreach (BeeImage bi in images)
-            {
-                Stack.Images.Remove(bi);
-            }
+            //var images = GetSelectedImages();
+            //foreach (BeeImage bi in images)
+            //{
+                //Stack.Images.Remove(bi);
+            //}
         }
 
         private void BtnPaste_Click(object sender, RoutedEventArgs e)
@@ -224,6 +220,94 @@ namespace BeeBurn.XAML
             }
         }
 
-        
+        private void Image_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Window.GetWindow(this).CaptureMouse();
+            Image_MouseLeftButtonDown(sender, e);
+        }
+
+        private void Image_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private BeeImage GetImageFromSender(object sender)
+        {
+            return ((FrameworkElement)sender).DataContext as BeeImage;
+        }
+
+        private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int srcId = (int)((Image)e.Source).Tag;
+            BeeImage dragImage = GetImageFromSender(sender);
+            var dragEffects = DragDropEffects.Move;
+            SelectionIndex = Stack.Images.IndexOf(m_dragImg);
+
+            if (DragDrop.DoDragDrop((Image)(e.Source), dragImage, dragEffects) != DragDropEffects.None)
+            {
+                m_dragImg = dragImage;
+            }
+        }
+
+        private void ActiveGrid_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(BeeImage)))
+            {
+                e.Effects = DragDropEffects.Move;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        private void ActiveGrid_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(BeeImage)))
+            {
+                BeeImage imgDrag = e.Data.GetData(typeof(BeeImage)) as BeeImage;
+                if (Stack.Images.Contains(imgDrag))
+                {
+                    Stack.Images.Remove(imgDrag);
+                }
+                Stack.Images.Add(imgDrag);
+                e.Handled = true;
+            }
+        }
+
+        private void Image_DragEnter(object sender, DragEventArgs e)
+        {
+
+        }
+
+        private void Image_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(BeeImage)))
+            {
+                e.Handled = true;
+
+                BeeImage imgDrag = e.Data.GetData(typeof(BeeImage)) as BeeImage;
+                BeeImage imgDrop = GetImageFromSender(sender);
+                if (imgDrag == imgDrop)
+                    return;
+
+                int oldIndex = -1;
+                if (Stack.Images.Contains(imgDrag))
+                {
+                    oldIndex = Stack.Images.IndexOf(imgDrag);
+                    Stack.Images.RemoveAt(oldIndex);
+                }
+
+                // If the new index and the old index are the same, we should swap, because
+                // that means they drug it to the next image.
+                int newIndex = Stack.Images.IndexOf(imgDrop);
+                Stack.Images.Insert((newIndex == oldIndex) ? newIndex + 1 : newIndex, imgDrag);
+            }
+        }
     }
 }
