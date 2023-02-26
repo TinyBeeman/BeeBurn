@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Windows;
@@ -28,13 +30,14 @@ namespace BeeBurn
         private static BeeImage s_showingImage = null;
 
         private BitmapImage m_bitmapImage;
-        private BeeRect m_startRect;
-        private BeeRect m_endRect;
+        private BeeRect m_startRect = new BeeRect(0, 0, 1, 1);
+        private BeeRect m_endRect = new BeeRect(0, 0, 1, 1);
         private string m_name;
         private bool m_fromLibrary = false;
         private bool m_edited = false;
         private bool m_isShowing;
         private bool m_isNext;
+        private bool m_stopImage;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string name = null)
@@ -64,15 +67,19 @@ namespace BeeBurn
                 biShowing.IsShowing = true;
         }
 
+        public static BeeImage CreateStopImage()
+        {
+            BeeImage bi = new BeeImage(BlankImage, "Stop");
+            bi.m_stopImage = true;
+            return bi;
+        }
+
         public void UpdateAllProps()
         {
             OnPropertyChanged("BitmapImage");
             OnPropertyChanged("StartRect");
             OnPropertyChanged("EndRect");
-
         }
-
-
 
         public int SessionId => m_sessionId;
 
@@ -141,6 +148,11 @@ namespace BeeBurn
             }
         }
 
+        public bool IsStopImage
+        {
+            get => m_stopImage;
+        }
+
         public string Name {
             get => m_name;
             set
@@ -198,6 +210,41 @@ namespace BeeBurn
         private void InitializeSessionId()
         {
             m_sessionId = s_nextSessionId++;
+        }
+
+        static BitmapImage m_blankImage = null;
+        static BitmapImage BlankImage
+        {
+            get
+            {
+                if (m_blankImage == null)
+                {
+                    m_blankImage = new BitmapImage();
+                    Array bytes = Enumerable.Repeat<byte>(0, 100 * 100).ToArray();
+                    int stride = 100;
+                    var src = BitmapImage.Create(
+                                        100,
+                                        100,
+                                        96,
+                                        96,
+                                        PixelFormats.Indexed1,
+                                        new BitmapPalette(new List<System.Windows.Media.Color> { Colors.Black }),
+                                        bytes,
+                                        stride);
+                    PngBitmapEncoder encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(src));
+                    MemoryStream ms = new MemoryStream();
+                    encoder.Save(ms);
+                    ms.Position = 0;
+                    m_blankImage.BeginInit();
+                    m_blankImage.CacheOption = BitmapCacheOption.OnLoad;
+                    m_blankImage.StreamSource = new MemoryStream(ms.ToArray());
+                    m_blankImage.EndInit();
+                    ms.Close();
+                }
+
+                return m_blankImage;
+            }
         }
 
         public BeeImage(BitmapImage src, string name)

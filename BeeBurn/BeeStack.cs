@@ -36,6 +36,11 @@ namespace BeeBurn
             m_name = "Stack " + (s_nextStackCounter++).ToString("D" + 3);
         }
 
+        public BeeStack(string name)
+        {
+            m_name = name;
+        }
+
         public void ResetNextImage()
         {
             m_atEnd = false;

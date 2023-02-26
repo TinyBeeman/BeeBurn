@@ -22,9 +22,7 @@ namespace BeeBurn.XAML
     /// </summary>
     public partial class BeeImageGrid : UserControl
     {
-        private int m_dragIndex = -1;
         private BeeImage m_dragImg;
-        private BeeImage m_selectedImg;
 
         public BeeStack Stack
         {
@@ -80,74 +78,6 @@ namespace BeeBurn.XAML
         {
             InitializeComponent();
         }
-
-        /*private void ActiveGrid_Drop(object sender, DragEventArgs e)
-        {
-            if (m_dragIndex < 0)
-                return;
-            int iInsert = this.GetCurrentRowIndex(e.GetPosition);
-            if (iInsert < 0 || iInsert == m_dragIndex)
-                return;
-
-                        var biMoved = Stack.Images[m_dragIndex];
-            Stack.Images.RemoveAt(m_dragIndex);
-            Stack.Images.Insert(iInsert, biMoved);
-
-
-        }*/
-
-        /*private void ActiveGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-
-            m_dragIndex = GetCurrentRowIndex(e.GetPosition);
-            if (m_dragIndex < 0)
-                return;
-
-            ActiveGrid.SelectedIndex = m_dragIndex;
-            BeeImage biSel = ActiveGrid.Items[m_dragIndex] as BeeImage;
-            if (biSel == null)
-                return;
-            var dragEffects = DragDropEffects.Move;
-            if (DragDrop.DoDragDrop(ActiveGrid, biSel, dragEffects) != DragDropEffects.None)
-            {
-                ActiveGrid.SelectedItem = biSel;
-            }
-        }
-
-        private bool GetMouseTargetRow(Visual theTarget, GetPosition position)
-        {
-            if (theTarget == null)
-                return false;
-
-            var rect = VisualTreeHelper.GetDescendantBounds(theTarget);
-            Point point = position((IInputElement)theTarget);
-            return rect.Contains(point);
-        }
-
-
-        private DataGridRow GetRowItem(int index)
-        {
-            if (ActiveGrid.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
-                return null;
-
-            return ActiveGrid.ItemContainerGenerator.ContainerFromIndex(index) as DataGridRow;
-        }
-
-        private int GetCurrentRowIndex(GetPosition pos)
-        {
-            int curIndex = -1;
-            for (int i = 0; i < ActiveGrid.Items.Count; i++)
-            {
-                DataGridRow itm = GetRowItem(i);
-                if (itm != null && GetMouseTargetRow(itm, pos))
-                {
-                    curIndex = i;
-                    break;
-                }
-            }
-            return curIndex;
-        }*/
 
         private void BtnRandom_Click(object sender, RoutedEventArgs e)
         {

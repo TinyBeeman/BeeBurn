@@ -26,10 +26,10 @@
             <StackPanel Grid.Column="0" Grid.Row="1">
                 <Button x:Name="PlayPauseButton" Click="ClickPlayPause" Margin="10,10,10,0">Play</Button>
                 <Button x:Name="HoldButton" Click="ClickHold" Margin="10,10,10,0">Hold</Button>
+                <Button x:Name="CutToBlackButton" Click="ClickCutToBlack" Margin="10,10,10,0">Cut To Black</Button>
                 <Button Click="ClickSkip" Margin="10,10,10,0">Skip</Button>
                 <Button Click="ClickPasteNext" Margin="10,10,10,0">Paste Next Image</Button>
                 <Button Click="ClickLoadNext" Margin="10,10,10,0">Load Next Image</Button>
-                <RadioButton Content="Auto-Load Next List" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=PlayOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter={x:Static local:PlayOptions.NextList}}" Margin="10,10,10,0"/>
                 <RadioButton Content="Stop At End Of List" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=PlayOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter={x:Static local:PlayOptions.StopAtEnd}}" Margin="10,10,10,0"/>
                 <RadioButton Content="Repeat This List" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=PlayOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter={x:Static local:PlayOptions.RepeatThisList}}" Margin="10,10,10,0"/>
                 <TextBlock Margin="10,10,10,0">Showing</TextBlock>
@@ -37,20 +37,30 @@
                 <TextBlock Margin="10,10,10,0">Next</TextBlock>
                 <Image x:Name="NextImage" Margin="10,10,10,0" Width="180" Height="180" />
             </StackPanel>
-            <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Path=SelectedStack.Name}" Margin="0,10,0,0" />
+            <TextBlock Grid.Column="1" Grid.Row="0" Text="Currently Presenting" Margin="0,10,0,0" />
             <local:BeeImageGrid
                     Grid.Column="1"
                     Grid.Row="1"
-                    x:Name="ActiveImageList"
-                    Stack="{Binding Path=SelectedStack, Mode=TwoWay}"
-                    SelectionIndex="{Binding Path=SelectedStack.SelectedIndex, Mode=TwoWay}"/>
+                    x:Name="PresentationImageGrid"
+                    Stack="{Binding Path=PresentationStack, Mode=OneWay}"
+                    SelectionIndex="{Binding Path=PresentationStack.SelectedIndex, Mode=TwoWay}"/>
 
-            <TextBlock Grid.Column="2" Grid.Row="0" Text="Stacks" Margin="0,10,0,0" />
-            <local:BeeStackList
+            <!--<TextBlock Grid.Column="2" Grid.Row="0" Text="Stacks" Margin="0,10,0,0" />-->
+            <ComboBox
+                Grid.Column="2"
+                Grid.Row="0"
+                ItemsSource="{Binding Path=Stacks}"
+                DisplayMemberPath="Name"
+                SelectedValue="{Binding Path=SelectedStack}"
+                SelectionChanged="ComboBox_SelectionChanged"
+                />
+
+            <local:BeeImageGrid
                     Grid.Column="2"
                     Grid.Row="1"
-                    Stacks="{Binding Path=Stacks}"
-                    SelectedStackIndex="{Binding Path=SelectedStackIndex, Mode=TwoWay}"/>
+                    x:Name="ActiveImageList"
+                    Stack="{Binding Path=SelectedStack, Mode=OneWay}"
+                    SelectionIndex="{Binding Path=SelectedStack.SelectedIndex, Mode=TwoWay}" />
         </Grid>
     </DockPanel>
 </Window>

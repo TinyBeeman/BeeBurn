@@ -16,7 +16,7 @@ using System.Windows.Forms;
 namespace BeeBurn.XAML
 {
 
-    public enum PlayOptions { StopAtEnd, NextList, RepeatThisList }
+    public enum PlayOptions { StopAtEnd, RepeatThisList }
 
     /// <summary>
     /// Interaction logic for PresenterView.xaml
@@ -63,7 +63,7 @@ namespace BeeBurn.XAML
          DependencyProperty.Register("PlayOption",
              typeof(PlayOptions),
              typeof(PresenterView),
-             new PropertyMetadata(PlayOptions.NextList, null));
+             new PropertyMetadata(PlayOptions.RepeatThisList, null));
 
         public delegate void CloseHandler();
 
@@ -124,33 +124,16 @@ namespace BeeBurn.XAML
             QueueNextImage();
         }
 
-        private BeeImage GetNextImage(bool advancePointers)
+        private BeeStack PresentationStack => BeeBurnVM.Get().PresentationStack;
+
+        private BeeImage GetNextImage()
         {
-            BeeStack nextStack = BeeBurnVM.Get().EnsureActiveStack();
-            BeeImage biNext;
-            if (advancePointers)
-                biNext  = nextStack.GetNextImage(PlayOption == PlayOptions.RepeatThisList);
-            else
-                biNext = nextStack.PeekNextImage(PlayOption == PlayOptions.RepeatThisList);
-
-            if (biNext == null && PlayOption == PlayOptions.NextList)
-            {
-                nextStack = BeeBurnVM.Get().GetNextStack(true, advancePointers);
-
-                if (nextStack != null)
-                {
-                    if (advancePointers)
-                        return nextStack.GetNextImage(PlayOption == PlayOptions.RepeatThisList);
-                    else
-                        return nextStack.PeekNextImage(PlayOption == PlayOptions.RepeatThisList);
-                }
-            }
-            return biNext;
+            return PresentationStack.GetNextImage(PlayOption == PlayOptions.RepeatThisList);
         }
 
         private void RefreshNextImageControl()
         {
-            BeeImage biNext = GetNextImage(false);
+            BeeImage biNext = GetNextImage();
             NextImage.Source = biNext?.Image;
         }
 
@@ -158,7 +141,7 @@ namespace BeeBurn.XAML
         {
             EnsureProjectionWindow();
             BeeStack activeStack = BeeBurnVM.Get().EnsureActiveStack();
-            BeeImage biNext = GetNextImage(true);
+            BeeImage biNext = GetNextImage();
             if (biNext == null)
             {
                 PauseProjection(true);
@@ -231,6 +214,11 @@ namespace BeeBurn.XAML
             }
         }
 
+        private void ClickCutToBlack(object sender, RoutedEventArgs e)
+        {
+            PresentationStack.Images.Insert(0, BeeImage.CreateStopImage());
+        }
+
         private void ClickSkip(object sender, RoutedEventArgs e)
         {
             QueueNextImage();
@@ -249,6 +237,11 @@ namespace BeeBurn.XAML
         }
 
         private void ClickLoadNext(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
