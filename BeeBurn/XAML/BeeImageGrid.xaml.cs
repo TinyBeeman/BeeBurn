@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,6 +27,7 @@ namespace BeeBurn.XAML
 
 
         public RelayCommand<BeeImage> DeleteImageCommand { get; set; }
+        public RelayCommand<BeeImage> EditImageCommand { get; set; }
 
 
         public BeeStack Stack
@@ -83,6 +84,7 @@ namespace BeeBurn.XAML
             InitializeComponent();
 
             DeleteImageCommand = new RelayCommand<BeeImage>(img => { this.Stack.RemoveImage(img); });
+            EditImageCommand = new RelayCommand<BeeImage>(img => { BeeImageEditWindow.ShowEditImageDlg(img); });
         }
 
         private void BtnRandom_Click(object sender, RoutedEventArgs e)

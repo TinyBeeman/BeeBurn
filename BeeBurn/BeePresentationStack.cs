@@ -55,5 +55,19 @@
         }
         public BeeImage CurrentImage { get => m_currentImg;}
 
+        private bool m_holdOnCurrent;
+        public bool HoldOnCurrent
+        {
+            get
+            {
+                return m_holdOnCurrent;
+            }
+            set
+            {
+                m_holdOnCurrent = value;
+                OnPropertyChanged();
+            }
+        }
+
     }
 }
