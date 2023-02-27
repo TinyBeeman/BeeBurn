@@ -36,6 +36,11 @@ namespace BeeBurn.XAML
             DataContext = BeeBurnVM.Get();
         }
 
+        public void Reload()
+        {
+            this.InvalidateVisual();
+        }
+
         private void PresenterLoaded(object sender, RoutedEventArgs e)
         {
             EnsureProjectionWindow();

@@ -12,6 +12,9 @@
     <Window.Resources>
         <local:EnumBooleanConverter x:Key="enumBooleanConverter"/>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="v" Modifiers="Ctrl" Command="{Binding PresentationPasteCommand}"/>
+    </Window.InputBindings>
     <DockPanel>
         <Grid>
             <Grid.RowDefinitions>
@@ -58,7 +61,7 @@
             <local:BeeImageGrid
                     Grid.Column="2"
                     Grid.Row="1"
-                    x:Name="ActiveImageList"
+                    x:Name="StackImageGrid"
                     Stack="{Binding Path=SelectedStack, Mode=OneWay}"
                     SelectionIndex="{Binding Path=SelectedStack.SelectedIndex, Mode=TwoWay}" />
         </Grid>

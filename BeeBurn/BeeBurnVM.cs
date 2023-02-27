@@ -29,9 +29,16 @@ namespace BeeBurn
         }
 
         public ICommand PasteCommand { get; set; }
+        public ICommand PresentationPasteCommand { get; set; }
+
         private void Paste()
         {
             SelectedStack?.PasteImage();
+        }
+
+        private void PresentationPaste()
+        {
+            PresentationStack?.PasteImage();
         }
 
         public static BeeBurnVM Get()
@@ -48,6 +55,7 @@ namespace BeeBurn
             m_stacks.Add(new BeeStack()); // Always at Index 0;
             SelectedStack = m_stacks[0];
             PasteCommand = new RelayCommand(Paste);
+            PresentationPasteCommand = new RelayCommand(PresentationPaste);
         }
 
         public BeePresentationStack PresentationStack

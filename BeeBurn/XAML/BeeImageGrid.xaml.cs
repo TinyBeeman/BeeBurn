@@ -26,7 +26,7 @@ namespace BeeBurn.XAML
         private BeeImage m_dragImg;
 
 
-        public static RelayCommand<BeeImage> DeleteImageCommand { get; set; }
+        public RelayCommand<BeeImage> DeleteImageCommand { get; set; }
 
 
         public BeeStack Stack
@@ -233,6 +233,8 @@ namespace BeeBurn.XAML
                 Stack.Images.Add(imgDrag);
                 e.Handled = true;
             }
+
+            this.InvalidateVisual();
         }
 
         private void Image_DragEnter(object sender, DragEventArgs e)
