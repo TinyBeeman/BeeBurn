@@ -49,6 +49,19 @@ namespace BeeBurn.XAML
             this.Activate();
         }
 
+        private bool m_holdOnCurrent;
+        public bool HoldOnCurrent
+        {
+            get
+            {
+                return m_holdOnCurrent;
+            }
+            set
+            {
+                m_holdOnCurrent = value;
+            }
+        }
+
         public PlayOptions PlayOption
         {
             get

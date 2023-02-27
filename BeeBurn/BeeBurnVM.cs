@@ -6,7 +6,7 @@ using System.Windows.Media.Imaging;
 using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
 
 namespace BeeBurn
 {

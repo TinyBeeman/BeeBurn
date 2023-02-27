@@ -60,6 +60,7 @@
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Delete" Command="{Binding DeleteImageCommand}"  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"/>
+                    <MenuItem Header="Edit Image" Command="{Binding EditImageCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>

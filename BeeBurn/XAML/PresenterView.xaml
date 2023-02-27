@@ -33,8 +33,7 @@
                 <Button Click="ClickPasteNext" Margin="10,10,10,0">Paste Next Image</Button>
                 <Button Click="ClickLoadNext" Margin="10,10,10,0">Load Next Image From Disk</Button>
                 <Button Click="ClickAddStop" Margin="10,10,10,0">Add Stop Image To End</Button>
-                <RadioButton Content="Stop At End Of List" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=PlayOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter={x:Static local:PlayOptions.StopAtEnd}}" Margin="10,10,10,0"/>
-                <RadioButton Content="Repeat This List" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=PlayOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter={x:Static local:PlayOptions.RepeatThisList}}" Margin="10,10,10,0"/>
+                <CheckBox Margin="10,10,10,0" IsChecked="{Binding Path=HoldOnCurrent}">Hold on Current Image</CheckBox>
                 <TextBlock Margin="10,10,10,0">Showing</TextBlock>
                 <Image x:Name="CurrentImage" Margin="10,10,10,0" Width="180" Height="180" />
                 <TextBlock Margin="10,10,10,0">Next</TextBlock>
