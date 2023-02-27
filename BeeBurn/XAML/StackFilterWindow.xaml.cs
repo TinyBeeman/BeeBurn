@@ -22,28 +22,9 @@ namespace BeeBurn.XAML
     {
         public StackFilterWindow()
         {
-            Decades = new ObservableCollection<BeeBooleanChoice>();
             Tags = new ObservableCollection<BeeBooleanChoice>();
             InitializeComponent();
         }
-
-        public ObservableCollection<BeeBooleanChoice> Decades
-        {
-            get
-            {
-                return (ObservableCollection<BeeBooleanChoice>)GetValue(DecadesProperty);
-            }
-            set
-            {
-                SetValue(DecadesProperty, value);
-            }
-        }
-
-        public static readonly DependencyProperty DecadesProperty =
-                DependencyProperty.Register("Decades",
-                    typeof(ObservableCollection<BeeBooleanChoice>),
-                    typeof(StackFilterWindow),
-                    new PropertyMetadata(null));
 
         public ObservableCollection<BeeBooleanChoice> Tags
         {

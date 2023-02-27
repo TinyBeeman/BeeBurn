@@ -134,6 +134,7 @@
     <Compile Include="XAML\BeeStackEditor.xaml.cs">
       <DependentUpon>BeeStackEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="XAML\MultiValueConverter.cs" />
     <Compile Include="XAML\StackFilterWindow.xaml.cs">
       <DependentUpon>StackFilterWindow.xaml</DependentUpon>
     </Compile>

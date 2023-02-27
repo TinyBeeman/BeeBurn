@@ -43,20 +43,46 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Image
-                            Source="{Binding Path=Image}"
-                            Tag="{Binding Path=SessionId}"
-                            Width="100"
-                            Height="100"
-                            Margin="5,5,5,5"
-                            PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown"
-                            MouseLeftButtonDown="Image_MouseLeftButtonDown"
-                            MouseMove="Image_MouseMove"
-                            MouseLeftButtonUp="Image_MouseLeftButtonUp"
-                            AllowDrop="True"
-                            DragEnter="Image_DragEnter"
-                            Drop="Image_Drop"
-                            />
+                        <Border BorderThickness="2" BorderBrush="AliceBlue">
+                            <Border.Resources>
+                                <local:MultiValueEqualityConverter x:Key="multiValueEqualityConverter"/>
+                            </Border.Resources>
+                            <Border.Style>
+                                <Style>
+                                    <Setter Property="Border.BorderBrush" Value="White"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Value="True">
+                                            <DataTrigger.Binding>
+                                                <MultiBinding Converter="{StaticResource multiValueEqualityConverter}">
+                                                    <Binding
+                                                        RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
+                                                        Path="Stack.SelectedSessionId"
+                                                        Mode="OneWay"/>
+                                                    <Binding
+                                                        Path="SessionId"
+                                                        Mode="OneWay"/>
+                                                </MultiBinding>
+                                            </DataTrigger.Binding>
+                                            <Setter Property="Border.BorderBrush" Value="Navy"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Image
+                                Source="{Binding Path=Image}"
+                                Tag="{Binding Path=SessionId}"
+                                Width="100"
+                                Height="100"
+                                Margin="5,5,5,5"
+                                PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown"
+                                MouseLeftButtonDown="Image_MouseLeftButtonDown"
+                                MouseMove="Image_MouseMove"
+                                MouseLeftButtonUp="Image_MouseLeftButtonUp"
+                                AllowDrop="True"
+                                DragEnter="Image_DragEnter"
+                                Drop="Image_Drop"
+                                />
+                        </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

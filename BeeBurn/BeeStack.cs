@@ -17,7 +17,6 @@ namespace BeeBurn
         private BeeImage m_nextImage = null;
         private string m_name;
         private RangeObservableCollection<string> m_tags = new RangeObservableCollection<string>();
-        private RangeObservableCollection<string> m_decades = new RangeObservableCollection<string>();
         private ObservableCollection<BeeImage> m_images = new ObservableCollection<BeeImage>();
         private int m_SelectedIndex = -1;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -172,6 +171,15 @@ namespace BeeBurn
             }
         }
 
+        public int SelectedSessionId
+        {
+            get
+            {
+                if (m_SelectedIndex == -1 || m_SelectedIndex >= m_images.Count) return 0;
+                return m_images[m_SelectedIndex].SessionId;
+            }
+        }
+
         public BeeImage BeeImgToDisplay
         {
             get => m_beeImgToDisplay;
@@ -194,17 +202,6 @@ namespace BeeBurn
             }
         }
 
-        public RangeObservableCollection<string> Decades
-        {
-            get => m_decades;
-            set
-            {
-                m_decades = value;
-                OnPropertyChanged();
-                OnPropertyChanged("AllDecades");
-            }
-        }
-
         public string AllTags
         {
             get
@@ -221,22 +218,6 @@ namespace BeeBurn
             }
         }
 
-        public string AllDecades
-        {
-            get
-            {
-                return string.Join(", ", m_decades);
-            }
-            set
-            {
-                m_decades.Clear();
-                IEnumerable<string> decades = new List<string>(value.Split(new string[] { ", ", "," }, StringSplitOptions.RemoveEmptyEntries)).Distinct().OrderBy(s => s);
-                m_decades.AddRange(decades);
-                OnPropertyChanged("Decades");
-                OnPropertyChanged("AllDecades");
-            }
-        }
-
         internal bool SaveStack(string fileNameNaked, string savePath)
         {
             try
@@ -250,14 +231,6 @@ namespace BeeBurn
                 // TAGS
                 fullText += "Tags:";
                 foreach (var s in m_tags)
-                {
-                    fullText += s + "|";
-                }
-                fullText += "\n" + s_sep;
-
-                // DECADES
-                fullText += "Decades:";
-                foreach (var s in m_decades)
                 {
                     fullText += s + "|";
                 }
@@ -303,12 +276,6 @@ namespace BeeBurn
                         string tagLine = imgs[iLine++].Trim(new char[] { '\n', ' ' });
                         // Substring is to remove "tags:"
                         Tags.AddRange(tagLine.Substring(5).Split(new string[] { "|", "| " }, StringSplitOptions.RemoveEmptyEntries));
-                    }
-                    else if (string.Compare(line.Substring(0, 8), "decades:", true) == 0)
-                    {
-                        string decadeLine = line.Trim(new char[] { '\n', ' ' });
-                        // Substring is to remove "decades:"
-                        Decades.AddRange(decadeLine.Substring(8).Split(new string[] { "|", "| " }, StringSplitOptions.RemoveEmptyEntries));
                     }
                     else
                     {

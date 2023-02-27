@@ -62,14 +62,6 @@ namespace BeeBurn.XAML
                 Stack.AllTags = dlg.TextBox.Text;
         }
 
-        private void ClickEditDecades(object sender, RoutedEventArgs e)
-        {
-            BeeTagEditor dlg = new BeeTagEditor();
-            dlg.TextBox.Text = Stack.AllDecades;
-            if (dlg.ShowDialog() == true)
-                Stack.AllDecades = dlg.TextBox.Text;
-        }
-
         private void ClickSaveList(object sender, RoutedEventArgs e)
         {
             BeeBurnIO.SaveAsStack(Stack);

@@ -60,8 +60,6 @@ namespace BeeBurn
             StackFilterWindow sfw = new StackFilterWindow();
             sfw.Tags.Add(new BeeBooleanChoice("TagA", false));
             sfw.Tags.Add(new BeeBooleanChoice("TagB", true));
-            sfw.Decades.Add(new BeeBooleanChoice("1910s", false));
-            sfw.Decades.Add(new BeeBooleanChoice("1920s", false));
 
             sfw.ShowDialog();
         }

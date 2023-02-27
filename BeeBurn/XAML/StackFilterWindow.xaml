@@ -22,9 +22,6 @@
         <StackPanel Grid.Column="0" Orientation="Vertical">
             <Button x:Name="BtnDone" Margin="10,10,10,0">Done</Button>
         </StackPanel>
-        <StackPanel Grid.Column="1" Orientation="Vertical">
-            <ItemsControl ItemsSource="{Binding Path=Decades}" ItemTemplate="{StaticResource BeeChoiceTemplate}"/>
-        </StackPanel>
         <StackPanel Grid.Column="2" Orientation="Vertical">
             <ItemsControl ItemsSource="{Binding Path=Tags}" ItemTemplate="{StaticResource BeeChoiceTemplate}"/>
         </StackPanel>

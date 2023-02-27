@@ -81,6 +81,9 @@ namespace BeeBurn.XAML
 
         private void BtnRandom_Click(object sender, RoutedEventArgs e)
         {
+            if (Stack == null)
+                return;
+
             Random rng = new Random();
             int n = Stack.Images.Count;
             while (n > 1)
@@ -95,6 +98,9 @@ namespace BeeBurn.XAML
 
         private void BtnClear_Click(object sender, RoutedEventArgs e)
         {
+            if (Stack == null)
+                return;
+
             Stack.Images.Clear();
         }
 
@@ -123,26 +129,41 @@ namespace BeeBurn.XAML
 
         private void BtnPaste_Click(object sender, RoutedEventArgs e)
         {
+            if (Stack == null)
+                return;
+
             Stack.PasteImage();
         }
 
         private void BtnReset_Click(object sender, RoutedEventArgs e)
         {
+            if (Stack == null)
+                return;
+
             Stack.ResetNextImage();
         }
 
         private void BtnLoad_Click(object sender, RoutedEventArgs e)
         {
+            if (Stack == null)
+                return;
+
             BeeBurnIO.LoadImagesToStack(Stack);
         }
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
+            if (Stack == null)
+                return;
+
             BeeBurnIO.SaveAsStack(Stack);
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (Stack == null)
+                return;
+
             if (AllowStackEdit)
             {
                 var dlgEditStack = new BeeStackEditor(Stack);
@@ -173,6 +194,9 @@ namespace BeeBurn.XAML
 
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if (Stack == null)
+                return;
+
             int srcId = (int)((Image)e.Source).Tag;
             BeeImage dragImage = GetImageFromSender(sender);
             var dragEffects = DragDropEffects.Move;
@@ -198,6 +222,9 @@ namespace BeeBurn.XAML
 
         private void ActiveGrid_Drop(object sender, DragEventArgs e)
         {
+            if (Stack == null)
+                return;
+
             if (e.Data.GetDataPresent(typeof(BeeImage)))
             {
                 BeeImage imgDrag = e.Data.GetData(typeof(BeeImage)) as BeeImage;
@@ -217,6 +244,9 @@ namespace BeeBurn.XAML
 
         private void Image_Drop(object sender, DragEventArgs e)
         {
+            if (Stack == null)
+                return;
+
             if (e.Data.GetDataPresent(typeof(BeeImage)))
             {
                 e.Handled = true;
