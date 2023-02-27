@@ -116,6 +116,7 @@
     <Compile Include="BeeBurnIO.cs" />
     <Compile Include="BeeBurnVM.cs" />
     <Compile Include="BeeConfigSettings.cs" />
+    <Compile Include="BeePresentationStack.cs" />
     <Compile Include="RangeObservableCollection.cs" />
     <Compile Include="XAML\BeeConfig.xaml.cs">
       <DependentUpon>BeeConfig.xaml</DependentUpon>

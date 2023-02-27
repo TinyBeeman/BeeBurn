@@ -124,23 +124,22 @@ namespace BeeBurn.XAML
             QueueNextImage();
         }
 
-        private BeeStack PresentationStack => BeeBurnVM.Get().PresentationStack;
+        private BeePresentationStack PresentationStack => BeeBurnVM.Get().PresentationStack;
 
         private BeeImage GetNextImage()
         {
-            return PresentationStack.GetNextImage(PlayOption == PlayOptions.RepeatThisList);
+            return PresentationStack.GetNextImage(true /* always loop for now*/);
         }
 
         private void RefreshNextImageControl()
         {
-            BeeImage biNext = GetNextImage();
-            NextImage.Source = biNext?.Image;
+            NextImage.Source = PresentationStack.PeekNextImage(true)?.Image;
         }
 
         private void QueueNextImage()
         {
             EnsureProjectionWindow();
-            BeeStack activeStack = BeeBurnVM.Get().EnsureActiveStack();
+            
             BeeImage biNext = GetNextImage();
             if (biNext == null)
             {
@@ -152,7 +151,7 @@ namespace BeeBurn.XAML
             CurrentImage.Source = biNext.Image;
             RefreshNextImageControl();
 
-            double panSeconds = m_proj.QueueImage(biNext) + BeeBurnVM.Get().ConfigSettings.ImageFadeTime;
+            double panSeconds = m_proj.QueueCurrentImage() + BeeBurnVM.Get().ConfigSettings.ImageFadeTime;
 
             //  DispatcherTimer setup
             if (m_dispatcherTimer == null)
@@ -167,6 +166,11 @@ namespace BeeBurn.XAML
             m_timerStart = DateTime.Now;
             m_dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
             m_dispatcherTimer.Start();
+
+            if (PresentationStack.CurrentImage.IsStopImage && !m_paused)
+            {
+                ClickPlayPause(null, null);
+            }
         }
 
         private void ProjectionTimerTick(object sender, EventArgs e)
@@ -199,24 +203,32 @@ namespace BeeBurn.XAML
             m_paused = true;
         }
 
+        private void ClickAddStop(object sender, EventArgs e)
+        {
+            PresentationStack.Images.Add(BeeImage.CreateStopImage());
+        }
         private void ClickPlayPause(object sender, RoutedEventArgs e)
         {
             m_proj.Show();
             if (m_paused)
             {
                 StartProjection();
-                PlayPauseButton.Content = "Pause";
+                PlayPauseButton.Content = "Stop After This Image";
             }
             else
             {
                 PauseProjection(true);
-                PlayPauseButton.Content = "Play";
+                PlayPauseButton.Content = "Play From First Image";
             }
         }
 
         private void ClickCutToBlack(object sender, RoutedEventArgs e)
         {
-            PresentationStack.Images.Insert(0, BeeImage.CreateStopImage());
+            if (PresentationStack.CurrentImage.IsStopImage)
+                return;
+
+            PresentationStack.EnsureStopImage(true);
+            QueueNextImage();
         }
 
         private void ClickSkip(object sender, RoutedEventArgs e)
@@ -245,5 +257,6 @@ namespace BeeBurn.XAML
         {
 
         }
+
     }
 }

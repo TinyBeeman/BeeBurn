@@ -34,7 +34,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Grid.Row="1">
-                <Button Click="ClickProject" Margin="10,10,10,0">Project Stack</Button>
+                <Button Click="ClickProject" Margin="10,10,10,0">Open Presenter View</Button>
                 <Button Click="ClickEditStack" Margin="10,10,10,0">Edit Stack</Button>
                 <Button Click="ClickLoadImages" Margin="10,10,10,0">Load Image(s) Into Stack</Button>
                 <Button Click="ClickFilterTest" Margin="10,10,10,0">Filter Test</Button>

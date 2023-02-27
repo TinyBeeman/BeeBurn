@@ -76,7 +76,6 @@
         <StackPanel
             Orientation="Horizontal"
             Grid.Row="2">
-            <Button x:Name="BtnReset" Click="BtnReset_Click" Width="50">Reset</Button>
             <Button x:Name="BtnPaste" Click="BtnPaste_Click" Width="50">Paste</Button>
             <Button x:Name="BtnLoad" Click="BtnLoad_Click" Width="50">Load</Button>
         </StackPanel>

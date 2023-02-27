@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -23,6 +24,10 @@ namespace BeeBurn.XAML
     public partial class BeeImageGrid : UserControl
     {
         private BeeImage m_dragImg;
+
+
+        public static RelayCommand<BeeImage> DeleteImageCommand { get; set; }
+
 
         public BeeStack Stack
         {
@@ -54,7 +59,6 @@ namespace BeeBurn.XAML
                 typeof(BeeImageGrid),
                 new PropertyMetadata(true));
 
-
         public int SelectionIndex
         {
             get
@@ -77,6 +81,8 @@ namespace BeeBurn.XAML
         public BeeImageGrid()
         {
             InitializeComponent();
+
+            DeleteImageCommand = new RelayCommand<BeeImage>(img => { this.Stack.RemoveImage(img); });
         }
 
         private void BtnRandom_Click(object sender, RoutedEventArgs e)
@@ -133,14 +139,6 @@ namespace BeeBurn.XAML
                 return;
 
             Stack.PasteImage();
-        }
-
-        private void BtnReset_Click(object sender, RoutedEventArgs e)
-        {
-            if (Stack == null)
-                return;
-
-            Stack.ResetNextImage();
         }
 
         private void BtnLoad_Click(object sender, RoutedEventArgs e)

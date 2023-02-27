@@ -18,7 +18,7 @@ namespace BeeBurn
         
         private int m_pasteCounter = 0;
         private ObservableCollection<BeeStack> m_stacks = new ObservableCollection<BeeStack>();
-        private BeeStack m_presentationStack = new BeeStack("Presentation Stack");
+        private BeePresentationStack m_presentationStack = new BeePresentationStack();
         private int m_selectedStackIndex;
         private BeeStack m_activeStack;
         private BeeConfigSettings m_configSettings;
@@ -50,7 +50,7 @@ namespace BeeBurn
             PasteCommand = new RelayCommand(Paste);
         }
 
-        public BeeStack PresentationStack
+        public BeePresentationStack PresentationStack
         {
             get { return m_presentationStack; }
             set { m_presentationStack = value; OnPropertyChanged(); }

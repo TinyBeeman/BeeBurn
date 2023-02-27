@@ -24,18 +24,18 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Grid.Row="1">
-                <Button x:Name="PlayPauseButton" Click="ClickPlayPause" Margin="10,10,10,0">Play</Button>
-                <Button x:Name="HoldButton" Click="ClickHold" Margin="10,10,10,0">Hold</Button>
-                <Button x:Name="CutToBlackButton" Click="ClickCutToBlack" Margin="10,10,10,0">Cut To Black</Button>
-                <Button Click="ClickSkip" Margin="10,10,10,0">Skip</Button>
+                <Button x:Name="PlayPauseButton" Click="ClickPlayPause" Margin="10,10,10,0">Play From First Image</Button>
+                <Button x:Name="CutToBlackButton" Click="ClickCutToBlack" Margin="10,10,10,0">Fade To Black</Button>
+                <Button Click="ClickSkip" Margin="10,10,10,0">Skip to Next Image</Button>
                 <Button Click="ClickPasteNext" Margin="10,10,10,0">Paste Next Image</Button>
-                <Button Click="ClickLoadNext" Margin="10,10,10,0">Load Next Image</Button>
+                <Button Click="ClickLoadNext" Margin="10,10,10,0">Load Next Image From Disk</Button>
+                <Button Click="ClickAddStop" Margin="10,10,10,0">Add Stop Image To End</Button>
                 <RadioButton Content="Stop At End Of List" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=PlayOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter={x:Static local:PlayOptions.StopAtEnd}}" Margin="10,10,10,0"/>
                 <RadioButton Content="Repeat This List" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=PlayOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter={x:Static local:PlayOptions.RepeatThisList}}" Margin="10,10,10,0"/>
                 <TextBlock Margin="10,10,10,0">Showing</TextBlock>
                 <Image x:Name="CurrentImage" Margin="10,10,10,0" Width="180" Height="180" />
                 <TextBlock Margin="10,10,10,0">Next</TextBlock>
-                <Image x:Name="NextImage" Margin="10,10,10,0" Width="180" Height="180" />
+                <Image x:Name="NextImage" Visibility="Hidden" Margin="10,10,10,0" Width="180" Height="180" />
             </StackPanel>
             <TextBlock Grid.Column="1" Grid.Row="0" Text="Currently Presenting" Margin="0,10,0,0" />
             <local:BeeImageGrid

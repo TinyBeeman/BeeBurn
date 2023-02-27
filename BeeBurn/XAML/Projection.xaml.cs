@@ -40,10 +40,20 @@ namespace BeeBurn.XAML
         {
         }
 
+        private BeePresentationStack PresentationStack => BeeBurnVM.Get().PresentationStack;
+
+
         public void FadeToBlack()
         {
-            BeeImage.SetShowingImage(null);
+            if (!PresentationStack.CurrentImage.IsStopImage)
+            {
+                PresentationStack.EnsureStopImage(true);
+                PresentationStack.GetNextImage();
+            }
 
+            QueueCurrentImage();
+
+            /*
             if (m_imgOld != null)
                 GridImage.Children.Remove(m_imgOld);
 
@@ -62,15 +72,12 @@ namespace BeeBurn.XAML
                 Storyboard.SetTargetProperty(animFadeOut, new PropertyPath("Opacity"));
                 m_currentStoryboard.Children.Add(animFadeOut);
                 m_currentStoryboard.Begin();
-            }
-
-
+            }*/
         }
 
-        public double QueueImage(BeeImage bi)
+        public double QueueCurrentImage()
         {
-
-            BeeImage.SetShowingImage(bi);
+            BeeImage bi = PresentationStack.CurrentImage;
 
             if (m_imgOld != null)
                 GridImage.Children.Remove(m_imgOld);

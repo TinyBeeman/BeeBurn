@@ -200,11 +200,6 @@ namespace BeeBurn.XAML
             Stack.PasteImage();
         }
 
-        private void BtnReset_Click(object sender, RoutedEventArgs e)
-        {
-            Stack.ResetNextImage();
-        }
-
         private void BtnLoad_Click(object sender, RoutedEventArgs e)
         {
             BeeBurnIO.LoadImagesToStack(Stack);

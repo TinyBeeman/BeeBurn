@@ -26,8 +26,6 @@ namespace BeeBurn
     {
         private int m_sessionId;
         private static int s_nextSessionId = 0;
-        private static BeeImage s_nextImage = null;
-        private static BeeImage s_showingImage = null;
 
         private BitmapImage m_bitmapImage;
         private BeeRect m_startRect = new BeeRect(0, 0, 1, 1);
@@ -36,7 +34,6 @@ namespace BeeBurn
         private bool m_fromLibrary = false;
         private bool m_edited = false;
         private bool m_isShowing;
-        private bool m_isNext;
         private bool m_stopImage;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -45,31 +42,12 @@ namespace BeeBurn
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public static void SetNextImage(BeeImage biNext)
-        {
-            if (s_nextImage != null)
-                s_nextImage.IsNext = false;
-
-            s_nextImage = biNext;
-
-            if (s_nextImage != null)
-                biNext.IsNext = true;
-        }
-
-        public static void SetShowingImage(BeeImage biShowing)
-        {
-            if (s_showingImage != null)
-                s_showingImage.IsShowing = false;
-
-            s_showingImage = biShowing;
-
-            if (s_showingImage != null)
-                biShowing.IsShowing = true;
-        }
-
         public static BeeImage CreateStopImage()
         {
             BeeImage bi = new BeeImage(BlankImage, "Stop");
+            bi.StartRect = new BeeRect(BlankImage.Width / 3, BlankImage.Height / 3, BlankImage.Width / 3, BlankImage.Height / 3); ;
+            bi.ResetStartRect();
+            bi.ResetEndRect();
             bi.m_stopImage = true;
             return bi;
         }
@@ -134,16 +112,6 @@ namespace BeeBurn
             set
             {
                 m_isShowing = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsNext
-        {
-            get => m_isNext;
-            set
-            {
-                m_isNext = value;
                 OnPropertyChanged();
             }
         }

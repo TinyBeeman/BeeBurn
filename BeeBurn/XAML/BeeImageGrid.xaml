@@ -13,80 +13,58 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Grid.Resources>
             <DataTemplate x:Key="GrippieTemplate">
                 <TextBlock Text=":"/>
             </DataTemplate>
         </Grid.Resources>
-        <ScrollViewer Grid.Row="0" Name="sv"
-                      AllowDrop="True"
-                 DragEnter="ActiveGrid_DragEnter"
-                 Drop="ActiveGrid_Drop">
-            <ItemsControl ItemsSource="{Binding Path=Stack.Images}"
-                 MinWidth="{Binding ElementName=sv, Path=ViewportWidth}"
-                 MinHeight="{Binding ElementName=sv, Path=ViewportHeight}"
-                 AllowDrop="True"
-                 DragEnter="ActiveGrid_DragEnter"
-                 Drop="ActiveGrid_Drop">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel
-                            Orientation="Horizontal"
-                            x:Name="ActiveGrid"
+        <ListView ItemsSource="{Binding Path=Stack.Images}"
+                MinWidth="{Binding ElementName=sv, Path=ViewportWidth}"
+                MinHeight="{Binding ElementName=sv, Path=ViewportHeight}"
+                AllowDrop="True"
+                DragEnter="ActiveGrid_DragEnter"
+                Drop="ActiveGrid_Drop"
+                SelectionMode="Single"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                HorizontalContentAlignment="Stretch">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel
+                        Orientation="Horizontal"
+                        x:Name="ActiveGrid"
+                        AllowDrop="True"
+                        DragEnter="ActiveGrid_DragEnter"
+                        Drop="ActiveGrid_Drop"
+                    />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="2" BorderBrush="White">
+                        <Image
+                            Source="{Binding Path=Image}"
+                            Tag="{Binding Path=SessionId}"
+                            Width="100"
+                            Height="100"
+                            Margin="5,5,5,5"
+                            PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown"
+                            MouseLeftButtonDown="Image_MouseLeftButtonDown"
+                            MouseMove="Image_MouseMove"
+                            MouseLeftButtonUp="Image_MouseLeftButtonUp"
                             AllowDrop="True"
-                            DragEnter="ActiveGrid_DragEnter"
-                            Drop="ActiveGrid_Drop"
-                        />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderThickness="2" BorderBrush="AliceBlue">
-                            <Border.Resources>
-                                <local:MultiValueEqualityConverter x:Key="multiValueEqualityConverter"/>
-                            </Border.Resources>
-                            <Border.Style>
-                                <Style>
-                                    <Setter Property="Border.BorderBrush" Value="White"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Value="True">
-                                            <DataTrigger.Binding>
-                                                <MultiBinding Converter="{StaticResource multiValueEqualityConverter}">
-                                                    <Binding
-                                                        RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"
-                                                        Path="Stack.SelectedSessionId"
-                                                        Mode="OneWay"/>
-                                                    <Binding
-                                                        Path="SessionId"
-                                                        Mode="OneWay"/>
-                                                </MultiBinding>
-                                            </DataTrigger.Binding>
-                                            <Setter Property="Border.BorderBrush" Value="Navy"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                            <Image
-                                Source="{Binding Path=Image}"
-                                Tag="{Binding Path=SessionId}"
-                                Width="100"
-                                Height="100"
-                                Margin="5,5,5,5"
-                                PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown"
-                                MouseLeftButtonDown="Image_MouseLeftButtonDown"
-                                MouseMove="Image_MouseMove"
-                                MouseLeftButtonUp="Image_MouseLeftButtonUp"
-                                AllowDrop="True"
-                                DragEnter="Image_DragEnter"
-                                Drop="Image_Drop"
-                                />
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                            DragEnter="Image_DragEnter"
+                            Drop="Image_Drop"
+                            />
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Delete" Command="{Binding DeleteImageCommand}"  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+        </ListView>
         <StackPanel
             Orientation="Horizontal"
             Grid.Row="1">
@@ -97,13 +75,8 @@
         <StackPanel
             Orientation="Horizontal"
             Grid.Row="2">
-            <Button x:Name="BtnReset" Click="BtnReset_Click" Width="50">Reset</Button>
             <Button x:Name="BtnPaste" Click="BtnPaste_Click" Width="50">Paste</Button>
             <Button x:Name="BtnLoad" Click="BtnLoad_Click" Width="50">Load</Button>
-        </StackPanel>
-        <StackPanel
-            Orientation="Horizontal"
-            Grid.Row="3">
             <Button x:Name="BtnSaveStack" Click="BtnSave_Click" Width="50">Save</Button>
         </StackPanel>
     </Grid>

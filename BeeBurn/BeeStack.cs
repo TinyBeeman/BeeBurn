@@ -14,15 +14,13 @@ namespace BeeBurn
         private static string s_sep = "---\n";
         private static int s_nextStackCounter = 1;
 
-        private BeeImage m_nextImage = null;
         private string m_name;
         private RangeObservableCollection<string> m_tags = new RangeObservableCollection<string>();
         private ObservableCollection<BeeImage> m_images = new ObservableCollection<BeeImage>();
         private int m_SelectedIndex = -1;
         public event PropertyChangedEventHandler PropertyChanged;
-        private BeeImage m_beeImgToDisplay = null;
+        
         private bool m_isLibrary = false;
-        private bool m_atEnd = false;
         private bool m_isActive;
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
@@ -40,87 +38,6 @@ namespace BeeBurn
             m_name = name;
         }
 
-        public void ResetNextImage()
-        {
-            m_atEnd = false;
-            m_nextImage = m_images.Count > 0 ? m_images[0] : null;
-            BeeImage.SetNextImage(m_nextImage);
-        }
-
-        public BeeImage PeekNextImage(bool loop)
-        {
-            if (m_nextImage != null || m_images.Count == 0)
-                return m_nextImage;
-
-            if (m_atEnd && loop)
-                return Images[0];
-
-            return null;
-        }
-
-        public BeeImage GetNextImage(bool loop)
-        {
-            // Empty List? Set everything to null.
-            if (m_images.Count == 0)
-            {
-                m_nextImage = null;
-                BeeImage.SetNextImage(null);
-                return null;
-            }
-
-            // If we're at the end, reset the list but return null
-            // if we're not in a loop.
-            if (m_atEnd)
-            {
-                ResetNextImage();
-                if (!loop)
-                    return null;
-            }
-            
-            // If we don't have an empty list, but also no next image
-            // let's reset the next image.
-            if (m_nextImage == null)
-            {
-                ResetNextImage();
-            }
-
-            int iNext = m_images.IndexOf(m_nextImage);
-
-            // Weird case where m_nextImage isn't in the list anymore.
-            if (iNext == -1)
-            {
-                ResetNextImage();
-                iNext = 0;
-            }
-
-            BeeImage biRet = m_nextImage;
-            int iNewNext = iNext + 1;
-            if (iNewNext >= m_images.Count)
-            {
-                // If we're at the end of the list,
-                // we set the next image to null,
-                // unless we're looping, in which case
-                // we Reset it (to 0, presumably).
-                if (loop)
-                {
-                    ResetNextImage();
-                }
-                else
-                {
-                    m_nextImage = null;
-                    m_atEnd = true;
-                    BeeImage.SetNextImage(null);
-                }
-            }
-            else
-            {
-                // Set up our next image.
-                m_nextImage = m_images[iNewNext];
-                BeeImage.SetNextImage(m_nextImage);
-            }
-
-            return biRet;
-        }
 
         public string Name
         {
@@ -166,8 +83,6 @@ namespace BeeBurn
             {
                 m_SelectedIndex = value;
                 OnPropertyChanged();
-                if (value >= 0 && value < m_images.Count)
-                    BeeImgToDisplay = m_images[value];
             }
         }
 
@@ -180,16 +95,6 @@ namespace BeeBurn
             }
         }
 
-        public BeeImage BeeImgToDisplay
-        {
-            get => m_beeImgToDisplay;
-            set
-            {
-                m_beeImgToDisplay = value;
-                OnPropertyChanged();
-                m_beeImgToDisplay.UpdateAllProps();
-            }
-        }
 
         public RangeObservableCollection<string> Tags
         {
@@ -302,6 +207,11 @@ namespace BeeBurn
             {
                 Images.Add(new BeeImage(srcClip, "Paste-" + BeeBurnVM.Get().PasteCounter.ToString("D" + 4))); ;
             }
+        }
+
+        internal void RemoveImage(BeeImage img)
+        {
+            Images.Remove(img);
         }
     }
 }
