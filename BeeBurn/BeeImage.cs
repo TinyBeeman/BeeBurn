@@ -45,7 +45,8 @@ namespace BeeBurn
         public static BeeImage CreateStopImage()
         {
             BeeImage bi = new BeeImage(BlankImage, "Stop");
-            bi.StartRect = new BeeRect(BlankImage.Width / 3, BlankImage.Height / 3, BlankImage.Width / 3, BlankImage.Height / 3); ;
+            bi.StartRect = new BeeRect(BlankImage.Width / 3, BlankImage.Height / 3, BlankImage.Width / 3, BlankImage.Height / 3);
+            bi.EndRect = new BeeRect(BlankImage.Width / 3, BlankImage.Height / 3, BlankImage.Width / 3, BlankImage.Height / 3);
             bi.ResetStartRect();
             bi.ResetEndRect();
             bi.m_stopImage = true;
@@ -60,16 +61,6 @@ namespace BeeBurn
         }
 
         public int SessionId => m_sessionId;
-
-        /*public BitmapFrame BitmapFrame
-        {
-            get => m_bitmapFrame;
-            set
-            {
-                m_bitmapFrame = value;
-                OnPropertyChanged();
-            }
-        }*/
 
         public BitmapImage Image
         {

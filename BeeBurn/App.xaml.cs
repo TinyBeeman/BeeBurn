@@ -32,6 +32,9 @@ namespace BeeBurn
             string filename = "BeeBurn_Backup_" + RandomString(4);
             string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             BeeBurnVM.Get().SaveAll(filename, path);
+#if DEBUG
+            System.Diagnostics.Debugger.Break();
+#endif
             e.Handled = true;
             MessageBox.Show("An error has occured. A backup of your files has been saved on the desktop as '" + filename + ".BeeBurn'. We will attempt to keep going, but restart the app as soon as possible.", "BeeBurn Error!");
         }

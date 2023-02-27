@@ -20,8 +20,6 @@
             </DataTemplate>
         </Grid.Resources>
         <ListView ItemsSource="{Binding Path=Stack.Images}"
-                MinWidth="{Binding ElementName=sv, Path=ViewportWidth}"
-                MinHeight="{Binding ElementName=sv, Path=ViewportHeight}"
                 AllowDrop="True"
                 DragEnter="ActiveGrid_DragEnter"
                 Drop="ActiveGrid_Drop"
