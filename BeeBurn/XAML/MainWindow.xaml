@@ -37,7 +37,6 @@
                 <Button Click="ClickProject" Margin="10,10,10,0">Open Presenter View</Button>
                 <Button Click="ClickEditStack" Margin="10,10,10,0">Edit Stack</Button>
                 <Button Click="ClickLoadImages" Margin="10,10,10,0">Load Image(s) Into Stack</Button>
-                <Button Click="ClickFilterTest" Margin="10,10,10,0">Filter Test</Button>
                 <Button Click="ClickPaste" Margin="10,10,10,0">Paste</Button>
             </StackPanel>
             <TextBlock Grid.Column="1" Grid.Row="0" Text="Stacks" Margin="0,10,0,0" />

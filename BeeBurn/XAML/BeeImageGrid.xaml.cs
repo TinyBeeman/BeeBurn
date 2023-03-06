@@ -106,33 +106,39 @@ namespace BeeBurn.XAML
 
         private void BtnClear_Click(object sender, RoutedEventArgs e)
         {
+            int count = Stack.Images.Count;
+            if (count == 0)
+                return;
+
+            if (MessageBox.Show("Are you sure you want to clear this list of " + count.ToString() + " items?", "Verify List Clear", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                return;
+
             if (Stack == null)
                 return;
 
             Stack.Images.Clear();
         }
 
-        /*private HashSet<BeeImage> GetSelectedImages()
+        private HashSet<BeeImage> GetSelectedImages()
         {
             var images = new HashSet<BeeImage>();
-            for (int iCell = 0; iCell < ActiveGrid.SelectedCells.Count; iCell++)
+            
+            // TODO: Support multi-select?
+            int iImg = ImgListView.Items.IndexOf(ImgListView.SelectedItem);
+            if (iImg != -1)
             {
-                int iRow = ActiveGrid.Items.IndexOf(ActiveGrid.SelectedCells[iCell].Item);
-                if (iRow != -1)
-                {
-                    images.Add(Stack.Images[iRow]);
-                }
+                images.Add(Stack.Images[iImg]);
             }
             return images;
-        }*/
+        }
 
         private void BtnDel_Click(object sender, RoutedEventArgs e)
         {
-            //var images = GetSelectedImages();
-            //foreach (BeeImage bi in images)
-            //{
-                //Stack.Images.Remove(bi);
-            //}
+            var images = GetSelectedImages();
+            foreach (BeeImage bi in images)
+            {
+                Stack.Images.Remove(bi);
+            }
         }
 
         private void BtnPaste_Click(object sender, RoutedEventArgs e)

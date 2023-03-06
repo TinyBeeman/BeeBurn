@@ -246,12 +246,12 @@ namespace BeeBurn.XAML
 
         private void ClickPasteNext(object sender, RoutedEventArgs e)
         {
-            
+            PresentationStack.PasteNextImage();
         }
 
         private void ClickLoadNext(object sender, RoutedEventArgs e)
         {
-
+            BeeBurnIO.LoadImagesToStack(PresentationStack, 1);
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

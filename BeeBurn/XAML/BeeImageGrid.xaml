@@ -19,7 +19,7 @@
                 <TextBlock Text=":"/>
             </DataTemplate>
         </Grid.Resources>
-        <ListView ItemsSource="{Binding Path=Stack.Images}"
+        <ListView x:Name="ImgListView" ItemsSource="{Binding Path=Stack.Images}"
                 AllowDrop="True"
                 DragEnter="ActiveGrid_DragEnter"
                 Drop="ActiveGrid_Drop"

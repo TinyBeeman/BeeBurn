@@ -7,7 +7,7 @@ namespace BeeBurn
 {
     public static class BeeBurnIO
     {
-        public static bool LoadImagesToStack(BeeStack stack)
+        public static bool LoadImagesToStack(BeeStack stack, int index = -1)
         {
             var dlg = new OpenFileDialog
             {
@@ -23,7 +23,10 @@ namespace BeeBurn
                     try
                     {
                         BeeImage bi = new BeeImage(filepath);
-                        stack.Images.Add(bi);
+                        if (index == -1 || index >= stack.Images.Count)
+                            stack.Images.Add(bi);
+                        else
+                            stack.Images.Insert(index, bi);
                     }
                     catch (Exception)
                     {
