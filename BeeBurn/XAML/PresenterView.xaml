@@ -22,20 +22,20 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"></ColumnDefinition>
+                <ColumnDefinition Width="225"></ColumnDefinition>
                 <ColumnDefinition Width="300"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Grid.Row="1">
-                <Button x:Name="PlayPauseButton" Click="ClickPlayPause" Margin="10,10,10,0">Play From First Image</Button>
-                <Button x:Name="CutToBlackButton" Click="ClickCutToBlack" Margin="10,10,10,0">Fade To Black</Button>
-                <Button Click="ClickSkip" Margin="10,10,10,0">Skip to Next Image</Button>
+                <Button x:Name="PlayPauseButton" Click="ClickPlayOrFade" Margin="10,10,10,0">Play Next Image</Button>
+                <Button x:Name="HoldButton" Margin="10,10,10,0" Click="ClickPauseAfterCurrent">Pause On Current Image</Button>
+                <Button x:Name="CutToBlackButton" Click="ClickCutToBlack" Margin="10,10,10,0">Fade Immediately To Black</Button>
+                <Button Click="ClickSkip" Margin="10,10,10,0">Skip To Next Image</Button>
                 <Button Click="ClickPasteNext" Margin="10,10,10,0">Paste Next Image</Button>
                 <Button Click="ClickLoadNext" Margin="10,10,10,0">Load Next Image From Disk</Button>
                 <Button Click="ClickAddStop" Margin="10,10,10,0">Add Stop Image To End</Button>
-                <CheckBox Margin="10,10,10,0" IsChecked="{Binding Path=HoldOnCurrent}">Hold on Current Image</CheckBox>
                 <TextBlock Margin="10,10,10,0">Showing</TextBlock>
-                <Image x:Name="CurrentImage" Margin="10,10,10,0" Width="180" Height="180" />
+                <Image x:Name="CurrentImage" Visibility="Hidden" Margin="10,10,10,0" Width="180" Height="180" />
                 <TextBlock Margin="10,10,10,0">Next</TextBlock>
                 <Image x:Name="NextImage" Visibility="Hidden" Margin="10,10,10,0" Width="180" Height="180" />
             </StackPanel>

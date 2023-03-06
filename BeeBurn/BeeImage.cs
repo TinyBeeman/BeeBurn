@@ -47,8 +47,6 @@ namespace BeeBurn
             BeeImage bi = new BeeImage(BlankImage, "Stop");
             bi.StartRect = new BeeRect(BlankImage.Width / 3, BlankImage.Height / 3, BlankImage.Width / 3, BlankImage.Height / 3);
             bi.EndRect = new BeeRect(BlankImage.Width / 3, BlankImage.Height / 3, BlankImage.Width / 3, BlankImage.Height / 3);
-            bi.ResetStartRect();
-            bi.ResetEndRect();
             bi.m_stopImage = true;
             return bi;
         }
@@ -182,7 +180,7 @@ namespace BeeBurn
                     Array bytes = Enumerable.Repeat<byte>(0, 100 * 100).ToArray();
                     int stride = 100;
                     var src = BitmapImage.Create(
-                                        100,
+                                        200,
                                         100,
                                         96,
                                         96,

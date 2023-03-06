@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
 using System.Linq;
+using System.Net;
 
 namespace BeeBurn
 {
@@ -181,6 +182,11 @@ namespace BeeBurn
                         string tagLine = imgs[iLine++].Trim(new char[] { '\n', ' ' });
                         // Substring is to remove "tags:"
                         Tags.AddRange(tagLine.Substring(5).Split(new string[] { "|", "| " }, StringSplitOptions.RemoveEmptyEntries));
+                    }
+                    else if (line.StartsWith("decades:", true, null))
+                    {
+                        // Ignore deprecated decades tag.
+                        continue;
                     }
                     else
                     {

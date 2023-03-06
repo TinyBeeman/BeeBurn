@@ -38,23 +38,30 @@ namespace BeeBurn
 
         public static BitmapImage BitmapImageFromClipboard()
         {
-            if (Clipboard.ContainsImage())
+            // TODO: Log failures.
+            try
             {
-                System.Windows.Media.Imaging.BitmapSource bmp = Clipboard.GetImage();
-                BitmapImage bitmapImage = new BitmapImage();
-                using (var stream = new MemoryStream())
+                if (Clipboard.ContainsImage())
                 {
-                    BitmapEncoder encoder = new BmpBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(bmp));
-                    encoder.Save(stream);
-                    stream.Seek(0, SeekOrigin.Begin);
-                    bitmapImage.BeginInit();
-                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapImage.StreamSource = stream;
-                    bitmapImage.EndInit();
-                }
+                    System.Windows.Media.Imaging.BitmapSource bmp = Clipboard.GetImage();
+                    BitmapImage bitmapImage = new BitmapImage();
+                    using (var stream = new MemoryStream())
+                    {
+                        BitmapEncoder encoder = new BmpBitmapEncoder();
+                        encoder.Frames.Add(BitmapFrame.Create(bmp));
+                        encoder.Save(stream);
+                        stream.Seek(0, SeekOrigin.Begin);
+                        bitmapImage.BeginInit();
+                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapImage.StreamSource = stream;
+                        bitmapImage.EndInit();
+                    }
 
-                return bitmapImage;
+                    return bitmapImage;
+                }
+            }
+            catch
+            {
             }
 
             return null;

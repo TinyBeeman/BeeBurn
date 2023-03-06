@@ -45,34 +45,13 @@ namespace BeeBurn.XAML
 
         public void FadeToBlack()
         {
-            if (!PresentationStack.CurrentImage.IsStopImage)
+            if (!(PresentationStack.CurrentImage?.IsStopImage ?? false))
             {
                 PresentationStack.EnsureStopImage(true);
-                PresentationStack.GetNextImage();
+                PresentationStack.CycleNextImage();
             }
 
             QueueCurrentImage();
-
-            /*
-            if (m_imgOld != null)
-                GridImage.Children.Remove(m_imgOld);
-
-            m_imgOld = m_imgNew;
-            m_imgNew = null;
-
-            if (m_imgOld != null)
-            {
-                m_currentStoryboard = new Storyboard
-                {
-                    Duration = TimeSpan.FromSeconds(m_fadeSeconds)
-                };
-
-                DoubleAnimation animFadeOut = new DoubleAnimation(0, TimeSpan.FromSeconds(m_fadeSeconds));
-                Storyboard.SetTarget(animFadeOut, m_imgOld);
-                Storyboard.SetTargetProperty(animFadeOut, new PropertyPath("Opacity"));
-                m_currentStoryboard.Children.Add(animFadeOut);
-                m_currentStoryboard.Begin();
-            }*/
         }
 
         public double QueueCurrentImage()
